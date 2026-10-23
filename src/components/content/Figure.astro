@@ -21,19 +21,31 @@ const image = await resolveImage(src, 'Figure');
 
 <figure class="figure">
   <Image src={image} alt={decorative ? '' : alt} />
-  {
-    (caption || credit) && (
-      <figcaption>
-        {caption}
-        {credit && <span class="credit">{credit}</span>}
-      </figcaption>
-    )
-  }
+  {(caption || credit) && (
+    <figcaption>
+      {caption}
+      {credit && <span class="credit">{credit}</span>}
+    </figcaption>
+  )}
 </figure>
 
 <style>
-  .figure { margin-block: 1.5rem; }
-  .figure :global(img) { margin-inline: auto; border-radius: var(--radius); }
-  figcaption { font-size: 0.95rem; color: var(--color-muted); text-align: center; margin-top: 0.5rem; }
-  .credit { display: block; font-size: 0.85rem; font-style: italic; }
+  .figure {
+    margin-block: 1.5rem;
+  }
+  .figure :global(img) {
+    margin-inline: auto;
+    border-radius: var(--radius);
+  }
+  figcaption {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  .credit {
+    display: block;
+    font-size: 0.85rem;
+    font-style: italic;
+  }
 </style>

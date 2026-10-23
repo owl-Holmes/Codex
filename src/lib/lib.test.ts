@@ -9,7 +9,10 @@ import { tagSlug } from './tags';
 
 describe('parseFilePath', () => {
   it('maps a page file to its locale and slug', () => {
-    expect(parseFilePath('src/content/docs/fr/sciences/chimie/traces.mdx')).toEqual({ locale: 'fr', slug: 'sciences/chimie/traces' });
+    expect(parseFilePath('src/content/docs/fr/sciences/chimie/traces.mdx')).toEqual({
+      locale: 'fr',
+      slug: 'sciences/chimie/traces',
+    });
   });
   it('maps index files to their folder', () => {
     expect(parseFilePath('src\\content\\docs\\en\\sciences\\index.md')).toEqual({ locale: 'en', slug: 'sciences' });
@@ -28,7 +31,10 @@ describe('tagSlug', () => {
 
 describe('chart helpers', () => {
   it('parses CSV with numeric cells', () => {
-    expect(parseCsv('a,b\nx,1\ny,2.5')).toEqual([{ a: 'x', b: 1 }, { a: 'y', b: 2.5 }]);
+    expect(parseCsv('a,b\nx,1\ny,2.5')).toEqual([
+      { a: 'x', b: 1 },
+      { a: 'y', b: 2.5 },
+    ]);
   });
   it('produces nice ticks covering the maximum', () => {
     const t = ticks(93);

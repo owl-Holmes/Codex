@@ -27,21 +27,32 @@ const empty = Boolean(focus) && data.nodes.length < 2;
 <figure class="graph" data-focus={focus} hidden={empty}>
   {focus && <h2 class="graph-heading">{t('graph.local')}</h2>}
   <svg class="graph-canvas" viewBox={`0 0 ${width} ${height}`} role="group" aria-label={t('graph.label')}>
-    <text x={width / 2} y={height / 2} text-anchor="middle">{t('graph.loading')}</text>
+    <text x={width / 2} y={height / 2} text-anchor="middle">
+      {t('graph.loading')}
+    </text>
   </svg>
   <figcaption class="legend">
-    <span><i class="key key--prerequisite"></i>{t('graph.prerequisite')}</span>
-    <span><i class="key key--related"></i>{t('graph.related')}</span>
-    <span><i class="key key--tag"></i>{t('graph.tag')}</span>
+    <span>
+      <i class="key key--prerequisite"></i>
+      {t('graph.prerequisite')}
+    </span>
+    <span>
+      <i class="key key--related"></i>
+      {t('graph.related')}
+    </span>
+    <span>
+      <i class="key key--tag"></i>
+      {t('graph.tag')}
+    </span>
   </figcaption>
   <script type="application/json" class="graph-data" set:html={JSON.stringify(data)} />
 </figure>
 
-{!focus && (<details class="graph-list">
-  <summary>{t('graph.textList')}</summary>
-  <ul>
-    {
-      data.nodes.map((n) => (
+{!focus && (
+  <details class="graph-list">
+    <summary>{t('graph.textList')}</summary>
+    <ul>
+      {data.nodes.map((n) => (
         <li>
           <a href={n.url}>{n.title}</a> <small>({n.section})</small>
           <ul>
@@ -49,14 +60,20 @@ const empty = Boolean(focus) && data.nodes.length < 2;
               .filter((e) => e.source === n.id || e.target === n.id)
               .map((e) => {
                 const other = titleOf.get(e.source === n.id ? e.target : e.source);
-                return other && <li>{t(`graph.${e.kind === 'further' ? 'related' : e.kind}`)} : {other.title}</li>;
+                return (
+                  other && (
+                    <li>
+                      {t(`graph.${e.kind === 'further' ? 'related' : e.kind}`)} : {other.title}
+                    </li>
+                  )
+                );
               })}
           </ul>
         </li>
-      ))
-    }
-  </ul>
-</details>)}
+      ))}
+    </ul>
+  </details>
+)}
 
 <script>
   import { renderGraph } from './graph-sim';
@@ -75,21 +92,75 @@ const empty = Boolean(focus) && data.nodes.length < 2;
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
   }
-  .graph-canvas :global(text) { fill: var(--color-text); font-size: 13px; font-family: var(--font-body); }
-  .graph-canvas :global(.edge) { stroke: var(--color-border); stroke-width: 1; }
-  .graph-canvas :global(.edge--prerequisite) { stroke: var(--callout-warning); stroke-width: 2; }
-  .graph-canvas :global(.edge--related), .graph-canvas :global(.edge--further) { stroke: var(--color-ornament); stroke-width: 1.5; }
-  .graph-canvas :global(.edge--tag) { stroke-dasharray: 4 4; }
-  .graph-canvas :global(.node circle) { fill: var(--color-accent); stroke: var(--color-bg); stroke-width: 2; }
-  .graph-canvas :global(.node:hover circle), .graph-canvas :global(.node:focus circle) { r: 12; }
-  .graph-canvas :global(.node:focus) { outline: none; }
-  .graph-canvas :global(.node:focus text) { font-weight: 700; text-decoration: underline; }
-  .legend { display: flex; gap: 1.2rem; font-size: 0.9rem; color: var(--color-muted); margin-top: 0.5rem; }
-  .key { display: inline-block; width: 1.6rem; height: 0; border-top: 2px solid var(--color-border); margin-right: 0.4rem; vertical-align: middle; }
-  .key--prerequisite { border-color: var(--callout-warning); }
-  .key--related { border-color: var(--color-ornament); }
-  .key--tag { border-top-style: dashed; }
-  .graph-list { margin-top: 1rem; }
-  .graph-heading { font-size: 1.3rem; }
-  .graph-canvas :global(.node--focus circle) { fill: var(--color-ornament); r: 12; }
+  .graph-canvas :global(text) {
+    fill: var(--color-text);
+    font-size: 13px;
+    font-family: var(--font-body);
+  }
+  .graph-canvas :global(.edge) {
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+  .graph-canvas :global(.edge--prerequisite) {
+    stroke: var(--callout-warning);
+    stroke-width: 2;
+  }
+  .graph-canvas :global(.edge--related),
+  .graph-canvas :global(.edge--further) {
+    stroke: var(--color-ornament);
+    stroke-width: 1.5;
+  }
+  .graph-canvas :global(.edge--tag) {
+    stroke-dasharray: 4 4;
+  }
+  .graph-canvas :global(.node circle) {
+    fill: var(--color-accent);
+    stroke: var(--color-bg);
+    stroke-width: 2;
+  }
+  .graph-canvas :global(.node:hover circle),
+  .graph-canvas :global(.node:focus circle) {
+    r: 12;
+  }
+  .graph-canvas :global(.node:focus) {
+    outline: none;
+  }
+  .graph-canvas :global(.node:focus text) {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  .legend {
+    display: flex;
+    gap: 1.2rem;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin-top: 0.5rem;
+  }
+  .key {
+    display: inline-block;
+    width: 1.6rem;
+    height: 0;
+    border-top: 2px solid var(--color-border);
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+  .key--prerequisite {
+    border-color: var(--callout-warning);
+  }
+  .key--related {
+    border-color: var(--color-ornament);
+  }
+  .key--tag {
+    border-top-style: dashed;
+  }
+  .graph-list {
+    margin-top: 1rem;
+  }
+  .graph-heading {
+    font-size: 1.3rem;
+  }
+  .graph-canvas :global(.node--focus circle) {
+    fill: var(--color-ornament);
+    r: 12;
+  }
 </style>

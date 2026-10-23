@@ -21,20 +21,27 @@ const multiple = answers.length > 1;
 const name = `quiz-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
-<form class="quiz" data-answers={answers.join(',')} data-correct={t('quiz.correct')} data-incorrect={t('quiz.incorrect')}>
+<form
+  class="quiz"
+  data-answers={answers.join(',')}
+  data-correct={t('quiz.correct')}
+  data-incorrect={t('quiz.incorrect')}
+>
   <fieldset>
     <legend>{question}</legend>
-    {
-      options.map((option, i) => (
-        <label>
-          <input type={multiple ? 'checkbox' : 'radio'} name={name} value={i} /> {option}
-        </label>
-      ))
-    }
+    {options.map((option, i) => (
+      <label>
+        <input type={multiple ? 'checkbox' : 'radio'} name={name} value={i} /> {option}
+      </label>
+    ))}
   </fieldset>
   <button type="submit">{t('quiz.check')}</button>
   <p class="quiz-feedback" role="status" aria-live="polite"></p>
-  {explanation && <p class="quiz-explanation" hidden>{explanation}</p>}
+  {explanation && (
+    <p class="quiz-explanation" hidden>
+      {explanation}
+    </p>
+  )}
 </form>
 
 <script>
@@ -42,7 +49,10 @@ const name = `quiz-${Math.random().toString(36).slice(2, 8)}`;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const expected = (form.dataset.answers ?? '').split(',').sort().join(',');
-      const chosen = [...form.querySelectorAll<HTMLInputElement>('input:checked')].map((i) => i.value).sort().join(',');
+      const chosen = [...form.querySelectorAll<HTMLInputElement>('input:checked')]
+        .map((i) => i.value)
+        .sort()
+        .join(',');
       const ok = chosen === expected;
       form.classList.toggle('quiz--correct', ok);
       form.classList.toggle('quiz--incorrect', !ok);
@@ -62,9 +72,20 @@ const name = `quiz-${Math.random().toString(36).slice(2, 8)}`;
     padding: 0.8rem 1.1rem;
     margin-block: 1.25rem;
   }
-  fieldset { border: 0; padding: 0; margin: 0 0 0.6rem; }
-  legend { font-weight: 700; margin-bottom: 0.4rem; }
-  label { display: block; padding: 0.2rem 0; cursor: pointer; }
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 0.6rem;
+  }
+  legend {
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  label {
+    display: block;
+    padding: 0.2rem 0;
+    cursor: pointer;
+  }
   button {
     padding: 0.35rem 0.9rem;
     border: 1px solid var(--color-accent);
@@ -74,10 +95,24 @@ const name = `quiz-${Math.random().toString(36).slice(2, 8)}`;
     font: inherit;
     cursor: pointer;
   }
-  .quiz-feedback { margin: 0.5rem 0 0; font-weight: 700; }
-  .quiz--correct { border-left-color: var(--callout-example); }
-  .quiz--correct .quiz-feedback { color: var(--callout-example); }
-  .quiz--incorrect { border-left-color: var(--callout-warning); }
-  .quiz--incorrect .quiz-feedback { color: var(--callout-warning); }
-  .quiz-explanation { margin: 0.3rem 0 0; color: var(--color-muted); }
+  .quiz-feedback {
+    margin: 0.5rem 0 0;
+    font-weight: 700;
+  }
+  .quiz--correct {
+    border-left-color: var(--callout-example);
+  }
+  .quiz--correct .quiz-feedback {
+    color: var(--callout-example);
+  }
+  .quiz--incorrect {
+    border-left-color: var(--callout-warning);
+  }
+  .quiz--incorrect .quiz-feedback {
+    color: var(--callout-warning);
+  }
+  .quiz-explanation {
+    margin: 0.3rem 0 0;
+    color: var(--color-muted);
+  }
 </style>

@@ -88,14 +88,14 @@ export function findNode(root: TreeNode, slug: string): TreeNode | undefined {
 /** Ancestors from the top-level section down to the node itself (root excluded). */
 export function getTrail(root: TreeNode, slug: string): TreeNode[] {
   const parts = slug ? slug.split('/') : [];
-  return parts
-    .map((_, i) => findNode(root, parts.slice(0, i + 1).join('/')))
-    .filter((n): n is TreeNode => Boolean(n));
+  return parts.map((_, i) => findNode(root, parts.slice(0, i + 1).join('/'))).filter((n): n is TreeNode => Boolean(n));
 }
 
 /** Theme resolution: page theme > nearest ancestor theme > "base". */
 export function resolveTheme(root: TreeNode, slug: string, pageTheme?: string): string {
   if (pageTheme) return pageTheme;
-  const themed = getTrail(root, slug).reverse().find((n) => n.theme);
+  const themed = getTrail(root, slug)
+    .reverse()
+    .find((n) => n.theme);
   return themed?.theme ?? 'base';
 }

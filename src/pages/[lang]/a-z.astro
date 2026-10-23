@@ -35,7 +35,11 @@ const terms = [...glossary].map(([id, e]) => ({
 
 /** First significant letter, without leading articles' apostrophes or accents. */
 const letterOf = (s: string) =>
-  s.replace(/^(l['’]|la |le |les |the )/i, '').normalize('NFD').replace(/[̀-ͯ]/g, '')[0]?.toUpperCase() ?? '#';
+  s
+    .replace(/^(l['’]|la |le |les |the )/i, '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')[0]
+    ?.toUpperCase() ?? '#';
 const groups = new Map<string, typeof pages>();
 [...pages, ...terms]
   .sort((a, b) => a.label.localeCompare(b.label, locale, { sensitivity: 'base' }))
@@ -49,27 +53,37 @@ const letters = [...groups.keys()].sort();
 <BaseLayout locale={locale} slug="a-z" title={t('az.title')} description={t('az.title')} indexable={false}>
   <h1>{t('az.title')}</h1>
   <nav aria-label={t('az.letters')} class="letters">
-    {letters.map((l) => <a href={`#letter-${l}`}>{l}</a>)}
+    {letters.map((l) => (
+      <a href={`#letter-${l}`}>{l}</a>
+    ))}
   </nav>
-  {
-    letters.map((l) => (
-      <section id={`letter-${l}`}>
-        <h2>{l}</h2>
-        <ul>
-          {groups.get(l)!.map((item) => (
-            <li>
-              <a href={item.url}>{item.label}</a>
-              {item.kind && <small> · {item.kind}</small>}
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))
-  }
+  {letters.map((l) => (
+    <section id={`letter-${l}`}>
+      <h2>{l}</h2>
+      <ul>
+        {groups.get(l)!.map((item) => (
+          <li>
+            <a href={item.url}>{item.label}</a>
+            {item.kind && <small> · {item.kind}</small>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
 </BaseLayout>
 
 <style>
-  .letters { display: flex; flex-wrap: wrap; gap: 0.6rem; font-family: var(--font-display); font-size: 1.3rem; }
-  section { scroll-margin-top: 1rem; }
-  small { color: var(--color-muted); }
+  .letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+  }
+  section {
+    scroll-margin-top: 1rem;
+  }
+  small {
+    color: var(--color-muted);
+  }
 </style>

@@ -28,7 +28,10 @@ const { code, title } = Astro.props;
 </script>
 
 <style>
-  .mermaid-figure { margin-block: 1.5rem; text-align: center; }
+  .mermaid-figure {
+    margin-block: 1.5rem;
+    text-align: center;
+  }
   .mermaid-src {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -36,5 +39,9 @@ const { code, title } = Astro.props;
     padding: 1rem;
     overflow-x: auto;
   }
-  figcaption { font-size: 0.95rem; color: var(--color-muted); margin-top: 0.5rem; }
+  figcaption {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    margin-top: 0.5rem;
+  }
 </style>

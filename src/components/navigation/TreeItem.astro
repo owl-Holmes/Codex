@@ -17,30 +17,52 @@ const ariaCurrent = isCurrent ? 'page' : undefined;
 ---
 
 <li>
-  {
-    node.children.length ? (
-      <details open={isOpen}>
-        <summary>
-          <a href={href} aria-current={ariaCurrent}>{node.title}</a>
-        </summary>
-        <ul role="list">
-          {node.children.map((child) => (
-            <Astro.self node={child} locale={locale} current={current} />
-          ))}
-        </ul>
-      </details>
-    ) : (
-      <a href={href} aria-current={ariaCurrent}>{node.title}</a>
-    )
-  }
+  {node.children.length ? (
+    <details open={isOpen}>
+      <summary>
+        <a href={href} aria-current={ariaCurrent}>
+          {node.title}
+        </a>
+      </summary>
+      <ul role="list">
+        {node.children.map((child) => (
+          <Astro.self node={child} locale={locale} current={current} />
+        ))}
+      </ul>
+    </details>
+  ) : (
+    <a href={href} aria-current={ariaCurrent}>
+      {node.title}
+    </a>
+  )}
 </li>
 
 <style>
-  li { margin: 0.15rem 0; }
-  ul { list-style: none; padding-left: 1rem; margin: 0; border-left: 1px solid var(--color-border); }
-  a { color: var(--color-text); text-decoration: none; }
-  a:hover { color: var(--color-accent); text-decoration: underline; }
-  a[aria-current='page'] { color: var(--color-accent); font-weight: 700; }
-  summary { cursor: pointer; }
-  summary::marker { color: var(--color-ornament); }
+  li {
+    margin: 0.15rem 0;
+  }
+  ul {
+    list-style: none;
+    padding-left: 1rem;
+    margin: 0;
+    border-left: 1px solid var(--color-border);
+  }
+  a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+  a[aria-current='page'] {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+  summary {
+    cursor: pointer;
+  }
+  summary::marker {
+    color: var(--color-ornament);
+  }
 </style>

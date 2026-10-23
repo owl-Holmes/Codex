@@ -28,5 +28,8 @@ export function hashFile(path) {
 /** Reads one frontmatter scalar (e.g. sourceHash) from a page. */
 export function readField(path, field) {
   const fm = readFileSync(path, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  return fm?.[1].match(new RegExp(`^${field}:\\s*(.+)$`, 'm'))?.[1].trim().replace(/^['"]|['"]$/g, '');
+  return fm?.[1]
+    .match(new RegExp(`^${field}:\\s*(.+)$`, 'm'))?.[1]
+    .trim()
+    .replace(/^['"]|['"]$/g, '');
 }

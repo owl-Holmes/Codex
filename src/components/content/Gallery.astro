@@ -30,19 +30,19 @@ const items = await Promise.all(
 
 <div class="gallery">
   <ul role="list">
-    {
-      items.map((item) => (
-        <li>
-          <a href={item.full} data-caption={item.caption ?? ''} data-alt={item.alt}>
-            <Image src={item.image} alt={item.alt} width={320} />
-          </a>
-          {item.caption && <p>{item.caption}</p>}
-        </li>
-      ))
-    }
+    {items.map((item) => (
+      <li>
+        <a href={item.full} data-caption={item.caption ?? ''} data-alt={item.alt}>
+          <Image src={item.image} alt={item.alt} width={320} />
+        </a>
+        {item.caption && <p>{item.caption}</p>}
+      </li>
+    ))}
   </ul>
   <dialog class="lightbox" aria-label={t('gallery.viewer')}>
-    <button type="button" class="lightbox-close" aria-label={t('gallery.close')}>✕</button>
+    <button type="button" class="lightbox-close" aria-label={t('gallery.close')}>
+      ✕
+    </button>
     <img alt="" />
     <p class="lightbox-caption"></p>
   </dialog>
@@ -76,12 +76,52 @@ const items = await Promise.all(
     padding: 0;
     margin-block: 1.25rem;
   }
-  .gallery li a { display: block; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); padding: 0.4rem; }
-  .gallery li :global(img) { width: 100%; height: 9rem; object-fit: contain; }
-  .gallery li p { margin: 0.3rem 0 0; font-size: 0.9rem; color: var(--color-muted); text-align: center; }
-  .lightbox { max-width: min(90vw, 1100px); padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text); }
-  .lightbox::backdrop { background: rgb(0 0 0 / 0.75); }
-  .lightbox img { max-height: 78vh; margin-inline: auto; }
-  .lightbox-close { float: right; min-width: 2.25rem; min-height: 2.25rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: transparent; color: inherit; cursor: pointer; }
-  .lightbox-caption { text-align: center; margin: 0.5rem 0 0; color: var(--color-muted); }
+  .gallery li a {
+    display: block;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    padding: 0.4rem;
+  }
+  .gallery li :global(img) {
+    width: 100%;
+    height: 9rem;
+    object-fit: contain;
+  }
+  .gallery li p {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    text-align: center;
+  }
+  .lightbox {
+    max-width: min(90vw, 1100px);
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.75);
+  }
+  .lightbox img {
+    max-height: 78vh;
+    margin-inline: auto;
+  }
+  .lightbox-close {
+    float: right;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .lightbox-caption {
+    text-align: center;
+    margin: 0.5rem 0 0;
+    color: var(--color-muted);
+  }
 </style>

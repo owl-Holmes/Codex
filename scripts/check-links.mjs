@@ -5,7 +5,9 @@ import { join, relative } from 'node:path';
 
 const DIST = 'dist';
 // Base path read from the single source of truth, src/config/site.ts.
-const BASE = `${readFileSync('src/config/site.ts', 'utf8').match(/base:\s*'([^']+)'/)[1].replace(/\/$/, '')}/`;
+const BASE = `${readFileSync('src/config/site.ts', 'utf8')
+  .match(/base:\s*'([^']+)'/)[1]
+  .replace(/\/$/, '')}/`;
 
 if (!existsSync(DIST)) {
   console.error('dist/ not found — run `npm run build` first.');

@@ -18,18 +18,28 @@ const max = Math.max(1, ...tags.map(([, pages]) => pages.length));
 <BaseLayout locale={locale} slug="tags" title={t('tags.title')} description={t('tags.title')} indexable={false}>
   <h1>{t('tags.title')}</h1>
   <ul class="cloud" role="list">
-    {
-      tags.map(([tag, pages]) => (
-        <li style={`--weight: ${1 + pages.length / max}`}>
-          <a href={pageUrl(locale, `tags/${tag}`)}>#{tag}</a> <span class="count">({pages.length})</span>
-        </li>
-      ))
-    }
+    {tags.map(([tag, pages]) => (
+      <li style={`--weight: ${1 + pages.length / max}`}>
+        <a href={pageUrl(locale, `tags/${tag}`)}>#{tag}</a> <span class="count">({pages.length})</span>
+      </li>
+    ))}
   </ul>
 </BaseLayout>
 
 <style>
-  .cloud { display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem; padding: 0; list-style: none; }
-  .cloud a { font-size: calc(1rem * var(--weight)); font-family: var(--font-display); }
-  .count { color: var(--color-muted); font-size: 0.85rem; }
+  .cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.2rem;
+    padding: 0;
+    list-style: none;
+  }
+  .cloud a {
+    font-size: calc(1rem * var(--weight));
+    font-family: var(--font-display);
+  }
+  .count {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
 </style>

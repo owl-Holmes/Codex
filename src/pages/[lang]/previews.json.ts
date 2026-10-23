@@ -24,7 +24,10 @@ export const GET: APIRoute = async ({ params }) => {
         {
           title: page.entry.data.title,
           description: page.entry.data.description,
-          section: trail.slice(0, -1).map((n) => n.title).join(' › '),
+          section: trail
+            .slice(0, -1)
+            .map((n) => n.title)
+            .join(' › '),
         },
       ];
     }),

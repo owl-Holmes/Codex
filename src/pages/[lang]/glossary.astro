@@ -24,23 +24,33 @@ const terms = await Promise.all(
 <BaseLayout locale={locale} slug="glossary" title={t('glossary.title')} description={t('glossary.title')}>
   <h1>{t('glossary.title')}</h1>
   <dl class="glossary">
-    {
-      terms.map(({ id, entry, Body }) => (
-        <div id={id} class="glossary-entry" lang={entry.id.startsWith(`${locale}/`) ? locale : 'fr'}>
-          <dt>{entry.data.term}</dt>
-          <dd>
-            <p>{entry.data.definition}</p>
-            <Body />
-          </dd>
-        </div>
-      ))
-    }
+    {terms.map(({ id, entry, Body }) => (
+      <div id={id} class="glossary-entry" lang={entry.id.startsWith(`${locale}/`) ? locale : 'fr'}>
+        <dt>{entry.data.term}</dt>
+        <dd>
+          <p>{entry.data.definition}</p>
+          <Body />
+        </dd>
+      </div>
+    ))}
   </dl>
 </BaseLayout>
 
 <style>
-  .glossary-entry { padding-block: 0.8rem; border-bottom: 1px solid var(--color-border); scroll-margin-top: 1rem; }
-  .glossary-entry:target { background: var(--color-surface); }
-  dt { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; }
-  dd { margin: 0.2rem 0 0; }
+  .glossary-entry {
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--color-border);
+    scroll-margin-top: 1rem;
+  }
+  .glossary-entry:target {
+    background: var(--color-surface);
+  }
+  dt {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+  dd {
+    margin: 0.2rem 0 0;
+  }
 </style>

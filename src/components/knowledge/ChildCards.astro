@@ -12,21 +12,19 @@ interface Props {
 const { nodes, locale, heading } = Astro.props;
 ---
 
-{
-  nodes.length > 0 && (
-    <section>
-      <h2>{heading}</h2>
-      <ul class="cards" role="list">
-        {nodes.map((n) => (
-          <li class="card" data-theme={n.theme}>
-            <a href={pageUrl(locale, n.slug)}>{n.title}</a>
-            {n.description && <p>{n.description}</p>}
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
-}
+{nodes.length > 0 && (
+  <section>
+    <h2>{heading}</h2>
+    <ul class="cards" role="list">
+      {nodes.map((n) => (
+        <li class="card" data-theme={n.theme}>
+          <a href={pageUrl(locale, n.slug)}>{n.title}</a>
+          {n.description && <p>{n.description}</p>}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
 
 <style>
   .cards {
@@ -43,6 +41,14 @@ const { nodes, locale, heading } = Astro.props;
     border-radius: var(--radius);
     padding: 1rem;
   }
-  .card a { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; }
-  .card p { margin: 0.4rem 0 0; font-size: 0.95rem; color: var(--color-muted); }
+  .card a {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+  .card p {
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
 </style>

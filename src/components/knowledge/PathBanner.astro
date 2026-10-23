@@ -14,25 +14,23 @@ const t = useT(locale);
 const memberships = await getPathsForPage(locale, slug);
 ---
 
-{
-  memberships.map(({ path, index }) => {
-    const steps = path.data.steps;
-    const prev = steps[index - 1];
-    const next = steps[index + 1];
-    return (
-      <nav class="path-banner" aria-label={path.data.title}>
-        <a href={pageUrl(locale, `paths/${path.id}`)}>{path.data.title}</a>
-        <span>
-          {t('paths.step')} {index + 1} {t('paths.of')} {steps.length}
-        </span>
-        <span class="path-nav">
-          {prev && <a href={pageUrl(locale, prev.page)}>← {t('paths.prev')}</a>}
-          {next && <a href={pageUrl(locale, next.page)}>{t('paths.next')} →</a>}
-        </span>
-      </nav>
-    );
-  })
-}
+{memberships.map(({ path, index }) => {
+  const steps = path.data.steps;
+  const prev = steps[index - 1];
+  const next = steps[index + 1];
+  return (
+    <nav class="path-banner" aria-label={path.data.title}>
+      <a href={pageUrl(locale, `paths/${path.id}`)}>{path.data.title}</a>
+      <span>
+        {t('paths.step')} {index + 1} {t('paths.of')} {steps.length}
+      </span>
+      <span class="path-nav">
+        {prev && <a href={pageUrl(locale, prev.page)}>← {t('paths.prev')}</a>}
+        {next && <a href={pageUrl(locale, next.page)}>{t('paths.next')} →</a>}
+      </span>
+    </nav>
+  );
+})}
 
 <style>
   .path-banner {
@@ -48,6 +46,12 @@ const memberships = await getPathsForPage(locale, slug);
     background: var(--color-surface);
     font-size: 0.95rem;
   }
-  .path-banner > a { font-weight: 700; }
-  .path-nav { margin-left: auto; display: flex; gap: 1rem; }
+  .path-banner > a {
+    font-weight: 700;
+  }
+  .path-nav {
+    margin-left: auto;
+    display: flex;
+    gap: 1rem;
+  }
 </style>

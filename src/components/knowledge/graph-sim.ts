@@ -20,7 +20,10 @@ function layout(data: GraphData, width: number, height: number, ticks = 300): Ma
   const nodes = new Map<string, SimNode>(
     data.nodes.map((n, i) => {
       const angle = (i / data.nodes.length) * Math.PI * 2;
-      return [n.id, { id: n.id, x: width / 2 + Math.cos(angle) * 120, y: height / 2 + Math.sin(angle) * 120, vx: 0, vy: 0 }];
+      return [
+        n.id,
+        { id: n.id, x: width / 2 + Math.cos(angle) * 120, y: height / 2 + Math.sin(angle) * 120, vx: 0, vy: 0 },
+      ];
     }),
   );
   const list = [...nodes.values()];

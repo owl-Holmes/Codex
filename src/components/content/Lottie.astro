@@ -44,7 +44,8 @@ const url = await load();
         path: figure.dataset.src,
       });
       const button = figure.querySelector<HTMLButtonElement>('.lottie-toggle')!;
-      const label = () => (button.textContent = (animation.isPaused ? button.dataset.play : button.dataset.pause) ?? '');
+      const label = () =>
+        (button.textContent = (animation.isPaused ? button.dataset.play : button.dataset.pause) ?? '');
       animation.addEventListener('DOMLoaded', label);
       button.addEventListener('click', () => {
         animation.togglePause();
@@ -55,8 +56,14 @@ const url = await load();
 </script>
 
 <style>
-  .lottie { margin-block: 1.5rem; text-align: center; }
-  .lottie-stage { max-width: 420px; margin-inline: auto; }
+  .lottie {
+    margin-block: 1.5rem;
+    text-align: center;
+  }
+  .lottie-stage {
+    max-width: 420px;
+    margin-inline: auto;
+  }
   .lottie-toggle {
     margin-top: 0.4rem;
     padding: 0.25rem 0.8rem;
@@ -67,5 +74,9 @@ const url = await load();
     font: inherit;
     cursor: pointer;
   }
-  figcaption { font-size: 0.95rem; color: var(--color-muted); margin-top: 0.3rem; }
+  figcaption {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    margin-top: 0.3rem;
+  }
 </style>

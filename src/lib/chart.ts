@@ -12,7 +12,9 @@ export function parseCsv(text: string): Row[] {
   const keys = header.split(',').map((k) => k.trim());
   return lines.map((line) => {
     const cells = line.split(',').map((c) => c.trim());
-    return Object.fromEntries(keys.map((k, i) => [k, cells[i] !== '' && !isNaN(Number(cells[i])) ? Number(cells[i]) : cells[i]]));
+    return Object.fromEntries(
+      keys.map((k, i) => [k, cells[i] !== '' && !isNaN(Number(cells[i])) ? Number(cells[i]) : cells[i]]),
+    );
   });
 }
 

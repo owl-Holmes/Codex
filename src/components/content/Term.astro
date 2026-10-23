@@ -19,7 +19,9 @@ const tipId = `term-${id}-${Math.random().toString(36).slice(2, 7)}`;
 ---
 
 <span class="term">
-  <a href={`${pageUrl(locale, 'glossary')}#${id}`} aria-describedby={tipId}><slot /></a>
+  <a href={`${pageUrl(locale, 'glossary')}#${id}`} aria-describedby={tipId}>
+    <slot />
+  </a>
   <span role="tooltip" id={tipId} class="term-tip">
     <strong>{entry.data.term}</strong> — {entry.data.definition}
   </span>
@@ -50,5 +52,7 @@ const tipId = `term-${id}-${Math.random().toString(36).slice(2, 7)}`;
     visibility: hidden;
   }
   .term:hover .term-tip,
-  .term:focus-within .term-tip { visibility: visible; }
+  .term:focus-within .term-tip {
+    visibility: visible;
+  }
 </style>

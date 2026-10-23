@@ -17,8 +17,16 @@ const t = useT(locale);
 const pages = (await getTagIndex()).get(tag) ?? [];
 ---
 
-<BaseLayout locale={locale} slug={`tags/${tag}`} title={`#${tag}`} description={`${t('tags.title')} : ${tag}`} indexable={false}>
-  <p><a href={pageUrl(locale, 'tags')}>← {t('tags.title')}</a></p>
+<BaseLayout
+  locale={locale}
+  slug={`tags/${tag}`}
+  title={`#${tag}`}
+  description={`${t('tags.title')} : ${tag}`}
+  indexable={false}
+>
+  <p>
+    <a href={pageUrl(locale, 'tags')}>← {t('tags.title')}</a>
+  </p>
   <h1>#{tag}</h1>
   <PageList heading={t('tags.pages')} slugs={pages.map((p) => p.slug)} locale={locale} />
 </BaseLayout>

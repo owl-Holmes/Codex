@@ -19,7 +19,9 @@ const label = title ?? useT(locale)(`callout.${type}` as UiKey);
 
 <aside class={`callout callout--${type}`} style={`--callout-color: var(--callout-${type})`}>
   <p class="callout-title">{label}</p>
-  <div class="callout-body"><slot /></div>
+  <div class="callout-body">
+    <slot />
+  </div>
 </aside>
 
 <style>
@@ -37,5 +39,7 @@ const label = title ?? useT(locale)(`callout.${type}` as UiKey);
     color: var(--callout-color);
     margin-bottom: 0.3rem;
   }
-  .callout-body :global(> :last-child) { margin-bottom: 0; }
+  .callout-body :global(> :last-child) {
+    margin-bottom: 0;
+  }
 </style>

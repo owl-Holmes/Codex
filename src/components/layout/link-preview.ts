@@ -13,7 +13,10 @@ interface Preview {
 export function setupLinkPreviews(root: HTMLElement, indexUrl: string): void {
   if (matchMedia('(pointer: coarse)').matches) return;
   let index: Promise<Record<string, Preview>> | undefined;
-  const load = () => (index ??= fetch(indexUrl).then((r) => r.json()).catch(() => ({})));
+  const load = () =>
+    (index ??= fetch(indexUrl)
+      .then((r) => r.json())
+      .catch(() => ({})));
 
   const card = document.createElement('div');
   card.className = 'link-preview';

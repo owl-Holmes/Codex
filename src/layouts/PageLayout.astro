@@ -51,21 +51,35 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
   contentLang={fallback ? 'fr' : locale}
 >
   <Breadcrumbs trail={trail} locale={locale} />
-  {fallback && <p class="banner" role="note" lang={locale}>{t('page.fallback')}</p>}
+  {fallback && (
+    <p class="banner" role="note" lang={locale}>
+      {t('page.fallback')}
+    </p>
+  )}
   <PathBanner locale={locale} slug={slug} />
   <article>
-    {trail[0] && <span hidden data-pagefind-filter="section">{trail[0].title}</span>}
+    {trail[0] && (
+      <span hidden data-pagefind-filter="section">
+        {trail[0].title}
+      </span>
+    )}
     <header class="page-head">
       <h1>{title}</h1>
-      {
-        data && (
-          <p class="meta">
-            <span class={`status status--${data.status}`}>{t(`status.${data.status}`)}</span>
-            {date && <span>{t('page.updated')} {date.toLocaleDateString(locale)}</span>}
-            {data.tags.map((tag) => <a class="tag" href={pageUrl(locale, `tags/${tagSlug(tag)}`)}>#{tag}</a>)}
-          </p>
-        )
-      }
+      {data && (
+        <p class="meta">
+          <span class={`status status--${data.status}`}>{t(`status.${data.status}`)}</span>
+          {date && (
+            <span>
+              {t('page.updated')} {date.toLocaleDateString(locale)}
+            </span>
+          )}
+          {data.tags.map((tag) => (
+            <a class="tag" href={pageUrl(locale, `tags/${tagSlug(tag)}`)}>
+              #{tag}
+            </a>
+          ))}
+        </p>
+      )}
     </header>
     {data && <PageList heading={t('page.readFirst')} slugs={data.prerequisites} locale={locale} />}
     <slot />
@@ -76,15 +90,46 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
     <PageList heading={t('page.backlinks')} slugs={backlinks} locale={locale} />
     {data && <KnowledgeGraph locale={locale} focus={slug} />}
   </article>
-  {editUrl && <p class="page-footer"><a href={editUrl}>{t('page.edit')}</a></p>}
+  {editUrl && (
+    <p class="page-footer">
+      <a href={editUrl}>{t('page.edit')}</a>
+    </p>
+  )}
 </BaseLayout>
 
 <style>
-  .page-head { border-bottom: 1px solid var(--color-border); padding-bottom: 0.8rem; margin-bottom: 1.5rem; }
-  .meta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0.5rem 0 0; font-size: 0.95rem; color: var(--color-muted); }
-  .status { border: 1px solid currentColor; border-radius: 999px; padding: 0 0.6rem; }
-  .status--complete { color: var(--callout-example); }
-  .status--draft { color: var(--callout-warning); }
-  .banner { background: var(--color-surface); border: 1px dashed var(--color-ornament); padding: 0.6rem 1rem; border-radius: var(--radius); }
-  .page-footer { margin-top: 3rem; font-size: 0.95rem; }
+  .page-head {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+  .status {
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0 0.6rem;
+  }
+  .status--complete {
+    color: var(--callout-example);
+  }
+  .status--draft {
+    color: var(--callout-warning);
+  }
+  .banner {
+    background: var(--color-surface);
+    border: 1px dashed var(--color-ornament);
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius);
+  }
+  .page-footer {
+    margin-top: 3rem;
+    font-size: 0.95rem;
+  }
 </style>

@@ -15,7 +15,14 @@ const { label } = Astro.props;
 </section>
 
 <style>
-  .tab-fallback-title { font-weight: 700; margin-bottom: 0.3rem; }
-  :global(.tabs[data-ready]) .tab-fallback-title { display: none; }
-  .tab-panel :global(> :last-child) { margin-bottom: 0; }
+  .tab-fallback-title {
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  :global(.tabs[data-ready]) .tab-fallback-title {
+    display: none;
+  }
+  .tab-panel :global(> :last-child) {
+    margin-bottom: 0;
+  }
 </style>

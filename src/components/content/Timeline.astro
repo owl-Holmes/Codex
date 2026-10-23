@@ -16,15 +16,13 @@ const { items } = Astro.props;
 ---
 
 <ol class="timeline">
-  {
-    items.map((item) => (
-      <li>
-        <p class="timeline-date">{item.date}</p>
-        <p class="timeline-title">{item.title}</p>
-        {item.text && <p class="timeline-text">{item.text}</p>}
-      </li>
-    ))
-  }
+  {items.map((item) => (
+    <li>
+      <p class="timeline-date">{item.date}</p>
+      <p class="timeline-title">{item.title}</p>
+      {item.text && <p class="timeline-text">{item.text}</p>}
+    </li>
+  ))}
 </ol>
 
 <style>
@@ -35,7 +33,10 @@ const { items } = Astro.props;
     margin-block: 1.5rem;
     border-left: 2px solid var(--timeline-color);
   }
-  li { position: relative; margin-bottom: 1.2rem; }
+  li {
+    position: relative;
+    margin-bottom: 1.2rem;
+  }
   li::before {
     content: '';
     position: absolute;
@@ -47,8 +48,19 @@ const { items } = Astro.props;
     background: var(--color-bg);
     border: 2px solid var(--timeline-color);
   }
-  p { margin: 0; }
-  .timeline-date { font-family: var(--font-display); font-weight: 700; color: var(--color-accent); }
-  .timeline-title { font-weight: 600; }
-  .timeline-text { color: var(--color-muted); font-size: 0.98rem; }
+  p {
+    margin: 0;
+  }
+  .timeline-date {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+  .timeline-title {
+    font-weight: 600;
+  }
+  .timeline-text {
+    color: var(--color-muted);
+    font-size: 0.98rem;
+  }
 </style>

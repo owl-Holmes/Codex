@@ -18,13 +18,13 @@ const paths = await getPaths(locale);
   <h1>{t('paths.title')}</h1>
   <p>{t('paths.intro')}</p>
   <ul>
-    {
-      paths.map((p) => (
-        <li>
-          <a href={pageUrl(locale, `paths/${p.id}`)}>{p.data.title}</a> — {p.data.description}{' '}
-          <small>({p.data.steps.length} {t('paths.steps')})</small>
-        </li>
-      ))
-    }
+    {paths.map((p) => (
+      <li>
+        <a href={pageUrl(locale, `paths/${p.id}`)}>{p.data.title}</a> — {p.data.description}{' '}
+        <small>
+          ({p.data.steps.length} {t('paths.steps')})
+        </small>
+      </li>
+    ))}
   </ul>
 </BaseLayout>

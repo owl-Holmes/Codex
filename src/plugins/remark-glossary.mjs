@@ -5,7 +5,15 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const GLOSSARY = 'src/content/glossary';
-const SKIP = new Set(['heading', 'link', 'linkReference', 'inlineCode', 'code', 'mdxJsxTextElement', 'mdxJsxFlowElement']);
+const SKIP = new Set([
+  'heading',
+  'link',
+  'linkReference',
+  'inlineCode',
+  'code',
+  'mdxJsxTextElement',
+  'mdxJsxFlowElement',
+]);
 
 /** Reads `term` and `aliases` of every glossary file of a language: [{ id, words[] }]. */
 function loadTerms(lang) {
@@ -16,7 +24,11 @@ function loadTerms(lang) {
     .map((file) => {
       const fm = readFileSync(join(dir, file), 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
       const term = fm.match(/^term:\s*['"]?(.+?)['"]?\s*$/m)?.[1];
-      const aliases = fm.match(/^aliases:\s*\[(.*)\]/m)?.[1].split(',').map((a) => a.trim().replace(/^['"]|['"]$/g, '')) ?? [];
+      const aliases =
+        fm
+          .match(/^aliases:\s*\[(.*)\]/m)?.[1]
+          .split(',')
+          .map((a) => a.trim().replace(/^['"]|['"]$/g, '')) ?? [];
       return { id: file.replace(/\.md$/, ''), words: [term, ...aliases].filter(Boolean) };
     });
 }
@@ -61,7 +73,9 @@ export default function remarkGlossary() {
   const cache = new Map();
   return (tree, file) => {
     if (!file.data.astro?.frontmatter?.autoGlossary) return;
-    const lang = String(file.path ?? file.history?.[0] ?? '').replace(/\\/g, '/').match(/docs\/([a-z]{2})\//)?.[1];
+    const lang = String(file.path ?? file.history?.[0] ?? '')
+      .replace(/\\/g, '/')
+      .match(/docs\/([a-z]{2})\//)?.[1];
     if (!lang) return;
     if (!cache.has(lang)) cache.set(lang, loadTerms(lang));
     const used = existingTerms(tree);

@@ -39,20 +39,22 @@ if (!embed && !fileUrl) throw new Error(`Video "${title}": provide youtube, vime
 ---
 
 <figure class="video">
-  {
-    fileUrl ? (
-      <video controls preload="metadata" title={title}>
-        <source src={fileUrl} />
-        {captionsUrl && <track kind="captions" src={captionsUrl} srclang={locale} label={locale.toUpperCase()} default />}
-      </video>
-    ) : (
-      <button type="button" class="video-facade" data-embed={embed} data-title={title}>
-        <span class="play" aria-hidden="true">▶</span>
-        <span>{t('video.play')} : {title}</span>
-        <small>{t('video.external')}</small>
-      </button>
-    )
-  }
+  {fileUrl ? (
+    <video controls preload="metadata" title={title}>
+      <source src={fileUrl} />
+      {captionsUrl && <track kind="captions" src={captionsUrl} srclang={locale} label={locale.toUpperCase()} default />}
+    </video>
+  ) : (
+    <button type="button" class="video-facade" data-embed={embed} data-title={title}>
+      <span class="play" aria-hidden="true">
+        ▶
+      </span>
+      <span>
+        {t('video.play')} : {title}
+      </span>
+      <small>{t('video.external')}</small>
+    </button>
+  )}
   <figcaption>{title}</figcaption>
 </figure>
 
@@ -71,8 +73,12 @@ if (!embed && !fileUrl) throw new Error(`Video "${title}": provide youtube, vime
 </script>
 
 <style>
-  .video { margin-block: 1.5rem; }
-  .video video, .video :global(iframe), .video-facade {
+  .video {
+    margin-block: 1.5rem;
+  }
+  .video video,
+  .video :global(iframe),
+  .video-facade {
     width: 100%;
     aspect-ratio: 16 / 9;
     border: 1px solid var(--color-border);
@@ -87,6 +93,14 @@ if (!embed && !fileUrl) throw new Error(`Video "${title}": provide youtube, vime
     font: inherit;
     cursor: pointer;
   }
-  .play { font-size: 3rem; color: var(--color-ornament); }
-  figcaption { font-size: 0.95rem; color: var(--color-muted); text-align: center; margin-top: 0.5rem; }
+  .play {
+    font-size: 3rem;
+    color: var(--color-ornament);
+  }
+  figcaption {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    text-align: center;
+    margin-top: 0.5rem;
+  }
 </style>

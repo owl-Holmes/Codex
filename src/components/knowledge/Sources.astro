@@ -15,27 +15,37 @@ interface Props {
 const { sources, heading } = Astro.props;
 ---
 
-{
-  sources.length > 0 && (
-    <section class="sources">
-      <h2>{heading}</h2>
-      <ol>
-        {sources.map((s) => (
-          <li>
-            {s.author && <>{s.author}, </>}
-            {s.url ? <a href={s.url}><cite>{s.title}</cite></a> : <cite>{s.title}</cite>}
-            {s.publisher && <>, {s.publisher}</>}
-            {s.year && <> ({s.year})</>}
-            {s.note && <span class="note"> — {s.note}</span>}
-          </li>
-        ))}
-      </ol>
-    </section>
-  )
-}
+{sources.length > 0 && (
+  <section class="sources">
+    <h2>{heading}</h2>
+    <ol>
+      {sources.map((s) => (
+        <li>
+          {s.author && <>{s.author}, </>}
+          {s.url ? (
+            <a href={s.url}>
+              <cite>{s.title}</cite>
+            </a>
+          ) : (
+            <cite>{s.title}</cite>
+          )}
+          {s.publisher && <>, {s.publisher}</>}
+          {s.year && <> ({s.year})</>}
+          {s.note && <span class="note"> — {s.note}</span>}
+        </li>
+      ))}
+    </ol>
+  </section>
+)}
 
 <style>
-  .sources { font-size: 0.95rem; }
-  .sources h2 { font-size: 1.3rem; }
-  .note { color: var(--color-muted); }
+  .sources {
+    font-size: 0.95rem;
+  }
+  .sources h2 {
+    font-size: 1.3rem;
+  }
+  .note {
+    color: var(--color-muted);
+  }
 </style>

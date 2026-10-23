@@ -15,23 +15,26 @@ const { heading, slugs, locale, notes = {} } = Astro.props;
 const items = (await Promise.all(slugs.map((s) => resolvePage(locale, s)))).flatMap((r) => (r ? [r.page] : []));
 ---
 
-{
-  items.length > 0 && (
-    <section class="page-list">
-      <h2>{heading}</h2>
-      <ul>
-        {items.map((p) => (
-          <li>
-            <a href={pageUrl(locale, p.slug)}>{p.entry.data.title}</a>
-            {notes[p.slug] && <span class="note"> — {notes[p.slug]}</span>}
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
-}
+{items.length > 0 && (
+  <section class="page-list">
+    <h2>{heading}</h2>
+    <ul>
+      {items.map((p) => (
+        <li>
+          <a href={pageUrl(locale, p.slug)}>{p.entry.data.title}</a>
+          {notes[p.slug] && <span class="note"> — {notes[p.slug]}</span>}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
 
 <style>
-  .page-list h2 { font-size: 1.3rem; }
-  .note { color: var(--color-muted); font-size: 0.95rem; }
+  .page-list h2 {
+    font-size: 1.3rem;
+  }
+  .note {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
 </style>

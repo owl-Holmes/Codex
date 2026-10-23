@@ -29,11 +29,19 @@ const recent = (await getAllPages())
   <section>
     <h2>{t('home.recent')}</h2>
     <ul>
-      {recent.map((p) => <li><a href={pageUrl(locale, p.slug)}>{p.entry.data.title}</a></li>)}
+      {recent.map((p) => (
+        <li>
+          <a href={pageUrl(locale, p.slug)}>{p.entry.data.title}</a>
+        </li>
+      ))}
     </ul>
   </section>
 </BaseLayout>
 
 <style>
-  .intro { font-size: 1.3rem; font-style: italic; color: var(--color-muted); }
+  .intro {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--color-muted);
+  }
 </style>
