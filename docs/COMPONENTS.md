@@ -66,6 +66,41 @@ that use it. `title` is the accessible description. Follows light/dark mode at l
 Write LaTeX directly in MDX: `$E = mc^2$` inline, or a `$$ … $$` block. Rendered at build time,
 no JavaScript. A literal dollar sign must be escaped: `\$`.
 
+## Tabs / Tab
+
+```mdx
+<Tabs>
+  <Tab label="Principe">…</Tab>
+  <Tab label="Exemple">…</Tab>
+</Tabs>
+```
+WAI-ARIA tabs (arrows, Home, End). Without JavaScript all panels are shown with their label.
+Override: `.tabs-list [role=tab]`, `.tab-panel`.
+
+## Quiz
+
+```mdx
+<Quiz question="…" options={['A', 'B', 'C']} answer={1} explanation="Optionnel" />
+<Quiz question="…" options={['A', 'B', 'C']} answer={[0, 2]} />
+```
+`answer` = 0-based index, or an array for multiple choice (checkboxes). Immediate feedback, nothing stored.
+Override: `.quiz--correct`, `.quiz--incorrect`.
+
+## Flashcards
+
+```mdx
+<Flashcards cards={[{ front: 'Question ?', back: 'Réponse' }]} />
+```
+Click or Enter reveals the answer (native `<details>`, no JS). Override: `--flashcard-min`, `.flashcard`.
+
+## Gallery
+
+```mdx
+<Gallery images={[{ src: 'sciences/a.svg', alt: 'Description', caption: 'Optionnel' }]} />
+```
+Optimized thumbnails + lightbox (Esc / click outside to close). Without JS, thumbnails link to the image.
+`alt` is required. Override: `--gallery-min`, `.lightbox`.
+
 ## Adding a component
 
 1. Create `src/components/content/<Name>.astro` (header comment, typed `Props`, tokens-only CSS, stable class).

@@ -16,6 +16,7 @@ npm run dev        # http://localhost:4321/Codex/
 | `npm run build` | Génère le site dans `dist/` + l'index de recherche |
 | `npm run preview` | Sert le site généré |
 | `npm run validate` | Vérification des types + audit de fuites |
+| `npm run links` | Vérifie les liens internes du site généré |
 | `npm run new:page -- chemin/de/la-page` | Crée une page FR (brouillon) |
 | `npm run i18n:status` | Traductions manquantes / obsolètes |
 | `npm run i18n:stamp -- chemin.mdx` | Marque une traduction comme à jour |

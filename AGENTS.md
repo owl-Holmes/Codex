@@ -36,7 +36,7 @@ src/
   styles/                 tokens.css (design tokens), global.css (base + layout)
   themes/                 One CSS file per theme, registered in themes.css
   pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths, [lang]/a-z, [lang]/previews.json, manifest.webmanifest, sw.js
-scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks
+scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks, check-links
 .github/workflows/        deploy.yml (main → Pages), ci.yml (pull requests)
 ```
 
@@ -135,6 +135,7 @@ A balance of **pedagogical** and **encyclopedic**:
 ```bash
 npm run validate      # astro check + leak audit
 npm run build         # site + Pagefind index
+npm run links         # internal links in dist/
 npm run i18n:status   # translation report
 ```
 
@@ -156,6 +157,6 @@ npm run i18n:status   # translation report
 
 ## 11. Not built yet (planned, see PROMPT.md)
 
-Glossary auto-linking plugin, media components (Lottie, Chart, Gallery, Audio,
-Tabs, Quiz, Flashcards…), link checker, theme contrast test, ESLint/Prettier/Vitest,
+Glossary auto-linking plugin, media components (Lottie, Chart, Audio…), theme contrast test,
+ESLint/Prettier/Vitest,
 page-specific `styles` field, git-based `updated` dates.
