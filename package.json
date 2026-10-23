@@ -13,10 +13,14 @@
     "i18n:status": "node scripts/i18n-status.mjs",
     "i18n:stamp": "node scripts/i18n-stamp.mjs",
     "audit:leaks": "node scripts/audit-leaks.mjs",
-    "validate": "npm run check && npm run contrast && npm run audit:leaks",
+    "validate": "npm run check && npm run lint && npm run test && npm run contrast && npm run audit:leaks",
     "new:page": "node scripts/new-page.mjs",
     "links": "node scripts/check-links.mjs",
-    "contrast": "node scripts/check-contrast.mjs"
+    "contrast": "node scripts/check-contrast.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.3.4",
@@ -31,7 +35,14 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@eslint/js": "10.0.1",
+    "eslint": "10.13.0",
+    "eslint-plugin-astro": "3.2.1",
     "pagefind": "1.5.2",
-    "typescript": "6.0.3"
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0",
+    "vitest": "5.0.5"
   }
 }
