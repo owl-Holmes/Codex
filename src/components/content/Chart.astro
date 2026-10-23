@@ -1,0 +1,97 @@
+---
+/**
+ * Bar or line chart rendered to static SVG at build time (zero JavaScript), with the data table
+ * as an accessible alternative.
+ * Usage: <Chart data="histoire/affaires.csv" x="annee" y={['empreintes', 'adn']} type="line" title="…" />
+ * `data` is relative to src/assets/data/ (CSV or JSON). `y` = one column or several (one series each).
+ * Override: --chart-1 … --chart-4 (series colors), .chart
+ */
+import { loadData, plot } from '../../lib/chart';
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+interface Props {
+  data: string;
+  x: string;
+  y: string | string[];
+  title: string;
+  type?: 'bar' | 'line';
+  unit?: string;
+}
+const { data, x, y, title, type = 'bar', unit = '' } = Astro.props;
+const rows = await loadData(data);
+const series = Array.isArray(y) ? y : [y];
+const max = Math.max(...rows.flatMap((r) => series.map((s) => Number(r[s]) || 0)));
+const p = plot(rows.length, max);
+const barW = (p.band * 0.8) / series.length;
+const t = useT((Astro.currentLocale ?? 'fr') as Locale);
+const id = `chart-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<figure class="chart">
+  <svg viewBox={`0 0 ${p.width} ${p.height}`} role="img" aria-labelledby={`${id}-title`}>
+    <title id={`${id}-title`}>{title}</title>
+    {
+      p.yTicks.map((tick) => (
+        <g class="tick">
+          <line x1={p.pad.left} x2={p.width - p.pad.right} y1={p.y(tick)} y2={p.y(tick)} />
+          <text x={p.pad.left - 6} y={p.y(tick) + 4} text-anchor="end">{tick}{unit}</text>
+        </g>
+      ))
+    }
+    {rows.map((r, i) => <text class="label" x={p.x(i)} y={p.height - p.pad.bottom + 18} text-anchor="middle">{r[x]}</text>)}
+    {
+      series.map((s, k) =>
+        type === 'bar' ? (
+          rows.map((r, i) => (
+            <rect
+              class={`series series-${k + 1}`}
+              x={p.x(i) - (p.band * 0.8) / 2 + k * barW}
+              y={p.y(Number(r[s]) || 0)}
+              width={barW}
+              height={p.y(0) - p.y(Number(r[s]) || 0)}
+            />
+          ))
+        ) : (
+          <polyline class={`series series-${k + 1}`} points={rows.map((r, i) => `${p.x(i)},${p.y(Number(r[s]) || 0)}`).join(' ')} />
+        ),
+      )
+    }
+  </svg>
+  <figcaption>
+    {title}
+    {series.length > 1 && <span class="keys">{series.map((s, k) => <span><i class={`series-${k + 1}`}></i>{s}</span>)}</span>}
+  </figcaption>
+  <details>
+    <summary>{t('chart.table')}</summary>
+    <table>
+      <thead><tr><th scope="col">{x}</th>{series.map((s) => <th scope="col">{s}</th>)}</tr></thead>
+      <tbody>{rows.map((r) => <tr><th scope="row">{r[x]}</th>{series.map((s) => <td>{r[s]}{unit}</td>)}</tr>)}</tbody>
+    </table>
+  </details>
+</figure>
+
+<style>
+  .chart {
+    --chart-1: var(--color-accent);
+    --chart-2: var(--color-ornament);
+    --chart-3: var(--callout-definition);
+    --chart-4: var(--callout-example);
+    margin-block: 1.5rem;
+  }
+  svg { width: 100%; height: auto; font-family: var(--font-body); font-size: 12px; }
+  .tick line { stroke: var(--color-border); }
+  text { fill: var(--color-muted); }
+  .series-1 { --c: var(--chart-1); }
+  .series-2 { --c: var(--chart-2); }
+  .series-3 { --c: var(--chart-3); }
+  .series-4 { --c: var(--chart-4); }
+  rect.series { fill: var(--c); }
+  polyline.series { fill: none; stroke: var(--c); stroke-width: 2.5; }
+  figcaption { font-size: 0.95rem; color: var(--color-muted); text-align: center; }
+  .keys { display: flex; justify-content: center; gap: 1rem; }
+  .keys i { display: inline-block; width: 0.8rem; height: 0.8rem; margin-right: 0.3rem; background: var(--c); }
+  details { font-size: 0.9rem; margin-top: 0.4rem; }
+  table { border-collapse: collapse; margin-top: 0.4rem; }
+  th, td { border: 1px solid var(--color-border); padding: 0.2rem 0.6rem; text-align: right; }
+</style>
