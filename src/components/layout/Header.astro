@@ -26,6 +26,11 @@ const t = useT(locale);
   <nav aria-label={t('nav.sections')} class="tools">
     <a href={pageUrl(locale, 'tags')}>{t('nav.tags')}</a>
     <a href={pageUrl(locale, 'glossary')}>{t('nav.glossary')}</a>
+    <a href={pageUrl(locale, 'paths')}>{t('nav.paths')}</a>
+    <a href={pageUrl(locale, 'graph')}>{t('nav.graph')}</a>
+    <button type="button" class="palette-button" data-open-palette aria-label={t('palette.open')}>
+      <kbd>Ctrl K</kbd>
+    </button>
   </nav>
   <nav aria-label={t('nav.language')} class="tools">
     {
@@ -70,6 +75,14 @@ const t = useT(locale);
     background: var(--color-bg);
     color: var(--color-text);
     font: inherit;
+  }
+  .palette-button {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+    min-height: 2.25rem;
   }
   .tools { display: flex; gap: 0.75rem; align-items: center; }
   .tools a[aria-current] { font-weight: 700; text-decoration: none; }
