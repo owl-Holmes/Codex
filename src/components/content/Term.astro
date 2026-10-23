@@ -1,10 +1,12 @@
 ---
 /**
- * Glossary term with an accessible definition tooltip (CSS only, works on hover and focus).
+ * Glossary term: links to its glossary entry and shows the definition as a tooltip
+ * on hover and keyboard focus (CSS only).
  * Usage: <Term id="chromatographie">chromatographie</Term> — id = glossary file name.
  */
 import { getEntry } from 'astro:content';
 import type { Locale } from '../../config/site';
+import { pageUrl } from '../../lib/urls';
 
 interface Props {
   id: string;
@@ -16,8 +18,8 @@ if (!entry) throw new Error(`Term: unknown glossary entry "${id}"`);
 const tipId = `term-${id}-${Math.random().toString(36).slice(2, 7)}`;
 ---
 
-<span class="term" tabindex="0" aria-describedby={tipId}>
-  <slot />
+<span class="term">
+  <a href={`${pageUrl(locale, 'glossary')}#${id}`} aria-describedby={tipId}><slot /></a>
   <span role="tooltip" id={tipId} class="term-tip">
     <strong>{entry.data.term}</strong> — {entry.data.definition}
   </span>
@@ -26,7 +28,10 @@ const tipId = `term-${id}-${Math.random().toString(36).slice(2, 7)}`;
 <style>
   .term {
     position: relative;
-    border-bottom: 1px dotted var(--color-accent);
+  }
+  .term > a {
+    color: inherit;
+    text-decoration: underline dotted var(--color-accent);
     cursor: help;
   }
   .term-tip {
@@ -45,5 +50,5 @@ const tipId = `term-${id}-${Math.random().toString(36).slice(2, 7)}`;
     visibility: hidden;
   }
   .term:hover .term-tip,
-  .term:focus .term-tip { visibility: visible; }
+  .term:focus-within .term-tip { visibility: visible; }
 </style>

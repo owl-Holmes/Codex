@@ -1,0 +1,46 @@
+---
+/** Glossary: every term of the locale (FR fallback), alphabetical, each with a stable anchor (#id). */
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const locale = Astro.params.lang as Locale;
+const t = useT(locale);
+const all = await getCollection('glossary');
+const idOf = (entryId: string) => entryId.split('/').slice(1).join('/');
+const byId = new Map(all.filter((e) => e.id.startsWith('fr/')).map((e) => [idOf(e.id), e]));
+all.filter((e) => e.id.startsWith(`${locale}/`)).forEach((e) => byId.set(idOf(e.id), e));
+const terms = await Promise.all(
+  [...byId]
+    .sort(([, a], [, b]) => a.data.term.localeCompare(b.data.term, locale))
+    .map(async ([id, entry]) => ({ id, entry, Body: (await render(entry)).Content })),
+);
+---
+
+<BaseLayout locale={locale} slug="glossary" title={t('glossary.title')} description={t('glossary.title')}>
+  <h1>{t('glossary.title')}</h1>
+  <dl class="glossary">
+    {
+      terms.map(({ id, entry, Body }) => (
+        <div id={id} class="glossary-entry" lang={entry.id.startsWith(`${locale}/`) ? locale : 'fr'}>
+          <dt>{entry.data.term}</dt>
+          <dd>
+            <p>{entry.data.definition}</p>
+            <Body />
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</BaseLayout>
+
+<style>
+  .glossary-entry { padding-block: 0.8rem; border-bottom: 1px solid var(--color-border); scroll-margin-top: 1rem; }
+  .glossary-entry:target { background: var(--color-surface); }
+  dt { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; }
+  dd { margin: 0.2rem 0 0; }
+</style>
