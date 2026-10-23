@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { unified } from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkGlossary from './src/plugins/remark-glossary.mjs';
@@ -18,7 +19,7 @@ export default defineConfig({
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
   // Math: $inline$ and $$block$$ LaTeX rendered at build time; glossary auto-links (opt-in per page).
-  markdown: { remarkPlugins: [remarkMath, remarkGlossary], rehypePlugins: [rehypeKatex] },
+  markdown: { processor: unified({ remarkPlugins: [remarkMath, remarkGlossary], rehypePlugins: [rehypeKatex] }) },
   integrations: [mdx(), sitemap()],
   // Mermaid ships a large chunk, but it is lazy-loaded only on pages using <Mermaid>.
   vite: { build: { chunkSizeWarningLimit: 3000 } },
