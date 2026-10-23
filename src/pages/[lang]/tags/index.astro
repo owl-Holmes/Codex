@@ -1,0 +1,35 @@
+---
+/** All tags, sized by number of pages, linking to one page per tag. */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../../config/site';
+import { useT } from '../../../i18n/ui';
+import { getTagIndex } from '../../../lib/tags';
+import { pageUrl } from '../../../lib/urls';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const locale = Astro.params.lang as Locale;
+const t = useT(locale);
+const tags = [...(await getTagIndex())];
+const max = Math.max(1, ...tags.map(([, pages]) => pages.length));
+---
+
+<BaseLayout locale={locale} slug="tags" title={t('tags.title')} description={t('tags.title')} indexable={false}>
+  <h1>{t('tags.title')}</h1>
+  <ul class="cloud" role="list">
+    {
+      tags.map(([tag, pages]) => (
+        <li style={`--weight: ${1 + pages.length / max}`}>
+          <a href={pageUrl(locale, `tags/${tag}`)}>#{tag}</a> <span class="count">({pages.length})</span>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>
+
+<style>
+  .cloud { display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem; padding: 0; list-style: none; }
+  .cloud a { font-size: calc(1rem * var(--weight)); font-family: var(--font-display); }
+  .count { color: var(--color-muted); font-size: 0.85rem; }
+</style>

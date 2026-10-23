@@ -13,6 +13,8 @@ import { useT } from '../i18n/ui';
 import type { Page } from '../lib/pages';
 import { findNode, getTrail, getTree, resolveTheme } from '../lib/tree';
 import { getBacklinks, getRelated } from '../lib/knowledge';
+import { tagSlug } from '../lib/tags';
+import { pageUrl } from '../lib/urls';
 
 interface Props {
   locale: Locale;
@@ -56,7 +58,7 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
           <p class="meta">
             <span class={`status status--${data.status}`}>{t(`status.${data.status}`)}</span>
             {date && <span>{t('page.updated')} {date.toLocaleDateString(locale)}</span>}
-            {data.tags.map((tag) => <span class="tag">#{tag}</span>)}
+            {data.tags.map((tag) => <a class="tag" href={pageUrl(locale, `tags/${tagSlug(tag)}`)}>#{tag}</a>)}
           </p>
         )
       }
