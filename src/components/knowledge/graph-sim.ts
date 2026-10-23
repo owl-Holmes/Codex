@@ -67,8 +67,8 @@ function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, 
   return node;
 }
 
-/** Draws the graph into `svg`. Nodes are keyboard-focusable links; edges are styled by kind. */
-export function renderGraph(svg: SVGSVGElement, data: GraphData): void {
+/** Draws the graph into `svg`. Nodes are keyboard-focusable links; edges are styled by kind; `focus` highlights a node. */
+export function renderGraph(svg: SVGSVGElement, data: GraphData, focus?: string): void {
   const { width, height } = svg.viewBox.baseVal;
   const pos = layout(data, width, height);
   const edges = el('g', { class: 'edges' });
@@ -80,7 +80,7 @@ export function renderGraph(svg: SVGSVGElement, data: GraphData): void {
   const nodes = el('g', { class: 'nodes' });
   for (const n of data.nodes) {
     const p = pos.get(n.id)!;
-    const link = el('a', { href: n.url, class: 'node', 'data-theme': n.theme });
+    const link = el('a', { href: n.url, class: n.id === focus ? 'node node--focus' : 'node', 'data-theme': n.theme });
     const title = el('title', {});
     title.textContent = `${n.title} — ${n.section}`;
     link.append(title, el('circle', { cx: p.x, cy: p.y, r: 9 }));

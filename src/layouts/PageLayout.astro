@@ -10,6 +10,7 @@ import PageList from '../components/knowledge/PageList.astro';
 import ChildCards from '../components/knowledge/ChildCards.astro';
 import Sources from '../components/knowledge/Sources.astro';
 import PathBanner from '../components/knowledge/PathBanner.astro';
+import KnowledgeGraph from '../components/knowledge/KnowledgeGraph.astro';
 import { SITE, type Locale } from '../config/site';
 import { useT } from '../i18n/ui';
 import type { Page } from '../lib/pages';
@@ -73,6 +74,7 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
     {data && <PageList heading={t('page.further')} slugs={data.furtherReading} locale={locale} />}
     <PageList heading={t('page.related')} slugs={related.map((r) => r.slug)} notes={notes} locale={locale} />
     <PageList heading={t('page.backlinks')} slugs={backlinks} locale={locale} />
+    {data && <KnowledgeGraph locale={locale} focus={slug} />}
   </article>
   {editUrl && <p class="page-footer"><a href={editUrl}>{t('page.edit')}</a></p>}
 </BaseLayout>

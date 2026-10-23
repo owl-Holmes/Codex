@@ -25,6 +25,13 @@ export interface GraphData {
   edges: GraphEdge[];
 }
 
+/** Sub-graph of a page and its direct neighbors (depth 1), for the local graph on each page. */
+export function neighborhood(data: GraphData, id: string): GraphData {
+  const edges = data.edges.filter((e) => e.source === id || e.target === id);
+  const keep = new Set([id, ...edges.flatMap((e) => [e.source, e.target])]);
+  return { nodes: data.nodes.filter((n) => keep.has(n.id)), edges };
+}
+
 /** Builds nodes and deduplicated edges for a locale (titles translated when available). */
 export async function getGraph(locale: Locale): Promise<GraphData> {
   const fr = [...(await getPageMap('fr')).values()].filter((p) => p.slug);

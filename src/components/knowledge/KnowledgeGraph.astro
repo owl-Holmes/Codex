@@ -2,23 +2,32 @@
 /**
  * Interactive knowledge graph (SVG, no library) with a full text alternative.
  * Data is computed at build time and embedded as JSON; layout runs in the browser.
+ * With `focus`, shows only that page and its direct neighbors (local graph, no text list:
+ * the page's related/backlinks lists already provide it).
  */
 import type { Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
-import { getGraph } from '../../lib/graph';
+import { getGraph, neighborhood } from '../../lib/graph';
 
 interface Props {
   locale: Locale;
+  /** Slug of the current page for a local graph. */
+  focus?: string;
 }
-const { locale } = Astro.props;
+const { locale, focus } = Astro.props;
 const t = useT(locale);
-const data = await getGraph(locale);
+const full = await getGraph(locale);
+const data = focus ? neighborhood(full, focus) : full;
 const titleOf = new Map(data.nodes.map((n) => [n.id, n]));
+const [width, height] = focus ? [700, 320] : [900, 560];
+/** A local graph with no neighbor is pointless: render it hidden. */
+const empty = Boolean(focus) && data.nodes.length < 2;
 ---
 
-<figure class="graph">
-  <svg class="graph-canvas" viewBox="0 0 900 560" role="group" aria-label={t('graph.label')}>
-    <text x="450" y="280" text-anchor="middle">{t('graph.loading')}</text>
+<figure class="graph" data-focus={focus} hidden={empty}>
+  {focus && <h2 class="graph-heading">{t('graph.local')}</h2>}
+  <svg class="graph-canvas" viewBox={`0 0 ${width} ${height}`} role="group" aria-label={t('graph.label')}>
+    <text x={width / 2} y={height / 2} text-anchor="middle">{t('graph.loading')}</text>
   </svg>
   <figcaption class="legend">
     <span><i class="key key--prerequisite"></i>{t('graph.prerequisite')}</span>
@@ -28,7 +37,7 @@ const titleOf = new Map(data.nodes.map((n) => [n.id, n]));
   <script type="application/json" class="graph-data" set:html={JSON.stringify(data)} />
 </figure>
 
-<details class="graph-list">
+{!focus && (<details class="graph-list">
   <summary>{t('graph.textList')}</summary>
   <ul>
     {
@@ -47,13 +56,15 @@ const titleOf = new Map(data.nodes.map((n) => [n.id, n]));
       ))
     }
   </ul>
-</details>
+</details>)}
 
 <script>
   import { renderGraph } from './graph-sim';
-  const svg = document.querySelector<SVGSVGElement>('.graph-canvas');
-  const raw = document.querySelector('.graph-data')?.textContent;
-  if (svg && raw) renderGraph(svg, JSON.parse(raw));
+  document.querySelectorAll<HTMLElement>('.graph').forEach((figure) => {
+    const svg = figure.querySelector<SVGSVGElement>('.graph-canvas');
+    const raw = figure.querySelector('.graph-data')?.textContent;
+    if (svg && raw) renderGraph(svg, JSON.parse(raw), figure.dataset.focus);
+  });
 </script>
 
 <style>
@@ -79,4 +90,6 @@ const titleOf = new Map(data.nodes.map((n) => [n.id, n]));
   .key--related { border-color: var(--color-ornament); }
   .key--tag { border-top-style: dashed; }
   .graph-list { margin-top: 1rem; }
+  .graph-heading { font-size: 1.3rem; }
+  .graph-canvas :global(.node--focus circle) { fill: var(--color-ornament); r: 12; }
 </style>
