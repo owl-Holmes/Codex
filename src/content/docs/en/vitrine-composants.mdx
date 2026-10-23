@@ -6,7 +6,7 @@ created: 2026-10-24
 order: 999
 tags: [exemple]
 translationOf: vitrine-composants
-sourceHash: "c915910f2f75"
+sourceHash: "8fd19786c3f0"
 ---
 
 This page shows every component. The code of each example lives in
@@ -113,3 +113,20 @@ $$
     { src: 'sciences/phases.svg', alt: 'Diagram of the mobile phase above the stationary phase.', caption: 'The two phases' },
   ]}
 />
+
+## Data chart
+
+<Chart
+  data="histoire/methodes.csv"
+  x="periode"
+  y={['photographie', 'empreintes', 'adn']}
+  type="line"
+  unit="%"
+  title="Share of investigations using each method (fictional sample data)"
+/>
+
+<Chart data="histoire/methodes.csv" x="periode" y="empreintes" unit="%" title="Fingerprints (bars, fictional data)" />
+
+## Lottie animation
+
+<Lottie src="sciences/molecule.json" title="An atom moving back and forth along an axis (sample animation)." />

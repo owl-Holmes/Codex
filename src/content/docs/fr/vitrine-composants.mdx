@@ -111,3 +111,20 @@ $$
     { src: 'sciences/phases.svg', alt: 'Schéma de la phase mobile au-dessus de la phase stationnaire.', caption: 'Les deux phases' },
   ]}
 />
+
+## Graphique de données
+
+<Chart
+  data="histoire/methodes.csv"
+  x="periode"
+  y={['photographie', 'empreintes', 'adn']}
+  type="line"
+  unit="%"
+  title="Part des enquêtes utilisant chaque méthode (données fictives d’exemple)"
+/>
+
+<Chart data="histoire/methodes.csv" x="periode" y="empreintes" unit="%" title="Empreintes digitales (barres, données fictives)" />
+
+## Animation Lottie
+
+<Lottie src="sciences/molecule.json" title="Un atome qui va et vient sur un axe (animation d’exemple)." />
