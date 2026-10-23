@@ -1,0 +1,75 @@
+---
+/** A–Z index: every page and glossary term, grouped by first letter (accents ignored). */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { getPageMap, resolvePage } from '../../lib/pages';
+import { pageUrl } from '../../lib/urls';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const locale = Astro.params.lang as Locale;
+const t = useT(locale);
+
+const pages = await Promise.all(
+  [...(await getPageMap('fr')).keys()].filter(Boolean).map(async (slug) => ({
+    label: (await resolvePage(locale, slug))!.page.entry.data.title,
+    url: pageUrl(locale, slug),
+    kind: '',
+  })),
+);
+// FR terms first, then the locale's own terms override them (FR fallback).
+const allTerms = await getCollection('glossary');
+const glossary = new Map(
+  [...allTerms.filter((e) => e.id.startsWith('fr/')), ...allTerms.filter((e) => e.id.startsWith(`${locale}/`))].map(
+    (e) => [e.id.split('/')[1], e],
+  ),
+);
+const terms = [...glossary].map(([id, e]) => ({
+  label: e.data.term,
+  url: `${pageUrl(locale, 'glossary')}#${id}`,
+  kind: t('nav.glossary'),
+}));
+
+/** First significant letter, without leading articles' apostrophes or accents. */
+const letterOf = (s: string) =>
+  s.replace(/^(l['’]|la |le |les |the )/i, '').normalize('NFD').replace(/[̀-ͯ]/g, '')[0]?.toUpperCase() ?? '#';
+const groups = new Map<string, typeof pages>();
+[...pages, ...terms]
+  .sort((a, b) => a.label.localeCompare(b.label, locale, { sensitivity: 'base' }))
+  .forEach((item) => {
+    const key = letterOf(item.label);
+    groups.set(key, [...(groups.get(key) ?? []), item]);
+  });
+const letters = [...groups.keys()].sort();
+---
+
+<BaseLayout locale={locale} slug="a-z" title={t('az.title')} description={t('az.title')} indexable={false}>
+  <h1>{t('az.title')}</h1>
+  <nav aria-label={t('az.letters')} class="letters">
+    {letters.map((l) => <a href={`#letter-${l}`}>{l}</a>)}
+  </nav>
+  {
+    letters.map((l) => (
+      <section id={`letter-${l}`}>
+        <h2>{l}</h2>
+        <ul>
+          {groups.get(l)!.map((item) => (
+            <li>
+              <a href={item.url}>{item.label}</a>
+              {item.kind && <small> · {item.kind}</small>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</BaseLayout>
+
+<style>
+  .letters { display: flex; flex-wrap: wrap; gap: 0.6rem; font-family: var(--font-display); font-size: 1.3rem; }
+  section { scroll-margin-top: 1rem; }
+  small { color: var(--color-muted); }
+</style>
