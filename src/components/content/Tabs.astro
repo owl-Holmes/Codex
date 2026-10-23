@@ -1,0 +1,86 @@
+---
+/**
+ * Tabbed content following the WAI-ARIA tabs pattern (arrows / Home / End to move).
+ * Progressive: without JavaScript, every panel is shown one after the other.
+ * Usage:
+ *   <Tabs>
+ *     <Tab label="Principe">…</Tab>
+ *     <Tab label="Exemple">…</Tab>
+ *   </Tabs>
+ * Override: .tabs, .tabs-list, .tabs-list [role=tab]
+ */
+---
+
+<div class="tabs">
+  <div class="tabs-list" role="tablist" hidden></div>
+  <slot />
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.tabs:not([data-ready])').forEach((root, g) => {
+    const list = root.querySelector<HTMLElement>('.tabs-list')!;
+    const panels = [...root.querySelectorAll<HTMLElement>(':scope > .tab-panel')];
+    const tabs = panels.map((panel, i) => {
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.role = 'tab';
+      tab.id = `tabs-${g}-tab-${i}`;
+      tab.textContent = panel.dataset.tabLabel ?? '';
+      tab.setAttribute('aria-controls', (panel.id = `tabs-${g}-panel-${i}`));
+      panel.role = 'tabpanel';
+      panel.setAttribute('aria-labelledby', tab.id);
+      panel.tabIndex = 0;
+      list.append(tab);
+      return tab;
+    });
+    const select = (index: number) => {
+      tabs.forEach((tab, i) => {
+        tab.setAttribute('aria-selected', String(i === index));
+        tab.tabIndex = i === index ? 0 : -1;
+        panels[i].hidden = i !== index;
+      });
+    };
+    list.addEventListener('click', (e) => {
+      const i = tabs.indexOf(e.target as HTMLButtonElement);
+      if (i >= 0) select(i);
+    });
+    list.addEventListener('keydown', (e) => {
+      const current = tabs.indexOf(document.activeElement as HTMLButtonElement);
+      const keys: Record<string, number> = {
+        ArrowRight: (current + 1) % tabs.length,
+        ArrowLeft: (current - 1 + tabs.length) % tabs.length,
+        Home: 0,
+        End: tabs.length - 1,
+      };
+      if (!(e.key in keys)) return;
+      e.preventDefault();
+      select(keys[e.key]);
+      tabs[keys[e.key]].focus();
+    });
+    select(0);
+    list.hidden = false;
+    root.dataset.ready = '';
+  });
+</script>
+
+<style>
+  .tabs { margin-block: 1.25rem; }
+  .tabs-list { display: flex; flex-wrap: wrap; gap: 0.25rem; border-bottom: 1px solid var(--color-border); }
+  .tabs-list :global([role='tab']) {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    cursor: pointer;
+  }
+  .tabs-list :global([aria-selected='true']) {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+  .tabs :global(.tab-panel) { padding: 0.8rem 0.2rem; }
+</style>

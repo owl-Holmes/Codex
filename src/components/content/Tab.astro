@@ -1,0 +1,21 @@
+---
+/**
+ * One panel of a <Tabs> group. Without JavaScript it renders as a titled section.
+ * Usage: see Tabs.astro.
+ */
+interface Props {
+  label: string;
+}
+const { label } = Astro.props;
+---
+
+<section class="tab-panel" data-tab-label={label}>
+  <p class="tab-fallback-title">{label}</p>
+  <slot />
+</section>
+
+<style>
+  .tab-fallback-title { font-weight: 700; margin-bottom: 0.3rem; }
+  :global(.tabs[data-ready]) .tab-fallback-title { display: none; }
+  .tab-panel :global(> :last-child) { margin-bottom: 0; }
+</style>
