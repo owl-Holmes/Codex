@@ -30,6 +30,7 @@ jobs:
       - run: npm ci
       - run: npm run validate
       - run: npm run build
+      - run: npm run links
       - run: npm run i18n:status >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-pages-artifact@v3
         with:
