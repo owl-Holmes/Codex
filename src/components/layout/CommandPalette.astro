@@ -1,0 +1,63 @@
+---
+/**
+ * Quick-search palette (Ctrl/Cmd + K), powered by the Pagefind index of the current language.
+ * Native <dialog> + combobox pattern: arrows to move, Enter to open, Esc to close.
+ * Pagefind is loaded on first open only. Without JS, the header search form still works.
+ */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { withBase } from '../../lib/urls';
+
+interface Props {
+  locale: Locale;
+}
+const t = useT(Astro.props.locale);
+---
+
+<dialog class="palette" aria-label={t('palette.open')} data-bundle={withBase('pagefind')} data-empty={t('palette.empty')}>
+  <input
+    class="palette-input"
+    type="search"
+    role="combobox"
+    aria-expanded="true"
+    aria-controls="palette-results"
+    aria-autocomplete="list"
+    placeholder={t('palette.placeholder')}
+  />
+  <ul id="palette-results" class="palette-results" role="listbox"></ul>
+  <p class="palette-hint">{t('palette.hint')}</p>
+</dialog>
+
+<script>
+  import { setupPalette } from './palette';
+  setupPalette(document.querySelector<HTMLDialogElement>('.palette')!);
+</script>
+
+<style>
+  .palette {
+    width: min(40rem, 92vw);
+    margin-top: 12vh;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.3);
+  }
+  .palette::backdrop { background: rgb(0 0 0 / 0.4); }
+  .palette-input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 1.15rem;
+  }
+  .palette-results { list-style: none; margin: 0; padding: 0.3rem; max-height: 55vh; overflow-y: auto; }
+  .palette-results :global(li) { padding: 0.5rem 0.7rem; border-radius: var(--radius); cursor: pointer; }
+  .palette-results :global(li[aria-selected='true']) { background: var(--color-bg); outline: 2px solid var(--color-accent); }
+  .palette-results :global(small) { display: block; color: var(--color-muted); font-size: 0.85rem; }
+  .palette-hint { margin: 0; padding: 0.4rem 1rem; font-size: 0.8rem; color: var(--color-muted); border-top: 1px solid var(--color-border); }
+</style>
