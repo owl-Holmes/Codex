@@ -1,0 +1,16 @@
+/* Theme "noir" — investigation: case-file greys, typewriter headings. Tokens only. */
+@layer themes {
+  [data-theme='noir'] {
+    --font-display: 'Courier Prime', 'Courier New', monospace;
+    --color-surface: #f1efe9;
+    --color-accent: #8c1c13;
+    --color-ornament: #3d3d3d;
+    --color-border: #bdb8ad;
+  }
+  :root[data-mode='dark'] [data-theme='noir'] {
+    --color-surface: #1e1e1e;
+    --color-accent: #ff8a7a;
+    --color-ornament: #9a9a9a;
+    --color-border: #444;
+  }
+}

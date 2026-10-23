@@ -1,0 +1,7 @@
+/*
+ * Theme registry: imports every theme. To add a theme, create src/themes/<name>.css
+ * (override tokens under [data-theme='<name>'], light AND dark) and import it here.
+ */
+@import './alchemy.css';
+@import './archive.css';
+@import './noir.css';

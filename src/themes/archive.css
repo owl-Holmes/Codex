@@ -1,0 +1,11 @@
+/* Theme "archive" — history: oxblood ink and gilt. Tokens only. */
+@layer themes {
+  [data-theme='archive'] {
+    --color-accent: #7b1e23;
+    --color-ornament: #a47c2c;
+  }
+  :root[data-mode='dark'] [data-theme='archive'] {
+    --color-accent: #f0959a;
+    --color-ornament: #d6b15c;
+  }
+}

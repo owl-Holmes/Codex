@@ -1,0 +1,13 @@
+/* Theme "alchemy" — sciences: verdigris and copper. Tokens only. */
+@layer themes {
+  [data-theme='alchemy'] {
+    --color-accent: #1f5f55;
+    --color-ornament: #b06a2c;
+    --color-border: #c8d3c0;
+  }
+  :root[data-mode='dark'] [data-theme='alchemy'] {
+    --color-accent: #7fd1c0;
+    --color-ornament: #d39150;
+    --color-border: #34463f;
+  }
+}
