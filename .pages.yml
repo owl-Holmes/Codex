@@ -1,0 +1,81 @@
+# Pages CMS configuration (https://pagescms.org) — edit content from the browser.
+# Only GitHub accounts with write access to this repository can save changes.
+# Keep field names in sync with src/content.config.ts.
+
+media:
+  input: src/assets
+  output: /src/assets
+
+content:
+  - name: docs-fr
+    label: Pages (FR)
+    type: collection
+    path: src/content/docs/fr
+    format: yaml-frontmatter
+    filename: '{primary}.mdx'
+    subfolders: true
+    view:
+      fields: [title, status, created]
+    fields:
+      - { name: title, label: Titre, type: string, required: true }
+      - { name: description, label: Description (≤ 200 caractères), type: text, required: true }
+      - name: status
+        label: Statut
+        type: select
+        options: { values: [draft, in-progress, complete] }
+        default: draft
+      - { name: created, label: Créée le, type: date, required: true }
+      - { name: updated, label: Mise à jour le, type: date }
+      - { name: tags, label: Tags, type: string, list: true }
+      - { name: prerequisites, label: À lire avant (chemins de pages), type: string, list: true }
+      - { name: furtherReading, label: Pour aller plus loin (chemins), type: string, list: true }
+      - { name: related, label: Pages liées (chemins), type: string, list: true }
+      - name: sources
+        label: Sources
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Titre, type: string, required: true }
+          - { name: author, label: Auteur, type: string }
+          - { name: url, label: Lien, type: string }
+          - { name: publisher, label: Éditeur, type: string }
+          - { name: year, label: Année, type: number }
+          - { name: note, label: Note, type: string }
+      - { name: theme, label: Thème (surcharge), type: string }
+      - { name: order, label: Ordre, type: number }
+      - { name: body, label: Contenu (MDX), type: code, options: { format: markdown } }
+
+  - name: sections
+    label: Sections (dossiers)
+    type: collection
+    path: src/content/docs/fr
+    format: yaml
+    filename: section.yml
+    subfolders: true
+    fields:
+      - name: title
+        label: Titre
+        type: object
+        fields:
+          - { name: fr, label: Français, type: string, required: true }
+          - { name: en, label: English, type: string, required: true }
+      - name: description
+        label: Description
+        type: object
+        fields:
+          - { name: fr, label: Français, type: string }
+          - { name: en, label: English, type: string }
+      - { name: order, label: Ordre, type: number }
+      - { name: theme, label: Thème, type: string }
+
+  - name: glossary-fr
+    label: Glossaire (FR)
+    type: collection
+    path: src/content/glossary/fr
+    format: yaml-frontmatter
+    filename: '{primary}.md'
+    fields:
+      - { name: term, label: Terme, type: string, required: true }
+      - { name: aliases, label: Variantes, type: string, list: true }
+      - { name: definition, label: Définition courte, type: text, required: true }
+      - { name: body, label: Explication longue, type: code, options: { format: markdown } }
