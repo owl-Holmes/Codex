@@ -48,6 +48,7 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
   <Breadcrumbs trail={trail} locale={locale} />
   {fallback && <p class="banner" role="note" lang={locale}>{t('page.fallback')}</p>}
   <article>
+    {trail[0] && <span hidden data-pagefind-filter="section">{trail[0].title}</span>}
     <header class="page-head">
       <h1>{title}</h1>
       {

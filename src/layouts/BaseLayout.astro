@@ -53,7 +53,7 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
     <Header locale={locale} slug={slug} />
     <div class="shell" data-theme={theme}>
       <Sidebar tree={tree} locale={locale} current={slug} />
-      <main id="main" class="content" lang={contentLang ?? locale}>
+      <main id="main" class="content" lang={contentLang ?? locale} data-pagefind-body>
         <slot />
       </main>
     </div>

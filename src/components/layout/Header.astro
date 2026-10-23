@@ -19,6 +19,10 @@ const t = useT(locale);
     {SITE.name}
     <span class="brand-tagline">{t('site.tagline')}</span>
   </a>
+  <form class="search" role="search" action={pageUrl(locale, 'search')}>
+    <label class="visually-hidden" for="q">{t('nav.search')}</label>
+    <input id="q" name="q" type="search" placeholder={`${t('nav.search')}…`} />
+  </form>
   <nav aria-label={t('nav.language')} class="tools">
     {
       LOCALES.map((l) => (
@@ -52,6 +56,15 @@ const t = useT(locale);
   }
   .brand-mark { color: var(--color-ornament); }
   .brand-tagline { font-size: 0.95rem; color: var(--color-muted); font-style: italic; }
+  .search input {
+    width: min(22rem, 40vw);
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+  }
   .tools { display: flex; gap: 0.75rem; align-items: center; }
   .tools a[aria-current] { font-weight: 700; text-decoration: none; }
 </style>

@@ -1,0 +1,48 @@
+---
+/**
+ * Full-text search page powered by Pagefind (static index generated after `astro build`).
+ * Pagefind separates results by the page <html lang>, so each language searches its own pages.
+ * The index only exists after `npm run build`; in `npm run dev` the page shows a notice.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { withBase } from '../../lib/urls';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const locale = Astro.params.lang as Locale;
+const t = useT(locale);
+const bundle = withBase('pagefind');
+---
+
+<BaseLayout locale={locale} slug="search" title={t('search.title')} description={t('search.title')}>
+  <h1>{t('search.title')}</h1>
+  <link rel="stylesheet" href={`${bundle}pagefind-ui.css`} />
+  <div id="search" data-bundle={bundle}>
+    <noscript>{t('search.noscript')}</noscript>
+  </div>
+  <script is:inline type="module">
+    const el = document.getElementById('search');
+    const bundle = el.dataset.bundle;
+    try {
+      await import(`${bundle}pagefind-ui.js`);
+      const ui = new window.PagefindUI({ element: el, bundlePath: bundle, showSubResults: true, showImages: false });
+      const query = new URLSearchParams(location.search).get('q');
+      if (query) ui.triggerSearch(query);
+    } catch {
+      el.textContent = 'Search index not built yet — run `npm run build`.';
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  #search {
+    --pagefind-ui-primary: var(--color-accent);
+    --pagefind-ui-text: var(--color-text);
+    --pagefind-ui-background: var(--color-surface);
+    --pagefind-ui-border: var(--color-border);
+    --pagefind-ui-font: var(--font-body);
+  }
+</style>
