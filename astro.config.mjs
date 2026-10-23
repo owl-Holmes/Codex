@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { SITE, LOCALES, DEFAULT_LOCALE } from './src/config/site.ts';
 
 export default defineConfig({
@@ -14,5 +16,9 @@ export default defineConfig({
     defaultLocale: DEFAULT_LOCALE,
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
+  // Math: $inline$ and $$block$$ LaTeX, rendered to HTML at build time (no client JS).
+  markdown: { remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] },
   integrations: [mdx(), sitemap()],
+  // Mermaid ships a large chunk, but it is lazy-loaded only on pages using <Mermaid>.
+  vite: { build: { chunkSizeWarningLimit: 3000 } },
 });
