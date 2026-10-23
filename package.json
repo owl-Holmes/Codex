@@ -13,7 +13,7 @@
     "i18n:status": "node scripts/i18n-status.mjs",
     "i18n:stamp": "node scripts/i18n-stamp.mjs",
     "audit:leaks": "node scripts/audit-leaks.mjs",
-    "validate": "npm run check && npm run lint && npm run test && npm run contrast && npm run audit:leaks",
+    "validate": "npm run check && npm run lint && npm run format:check && npm run test && npm run contrast && npm run audit:leaks",
     "new:page": "node scripts/new-page.mjs",
     "links": "node scripts/check-links.mjs",
     "contrast": "node scripts/check-contrast.mjs",
