@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 // Vitest config: getViteConfig gives tests access to Astro virtual modules (astro:content…).
 import { getViteConfig } from 'astro/config';
 
