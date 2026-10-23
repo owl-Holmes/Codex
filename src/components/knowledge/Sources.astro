@@ -1,0 +1,41 @@
+---
+/** Bibliography of a page, from the `sources` frontmatter field. */
+interface Source {
+  title: string;
+  author?: string;
+  url?: string;
+  publisher?: string;
+  year?: number;
+  note?: string;
+}
+interface Props {
+  sources: Source[];
+  heading: string;
+}
+const { sources, heading } = Astro.props;
+---
+
+{
+  sources.length > 0 && (
+    <section class="sources">
+      <h2>{heading}</h2>
+      <ol>
+        {sources.map((s) => (
+          <li>
+            {s.author && <>{s.author}, </>}
+            {s.url ? <a href={s.url}><cite>{s.title}</cite></a> : <cite>{s.title}</cite>}
+            {s.publisher && <>, {s.publisher}</>}
+            {s.year && <> ({s.year})</>}
+            {s.note && <span class="note"> — {s.note}</span>}
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+<style>
+  .sources { font-size: 0.95rem; }
+  .sources h2 { font-size: 1.3rem; }
+  .note { color: var(--color-muted); }
+</style>
