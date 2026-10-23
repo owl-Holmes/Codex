@@ -7,4 +7,5 @@ Pure TypeScript logic, no markup. One module per domain:
 - `tags.ts` — tag index across categories
 - `graph.ts` — knowledge graph nodes/edges (refs + shared tags)
 - `paths.ts` — thematic paths, step validation, page membership
+- `images.ts` — resolves images of the central media folder (Figure, Gallery)
 - `urls.ts` — base-path-aware URLs (always use these for internal links)
