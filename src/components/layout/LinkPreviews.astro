@@ -1,0 +1,39 @@
+---
+/** Mounts link hover previews on the main content (see link-preview.ts). */
+import type { Locale } from '../../config/site';
+import { withBase } from '../../lib/urls';
+
+interface Props {
+  locale: Locale;
+}
+const indexUrl = withBase(`${Astro.props.locale}/previews.json`).replace(/\/$/, '');
+---
+
+<span hidden class="link-preview-config" data-index={indexUrl}></span>
+
+<script>
+  import { setupLinkPreviews } from './link-preview';
+  const main = document.getElementById('main');
+  const config = document.querySelector<HTMLElement>('.link-preview-config');
+  if (main && config?.dataset.index) setupLinkPreviews(main, config.dataset.index);
+</script>
+
+<style is:global>
+  .link-preview {
+    position: absolute;
+    z-index: 20;
+    width: 320px;
+    padding: 0.7rem 0.9rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-ornament);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.2);
+    font-size: 0.92rem;
+    pointer-events: none;
+  }
+  .link-preview small { display: block; color: var(--color-muted); }
+  .link-preview strong { font-family: var(--font-display); font-size: 1.15rem; }
+  .link-preview p { margin: 0.3rem 0 0; }
+</style>

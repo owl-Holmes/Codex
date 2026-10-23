@@ -9,6 +9,7 @@ import '../themes/themes.css';
 import Header from '../components/layout/Header.astro';
 import Sidebar from '../components/navigation/Sidebar.astro';
 import CommandPalette from '../components/layout/CommandPalette.astro';
+import LinkPreviews from '../components/layout/LinkPreviews.astro';
 import { SITE, type Locale } from '../config/site';
 import { useT } from '../i18n/ui';
 import { getTree } from '../lib/tree';
@@ -61,5 +62,6 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
       </main>
     </div>
     <CommandPalette locale={locale} />
+    <LinkPreviews locale={locale} />
   </body>
 </html>
