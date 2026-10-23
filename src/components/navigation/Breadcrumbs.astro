@@ -1,0 +1,37 @@
+---
+/** Breadcrumb trail from the language home down to the current page. */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import type { TreeNode } from '../../lib/tree';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  trail: TreeNode[];
+  locale: Locale;
+}
+const { trail, locale } = Astro.props;
+const t = useT(locale);
+---
+
+<nav aria-label={t('nav.breadcrumb')} class="breadcrumbs">
+  <ol>
+    <li><a href={pageUrl(locale, '')}>{t('home.title')}</a></li>
+    {
+      trail.map((node, i) => (
+        <li>
+          {i === trail.length - 1 ? (
+            <span aria-current="page">{node.title}</span>
+          ) : (
+            <a href={pageUrl(locale, node.slug)}>{node.title}</a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  ol { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0 0 1rem; font-size: 0.95rem; }
+  li + li::before { content: '›'; margin-inline: 0.5rem; color: var(--color-ornament); }
+  [aria-current] { color: var(--color-muted); }
+</style>
