@@ -35,6 +35,8 @@ const docs = defineCollection({
     sources: z.array(source).default([]),
     theme: z.string().optional(),
     order: z.number().optional(),
+    /** Link the first occurrence of each glossary term automatically (src/plugins/remark-glossary.mjs). */
+    autoGlossary: z.boolean().default(false),
     /** EN pages only: FR source path and its hash at translation time (see scripts/i18n-*). */
     translationOf: z.string().optional(),
     sourceHash: z.coerce.string().optional(),
