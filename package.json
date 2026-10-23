@@ -13,9 +13,10 @@
     "i18n:status": "node scripts/i18n-status.mjs",
     "i18n:stamp": "node scripts/i18n-stamp.mjs",
     "audit:leaks": "node scripts/audit-leaks.mjs",
-    "validate": "npm run check && npm run audit:leaks",
+    "validate": "npm run check && npm run contrast && npm run audit:leaks",
     "new:page": "node scripts/new-page.mjs",
-    "links": "node scripts/check-links.mjs"
+    "links": "node scripts/check-links.mjs",
+    "contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.3.4",
