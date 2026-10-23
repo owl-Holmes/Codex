@@ -56,7 +56,7 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
       // Apply the saved or system light/dark mode before paint (no flash).
       (() => {
         let mode;
-        try { mode = localStorage.getItem('codex-mode'); } catch {}
+        try { mode = localStorage.getItem('codex-mode'); } catch { /* storage blocked: use system mode */ }
         if (!mode) mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.dataset.mode = mode;
       })();
