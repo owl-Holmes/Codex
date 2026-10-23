@@ -3,10 +3,12 @@
  * To add one: create it in this folder, then register it below and document it in docs/COMPONENTS.md.
  */
 import Callout from './Callout.astro';
+import Chart from './Chart.astro';
 import Details from './Details.astro';
 import Figure from './Figure.astro';
 import Flashcards from './Flashcards.astro';
 import Gallery from './Gallery.astro';
+import Lottie from './Lottie.astro';
 import Mermaid from './Mermaid.astro';
 import Quiz from './Quiz.astro';
 import Tab from './Tab.astro';
@@ -17,10 +19,12 @@ import Video from './Video.astro';
 
 export const mdxComponents = {
   Callout,
+  Chart,
   Details,
   Figure,
   Flashcards,
   Gallery,
+  Lottie,
   Mermaid,
   Quiz,
   Tab,
