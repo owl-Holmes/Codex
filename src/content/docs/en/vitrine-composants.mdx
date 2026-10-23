@@ -1,0 +1,73 @@
+---
+title: Component showcase
+description: Every component available in pages, with its rendering — copy the examples.
+status: complete
+created: 2026-10-24
+order: 999
+tags: [exemple]
+translationOf: vitrine-composants
+sourceHash: "c2e88fd84217"
+---
+
+This page shows every component. The code of each example lives in
+`src/content/docs/fr/vitrine-composants.mdx`; the full reference is in `docs/COMPONENTS.md`.
+
+## Callouts
+
+<Callout type="definition">A formal **definition**.</Callout>
+<Callout type="remember">What to **remember**.</Callout>
+<Callout type="warning">A **warning**.</Callout>
+<Callout type="example">A concrete **example**.</Callout>
+<Callout type="tip" title="Custom title">A **tip**, with a chosen title.</Callout>
+
+## Glossary
+
+The term <Term id="chromatographie">chromatography</Term> shows its definition on hover or keyboard focus.
+
+## Collapsible blocks
+
+<Details summary="First question">Hidden answer until opened.</Details>
+<Details summary="Second question">Several blocks in a row form an accordion.</Details>
+
+## Timeline
+
+<Timeline
+  items={[
+    { date: '1879', title: 'Bertillon anthropometry', text: 'Identification by body measurements.' },
+    { date: '1910', title: "Locard's laboratory", text: 'One of the first forensic science laboratories.' },
+    { date: '1984', title: 'DNA fingerprinting', text: 'Identification through DNA.' },
+  ]}
+/>
+
+## Image or vector diagram
+
+<Figure
+  src="sciences/chromatographie.svg"
+  alt="A paper strip where an ink spot has separated into three coloured spots."
+  caption="Image optimized from src/assets/images/."
+/>
+
+## Mermaid diagram
+
+<Mermaid
+  title="From crime scene to court: collection, analysis, report."
+  code={`graph LR
+  A[Scene] --> B[Collection]
+  B --> C[Laboratory]
+  C --> D[Report]
+  D --> E[Court]`}
+/>
+
+## Mathematics
+
+Inline: the retention factor is $R_f = \dfrac{d_\text{solute}}{d_\text{solvent}}$.
+
+Block:
+
+$$
+c = \frac{n}{V} \qquad \Delta G = \Delta H - T\,\Delta S
+$$
+
+## Video
+
+<Video youtube="aqz-KE-bpKQ" title="Big Buck Bunny (sample YouTube video)" />

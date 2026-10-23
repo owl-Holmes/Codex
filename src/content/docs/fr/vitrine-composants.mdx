@@ -1,0 +1,71 @@
+---
+title: Vitrine des composants
+description: Tous les composants disponibles dans les pages, avec leur rendu — copiez les exemples.
+status: complete
+created: 2026-10-24
+order: 999
+tags: [exemple]
+---
+
+Cette page montre chaque composant. Le code de chaque exemple est dans
+`src/content/docs/fr/vitrine-composants.mdx` ; la référence complète est dans `docs/COMPONENTS.md`.
+
+## Encadrés
+
+<Callout type="definition">Une **définition** formelle.</Callout>
+<Callout type="remember">Ce qu’il faut **retenir**.</Callout>
+<Callout type="warning">Un point d’**attention**.</Callout>
+<Callout type="example">Un **exemple** concret.</Callout>
+<Callout type="tip" title="Titre personnalisé">Une **astuce**, avec un titre choisi.</Callout>
+
+## Glossaire
+
+Le terme <Term id="chromatographie">chromatographie</Term> affiche sa définition au survol ou au clavier.
+
+## Blocs repliables
+
+<Details summary="Première question">Réponse cachée tant qu’on n’ouvre pas.</Details>
+<Details summary="Deuxième question">Plusieurs blocs à la suite forment un accordéon.</Details>
+
+## Frise chronologique
+
+<Timeline
+  items={[
+    { date: '1879', title: 'Anthropométrie de Bertillon', text: 'Identification par mesures du corps.' },
+    { date: '1910', title: 'Laboratoire de Locard', text: 'Un des premiers laboratoires de police scientifique.' },
+    { date: '1984', title: 'Empreinte génétique', text: 'Identification par l’ADN.' },
+  ]}
+/>
+
+## Image ou schéma vectoriel
+
+<Figure
+  src="sciences/chromatographie.svg"
+  alt="Bande de papier où une tache d’encre s’est séparée en trois taches colorées."
+  caption="Image optimisée depuis src/assets/images/."
+/>
+
+## Diagramme Mermaid
+
+<Mermaid
+  title="De la scène de crime au tribunal : prélèvement, analyse, rapport."
+  code={`graph LR
+  A[Scène] --> B[Prélèvement]
+  B --> C[Laboratoire]
+  C --> D[Rapport]
+  D --> E[Tribunal]`}
+/>
+
+## Mathématiques
+
+En ligne : le facteur de rétention vaut $R_f = \dfrac{d_\text{soluté}}{d_\text{solvant}}$.
+
+En bloc :
+
+$$
+c = \frac{n}{V} \qquad \Delta G = \Delta H - T\,\Delta S
+$$
+
+## Vidéo
+
+<Video youtube="aqz-KE-bpKQ" title="Big Buck Bunny (exemple de vidéo YouTube)" />
