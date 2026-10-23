@@ -1,0 +1,41 @@
+---
+/**
+ * Highlighted box for MDX content.
+ * Usage: <Callout type="definition" title="Optional title">Text…</Callout>
+ * Style override: set --callout-color on .callout, or target .callout--<type> in a theme.
+ */
+import { useT, type UiKey } from '../../i18n/ui';
+import type { Locale } from '../../config/site';
+
+type CalloutType = 'definition' | 'remember' | 'warning' | 'example' | 'tip';
+interface Props {
+  type?: CalloutType;
+  title?: string;
+}
+const { type = 'remember', title } = Astro.props;
+const locale = (Astro.currentLocale ?? 'fr') as Locale;
+const label = title ?? useT(locale)(`callout.${type}` as UiKey);
+---
+
+<aside class={`callout callout--${type}`} style={`--callout-color: var(--callout-${type})`}>
+  <p class="callout-title">{label}</p>
+  <div class="callout-body"><slot /></div>
+</aside>
+
+<style>
+  .callout {
+    border-left: 4px solid var(--callout-color);
+    background: color-mix(in srgb, var(--callout-color) 8%, var(--color-surface));
+    border-radius: var(--radius);
+    padding: 0.8rem 1.1rem;
+    margin-block: 1.25rem;
+  }
+  .callout-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--callout-color);
+    margin-bottom: 0.3rem;
+  }
+  .callout-body :global(> :last-child) { margin-bottom: 0; }
+</style>
