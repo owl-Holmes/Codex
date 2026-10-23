@@ -37,7 +37,7 @@ const docs = defineCollection({
     order: z.number().optional(),
     /** EN pages only: FR source path and its hash at translation time (see scripts/i18n-*). */
     translationOf: z.string().optional(),
-    sourceHash: z.string().optional(),
+    sourceHash: z.coerce.string().optional(),
   }),
 });
 
