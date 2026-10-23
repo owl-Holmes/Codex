@@ -11,7 +11,7 @@ import { z } from 'astro/zod';
 const source = z.object({
   title: z.string(),
   author: z.string().optional(),
-  url: z.string().url().optional(),
+  url: z.url().optional(),
   publisher: z.string().optional(),
   year: z.number().int().optional(),
   note: z.string().optional(),
