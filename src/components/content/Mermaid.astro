@@ -1,0 +1,40 @@
+---
+/**
+ * Text-defined diagram (flowchart, timeline, sequence…) rendered by Mermaid in the browser.
+ * Mermaid is loaded lazily, only on pages using this component; the source stays as fallback.
+ * Usage: <Mermaid title="Description du schéma" code={`graph LR; A[Trace] --> B[Analyse]`} />
+ * `title` describes the diagram for screen readers.
+ */
+interface Props {
+  code: string;
+  title: string;
+}
+const { code, title } = Astro.props;
+---
+
+<figure class="mermaid-figure" role="img" aria-label={title}>
+  <pre class="mermaid-src">{code.trim()}</pre>
+  <figcaption>{title}</figcaption>
+</figure>
+
+<script>
+  const blocks = document.querySelectorAll<HTMLElement>('.mermaid-src');
+  if (blocks.length) {
+    const { default: mermaid } = await import('mermaid');
+    const dark = document.documentElement.dataset.mode === 'dark';
+    mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'neutral', securityLevel: 'strict' });
+    await mermaid.run({ nodes: [...blocks] });
+  }
+</script>
+
+<style>
+  .mermaid-figure { margin-block: 1.5rem; text-align: center; }
+  .mermaid-src {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  figcaption { font-size: 0.95rem; color: var(--color-muted); margin-top: 0.5rem; }
+</style>
