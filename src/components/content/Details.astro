@@ -1,0 +1,31 @@
+---
+/**
+ * Collapsible block (native <details>, no JavaScript). Stack several for an accordion.
+ * Usage: <Details summary="Pour aller plus loin">Contenu caché…</Details>
+ * Override: .details, .details-summary
+ */
+interface Props {
+  summary: string;
+  open?: boolean;
+}
+const { summary, open = false } = Astro.props;
+---
+
+<details class="details" open={open}>
+  <summary class="details-summary">{summary}</summary>
+  <div class="details-body"><slot /></div>
+</details>
+
+<style>
+  .details {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    margin-block: 0.75rem;
+  }
+  .details + .details { margin-top: -0.25rem; }
+  .details-summary { cursor: pointer; padding: 0.6rem 1rem; font-weight: 600; }
+  .details-summary::marker { color: var(--color-ornament); }
+  .details-body { padding: 0 1rem 0.6rem; }
+  .details-body :global(> :last-child) { margin-bottom: 0; }
+</style>
