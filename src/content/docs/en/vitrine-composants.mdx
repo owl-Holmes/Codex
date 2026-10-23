@@ -6,7 +6,7 @@ created: 2026-10-24
 order: 999
 tags: [exemple]
 translationOf: vitrine-composants
-sourceHash: "c2e88fd84217"
+sourceHash: "c915910f2f75"
 ---
 
 This page shows every component. The code of each example lives in
@@ -71,3 +71,45 @@ $$
 ## Video
 
 <Video youtube="aqz-KE-bpKQ" title="Big Buck Bunny (sample YouTube video)" />
+
+## Tabs
+
+<Tabs>
+  <Tab label="Principle">Each component travels at its own speed.</Tab>
+  <Tab label="Example">A black ink separates into blue, red and yellow pigments.</Tab>
+  <Tab label="Use">Identifying drugs, inks or accelerants.</Tab>
+</Tabs>
+
+## Quiz
+
+<Quiz
+  question="Which phase stays fixed in chromatography?"
+  options={['The mobile phase', 'The stationary phase', 'Neither']}
+  answer={1}
+  explanation="The stationary phase is fixed; the mobile phase carries the components."
+/>
+
+<Quiz
+  question="Which techniques are chromatographies? (several answers)"
+  options={['GC (gas phase)', 'HPLC (liquid phase)', 'Mass spectrometry']}
+  answer={[0, 1]}
+/>
+
+## Flashcards
+
+<Flashcards
+  cards={[
+    { front: 'Mobile phase?', back: 'The phase that moves and carries the components.' },
+    { front: "Locard's principle?", back: '"Every contact leaves a trace."' },
+    { front: 'HPLC?', back: 'High-performance liquid chromatography.' },
+  ]}
+/>
+
+## Gallery
+
+<Gallery
+  images={[
+    { src: 'sciences/chromatographie.svg', alt: 'Paper strip with three separated spots.', caption: 'Paper chromatography' },
+    { src: 'sciences/phases.svg', alt: 'Diagram of the mobile phase above the stationary phase.', caption: 'The two phases' },
+  ]}
+/>
