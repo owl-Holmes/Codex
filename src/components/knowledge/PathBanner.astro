@@ -1,0 +1,53 @@
+---
+/** "You are in path X — step n of m — previous / next" banner, shown on pages that belong to a path. */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { getPathsForPage } from '../../lib/paths';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  locale: Locale;
+  slug: string;
+}
+const { locale, slug } = Astro.props;
+const t = useT(locale);
+const memberships = await getPathsForPage(locale, slug);
+---
+
+{
+  memberships.map(({ path, index }) => {
+    const steps = path.data.steps;
+    const prev = steps[index - 1];
+    const next = steps[index + 1];
+    return (
+      <nav class="path-banner" aria-label={path.data.title}>
+        <a href={pageUrl(locale, `paths/${path.id}`)}>{path.data.title}</a>
+        <span>
+          {t('paths.step')} {index + 1} {t('paths.of')} {steps.length}
+        </span>
+        <span class="path-nav">
+          {prev && <a href={pageUrl(locale, prev.page)}>← {t('paths.prev')}</a>}
+          {next && <a href={pageUrl(locale, next.page)}>{t('paths.next')} →</a>}
+        </span>
+      </nav>
+    );
+  })
+}
+
+<style>
+  .path-banner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    align-items: center;
+    padding: 0.5rem 0.9rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-ornament);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    font-size: 0.95rem;
+  }
+  .path-banner > a { font-weight: 700; }
+  .path-nav { margin-left: auto; display: flex; gap: 1rem; }
+</style>

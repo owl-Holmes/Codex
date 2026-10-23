@@ -1,0 +1,49 @@
+---
+/** One thematic path: its ordered steps across sections. */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../../config/site';
+import { useT } from '../../../i18n/ui';
+import { getPaths } from '../../../lib/paths';
+import { resolvePage } from '../../../lib/pages';
+import { getTree, getTrail } from '../../../lib/tree';
+import { pageUrl } from '../../../lib/urls';
+
+export async function getStaticPaths() {
+  const ids = (await getPaths('fr')).map((p) => p.id);
+  return LOCALES.flatMap((lang) => ids.map((path) => ({ params: { lang, path } })));
+}
+const locale = Astro.params.lang as Locale;
+const t = useT(locale);
+const path = (await getPaths(locale)).find((p) => p.id === Astro.params.path)!;
+const tree = await getTree(locale);
+const steps = await Promise.all(
+  path.data.steps.map(async (s) => ({
+    ...s,
+    title: (await resolvePage(locale, s.page))?.page.entry.data.title ?? s.page,
+    section: getTrail(tree, s.page)[0]?.title,
+  })),
+);
+---
+
+<BaseLayout locale={locale} slug={`paths/${path.id}`} title={path.data.title} description={path.data.description}>
+  <p><a href={pageUrl(locale, 'paths')}>← {t('paths.title')}</a></p>
+  <h1>{path.data.title}</h1>
+  <p>{path.data.description}</p>
+  <ol class="steps">
+    {
+      steps.map((s) => (
+        <li>
+          <a href={pageUrl(locale, s.page)}>{s.title}</a>
+          {s.section && <small> · {s.section}</small>}
+          {s.note && <p>{s.note}</p>}
+        </li>
+      ))
+    }
+  </ol>
+</BaseLayout>
+
+<style>
+  .steps li { margin-bottom: 0.8rem; }
+  .steps a { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; }
+  .steps p { margin: 0; color: var(--color-muted); }
+</style>

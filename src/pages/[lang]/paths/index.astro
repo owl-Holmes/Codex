@@ -1,0 +1,30 @@
+---
+/** List of thematic paths. */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../../config/site';
+import { useT } from '../../../i18n/ui';
+import { getPaths } from '../../../lib/paths';
+import { pageUrl } from '../../../lib/urls';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const locale = Astro.params.lang as Locale;
+const t = useT(locale);
+const paths = await getPaths(locale);
+---
+
+<BaseLayout locale={locale} slug="paths" title={t('paths.title')} description={t('paths.intro')}>
+  <h1>{t('paths.title')}</h1>
+  <p>{t('paths.intro')}</p>
+  <ul>
+    {
+      paths.map((p) => (
+        <li>
+          <a href={pageUrl(locale, `paths/${p.id}`)}>{p.data.title}</a> — {p.data.description}{' '}
+          <small>({p.data.steps.length} {t('paths.steps')})</small>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

@@ -9,6 +9,7 @@ import Breadcrumbs from '../components/navigation/Breadcrumbs.astro';
 import PageList from '../components/knowledge/PageList.astro';
 import ChildCards from '../components/knowledge/ChildCards.astro';
 import Sources from '../components/knowledge/Sources.astro';
+import PathBanner from '../components/knowledge/PathBanner.astro';
 import { SITE, type Locale } from '../config/site';
 import { useT } from '../i18n/ui';
 import type { Page } from '../lib/pages';
@@ -50,6 +51,7 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
 >
   <Breadcrumbs trail={trail} locale={locale} />
   {fallback && <p class="banner" role="note" lang={locale}>{t('page.fallback')}</p>}
+  <PathBanner locale={locale} slug={slug} />
   <article>
     {trail[0] && <span hidden data-pagefind-filter="section">{trail[0].title}</span>}
     <header class="page-head">
