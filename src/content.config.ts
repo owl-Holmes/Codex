@@ -60,4 +60,14 @@ const glossary = defineCollection({
   }),
 });
 
-export const collections = { docs, sections, glossary };
+/** Thematic paths: ordered reading routes crossing categories. paths/<lang>/<id>.yml */
+const paths = defineCollection({
+  loader: glob({ pattern: '**/*.yml', base: './src/content/paths' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    steps: z.array(z.object({ page: ref, note: z.string().optional() })).min(2),
+  }),
+});
+
+export const collections = { docs, sections, glossary, paths };
