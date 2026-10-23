@@ -23,6 +23,10 @@ const t = useT(locale);
     <label class="visually-hidden" for="q">{t('nav.search')}</label>
     <input id="q" name="q" type="search" placeholder={`${t('nav.search')}…`} />
   </form>
+  <nav aria-label={t('nav.sections')} class="tools">
+    <a href={pageUrl(locale, 'tags')}>{t('nav.tags')}</a>
+    <a href={pageUrl(locale, 'glossary')}>{t('nav.glossary')}</a>
+  </nav>
   <nav aria-label={t('nav.language')} class="tools">
     {
       LOCALES.map((l) => (
