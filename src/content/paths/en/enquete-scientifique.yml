@@ -1,0 +1,9 @@
+title: From trace to evidence
+description: How science helps an investigation, through chemistry and history.
+steps:
+  - page: histoire/naissance-police-scientifique
+    note: The historical context.
+  - page: sciences/chimie/chimie-analytique/chromatographie
+    note: A key lab technique.
+  - page: enquete/analyse-de-traces
+    note: Applying it in the field.

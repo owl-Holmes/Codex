@@ -1,0 +1,9 @@
+title: De la trace à la preuve
+description: Comprendre comment la science aide une enquête, en passant par la chimie et l’histoire.
+steps:
+  - page: histoire/naissance-police-scientifique
+    note: Le contexte historique.
+  - page: sciences/chimie/chimie-analytique/chromatographie
+    note: Une technique clé du laboratoire.
+  - page: enquete/analyse-de-traces
+    note: L’application sur le terrain.
