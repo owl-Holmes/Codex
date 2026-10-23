@@ -1,0 +1,50 @@
+---
+/**
+ * Revision cards: the question is visible, the answer is revealed on click or Enter.
+ * Native <details> (no JavaScript, keyboard accessible).
+ * Usage: <Flashcards cards={[{ front: 'Question ?', back: 'Réponse' }]} />
+ * Override: .flashcards, .flashcard, --flashcard-min
+ */
+interface Card {
+  front: string;
+  back: string;
+}
+interface Props {
+  cards: Card[];
+}
+const { cards } = Astro.props;
+---
+
+<div class="flashcards">
+  {
+    cards.map((card) => (
+      <details class="flashcard">
+        <summary>{card.front}</summary>
+        <p>{card.back}</p>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .flashcards {
+    --flashcard-min: 13rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--flashcard-min), 1fr));
+    gap: 0.8rem;
+    margin-block: 1.25rem;
+  }
+  .flashcard {
+    min-height: 7rem;
+    padding: 0.9rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-ornament);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+  summary { cursor: pointer; font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: ' ↻'; color: var(--color-ornament); }
+  .flashcard[open] { background: color-mix(in srgb, var(--color-accent) 7%, var(--color-surface)); }
+  p { margin: 0.6rem 0 0; }
+</style>
