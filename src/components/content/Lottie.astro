@@ -1,0 +1,71 @@
+---
+/**
+ * Vector animation exported from After Effects / LottieFiles (JSON in src/assets/lottie/).
+ * The player loads lazily, only on pages using this component, and always offers a pause button
+ * (WCAG 2.2.2). With "reduce motion" enabled, the animation starts paused.
+ * Usage: <Lottie src="sciences/molecule.json" title="Description de l'animation" />
+ * Override: .lottie, .lottie-toggle
+ */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+interface Props {
+  src: string;
+  title: string;
+  loop?: boolean;
+}
+const { src, title, loop = true } = Astro.props;
+const t = useT((Astro.currentLocale ?? 'fr') as Locale);
+const files = import.meta.glob<string>('/src/assets/lottie/**/*.json', { query: '?url', import: 'default' });
+const load = files[`/src/assets/lottie/${src}`];
+if (!load) throw new Error(`Lottie: file not found in src/assets/lottie/: "${src}"`);
+const url = await load();
+---
+
+<figure class="lottie" data-src={url} data-loop={String(loop)}>
+  <div class="lottie-stage" role="img" aria-label={title}></div>
+  <button type="button" class="lottie-toggle" data-play={t('animation.play')} data-pause={t('animation.pause')}>
+    {t('animation.pause')}
+  </button>
+  <figcaption>{title}</figcaption>
+</figure>
+
+<script>
+  const figures = document.querySelectorAll<HTMLElement>('.lottie');
+  if (figures.length) {
+    const { default: lottie } = await import('lottie-web/build/player/lottie_light');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    figures.forEach((figure) => {
+      const animation = lottie.loadAnimation({
+        container: figure.querySelector('.lottie-stage')!,
+        renderer: 'svg',
+        loop: figure.dataset.loop === 'true',
+        autoplay: !reduced,
+        path: figure.dataset.src,
+      });
+      const button = figure.querySelector<HTMLButtonElement>('.lottie-toggle')!;
+      const label = () => (button.textContent = (animation.isPaused ? button.dataset.play : button.dataset.pause) ?? '');
+      animation.addEventListener('DOMLoaded', label);
+      button.addEventListener('click', () => {
+        animation.togglePause();
+        label();
+      });
+    });
+  }
+</script>
+
+<style>
+  .lottie { margin-block: 1.5rem; text-align: center; }
+  .lottie-stage { max-width: 420px; margin-inline: auto; }
+  .lottie-toggle {
+    margin-top: 0.4rem;
+    padding: 0.25rem 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+  }
+  figcaption { font-size: 0.95rem; color: var(--color-muted); margin-top: 0.3rem; }
+</style>
