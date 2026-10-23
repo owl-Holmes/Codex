@@ -1,0 +1,8 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+# Content is written by hand / the CMS: never reformat it automatically.
+src/content/
+src/assets/
+*.md
