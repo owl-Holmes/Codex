@@ -34,7 +34,7 @@ src/
   i18n/ui.ts              ALL interface strings, FR + EN (typed)
   styles/                 tokens.css (design tokens), global.css (base + layout)
   themes/                 One CSS file per theme, registered in themes.css
-  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search
+  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary
 scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks
 .github/workflows/        deploy.yml (main → Pages), ci.yml (pull requests)
 ```
@@ -143,7 +143,7 @@ npm run i18n:status   # translation report
 
 ## 11. Not built yet (planned, see PROMPT.md)
 
-Interactive knowledge graph, thematic paths, Ctrl+K palette, link hover previews, tag / glossary / A–Z
-pages, glossary auto-linking plugin, media components (Video, Lottie, Mermaid, KaTeX, Chart, Gallery,
-Tabs, Timeline, Quiz, Flashcards…), PWA/offline, link checker, theme contrast test, ESLint/Prettier/Vitest,
+Interactive knowledge graph, thematic paths, Ctrl+K palette, link hover previews, A–Z
+index page, glossary auto-linking plugin, media components (Lottie, Chart, Gallery, Audio,
+Tabs, Quiz, Flashcards…), PWA/offline, link checker, theme contrast test, ESLint/Prettier/Vitest,
 page-specific `styles` field, git-based `updated` dates.
