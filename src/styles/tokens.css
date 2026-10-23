@@ -1,0 +1,51 @@
+/*
+ * Design tokens — the "grimoire / ancient library" base identity.
+ * Components use ONLY these variables. Themes (src/themes/*.css) override them.
+ * Light = "daylight parchment", dark = "candlelight library".
+ */
+@layer tokens {
+  :root {
+    color-scheme: light;
+    --font-display: 'Cormorant Garamond', 'Garamond', 'Georgia', serif;
+    --font-body: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+    --color-bg: #f5efe0;
+    --color-surface: #fbf7ec;
+    --color-text: #2b2118;
+    --color-muted: #5f4f3e;
+    --color-accent: #7a3b12;
+    --color-accent-contrast: #fffaf0;
+    --color-border: #d8c9a8;
+    --color-ornament: #a8834a;
+
+    --callout-definition: #2f5d7c;
+    --callout-remember: #6b4c9a;
+    --callout-warning: #9a3412;
+    --callout-example: #3f6b2f;
+    --callout-tip: #8a6d1d;
+
+    --radius: 6px;
+    --space: 1rem;
+    --measure: 72ch;
+    --sidebar-width: 18rem;
+  }
+
+  :root[data-mode='dark'] {
+    color-scheme: dark;
+    --color-bg: #1b1611;
+    --color-surface: #251e17;
+    --color-text: #eee3cc;
+    --color-muted: #c2b296;
+    --color-accent: #e6a65d;
+    --color-accent-contrast: #1b1611;
+    --color-border: #4a3c2c;
+    --color-ornament: #b8955a;
+
+    --callout-definition: #8cc3e8;
+    --callout-remember: #c4a8ee;
+    --callout-warning: #f4a07a;
+    --callout-example: #a7d48f;
+    --callout-tip: #e8cf7a;
+  }
+}
