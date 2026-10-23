@@ -1,0 +1,20 @@
+---
+/** Site root: sends visitors to their preferred language (default FR). Works without JS via meta refresh. */
+import { DEFAULT_LOCALE } from '../config/site';
+import { pageUrl } from '../lib/urls';
+const target = pageUrl(DEFAULT_LOCALE, '');
+const en = pageUrl('en', '');
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <title>Codex</title>
+    <script is:inline define:vars={{ en }}>
+      if (!navigator.language.toLowerCase().startsWith('fr')) location.replace(en);
+    </script>
+  </head>
+  <body><a href={target}>Codex</a></body>
+</html>

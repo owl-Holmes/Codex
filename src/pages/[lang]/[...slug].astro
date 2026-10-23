@@ -1,0 +1,34 @@
+---
+/**
+ * Route for every content page and every folder, in every locale.
+ * EN falls back to the FR page (with a banner) when no translation exists.
+ */
+import { render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { mdxComponents } from '../../components/content';
+import { LOCALES, type Locale } from '../../config/site';
+import { resolvePage } from '../../lib/pages';
+import { getTree, type TreeNode } from '../../lib/tree';
+import { assertRefsValid } from '../../lib/knowledge';
+
+export async function getStaticPaths() {
+  await assertRefsValid();
+  const tree = await getTree('fr');
+  const slugs: string[] = [];
+  const walk = (n: TreeNode) => {
+    if (n.slug) slugs.push(n.slug);
+    n.children.forEach(walk);
+  };
+  walk(tree);
+  return LOCALES.flatMap((lang) => slugs.map((slug) => ({ params: { lang, slug } })));
+}
+
+const lang = Astro.params.lang as Locale;
+const slug = Astro.params.slug ?? '';
+const resolved = await resolvePage(lang, slug);
+const Content = resolved ? (await render(resolved.page.entry)).Content : undefined;
+---
+
+<PageLayout locale={lang} slug={slug} page={resolved?.page} fallback={resolved?.fallback}>
+  {Content && <Content components={mdxComponents} />}
+</PageLayout>

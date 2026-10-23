@@ -1,0 +1,39 @@
+---
+/** Language home: intro, top-level sections as themed cards, recently updated pages. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChildCards from '../../components/knowledge/ChildCards.astro';
+import { LOCALES, type Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { getAllPages } from '../../lib/pages';
+import { getTree } from '../../lib/tree';
+import { pageUrl } from '../../lib/urls';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const t = useT(locale);
+const tree = await getTree(locale);
+const dateOf = (d: { updated?: Date; created: Date }) => (d.updated ?? d.created).getTime();
+const recent = (await getAllPages())
+  .filter((p) => p.locale === 'fr' && p.slug)
+  .sort((a, b) => dateOf(b.entry.data) - dateOf(a.entry.data))
+  .slice(0, 6);
+---
+
+<BaseLayout locale={locale} slug="" title={t('home.title')} description={t('home.intro')}>
+  <h1>{t('home.title')}</h1>
+  <p class="intro">{t('home.intro')}</p>
+  <ChildCards nodes={tree.children} locale={locale} heading={t('nav.sections')} />
+  <section>
+    <h2>{t('home.recent')}</h2>
+    <ul>
+      {recent.map((p) => <li><a href={pageUrl(locale, p.slug)}>{p.entry.data.title}</a></li>)}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro { font-size: 1.3rem; font-style: italic; color: var(--color-muted); }
+</style>
