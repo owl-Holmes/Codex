@@ -21,9 +21,11 @@ interface Props {
   theme?: string;
   /** Language of the main content when it differs (FR fallback on EN pages). */
   contentLang?: Locale;
+  /** False to keep the page out of the search index (e.g. the search page itself). */
+  indexable?: boolean;
 }
 
-const { locale, title, description, slug, theme = 'base', contentLang } = Astro.props;
+const { locale, title, description, slug, theme = 'base', contentLang, indexable = true } = Astro.props;
 const t = useT(locale);
 const tree = await getTree(locale);
 const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
@@ -53,7 +55,7 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
     <Header locale={locale} slug={slug} />
     <div class="shell" data-theme={theme}>
       <Sidebar tree={tree} locale={locale} current={slug} />
-      <main id="main" class="content" lang={contentLang ?? locale} data-pagefind-body>
+      <main id="main" class="content" lang={contentLang ?? locale} data-pagefind-body={indexable ? '' : undefined}>
         <slot />
       </main>
     </div>

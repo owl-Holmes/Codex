@@ -17,7 +17,7 @@ const t = useT(locale);
 const bundle = withBase('pagefind');
 ---
 
-<BaseLayout locale={locale} slug="search" title={t('search.title')} description={t('search.title')}>
+<BaseLayout locale={locale} slug="search" title={t('search.title')} description={t('search.title')} indexable={false}>
   <h1>{t('search.title')}</h1>
   <link rel="stylesheet" href={`${bundle}pagefind-ui.css`} />
   <div id="search" data-bundle={bundle}>
