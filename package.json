@@ -13,7 +13,8 @@
     "i18n:status": "node scripts/i18n-status.mjs",
     "i18n:stamp": "node scripts/i18n-stamp.mjs",
     "audit:leaks": "node scripts/audit-leaks.mjs",
-    "validate": "npm run check && npm run audit:leaks"
+    "validate": "npm run check && npm run audit:leaks",
+    "new:page": "node scripts/new-page.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "8.1.1",
