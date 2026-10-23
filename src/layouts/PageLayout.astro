@@ -1,0 +1,82 @@
+---
+/**
+ * Layout of a content or section page: breadcrumbs, metadata, "read first",
+ * body, children cards, sources, further reading, related pages and backlinks.
+ */
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/navigation/Breadcrumbs.astro';
+import PageList from '../components/knowledge/PageList.astro';
+import ChildCards from '../components/knowledge/ChildCards.astro';
+import Sources from '../components/knowledge/Sources.astro';
+import { SITE, type Locale } from '../config/site';
+import { useT } from '../i18n/ui';
+import type { Page } from '../lib/pages';
+import { findNode, getTrail, getTree, resolveTheme } from '../lib/tree';
+import { getBacklinks, getRelated } from '../lib/knowledge';
+
+interface Props {
+  locale: Locale;
+  slug: string;
+  /** Undefined for a folder without index.mdx (auto-generated index). */
+  page?: Page;
+  fallback?: boolean;
+}
+const { locale, slug, page, fallback = false } = Astro.props;
+const t = useT(locale);
+const tree = await getTree(locale);
+const node = findNode(tree, slug);
+const trail = getTrail(tree, slug);
+const data = page?.entry.data;
+const title = data?.title ?? node?.title ?? slug;
+const related = await getRelated(slug);
+const backlinks = await getBacklinks(slug);
+const notes = Object.fromEntries(
+  related.map((r) => [r.slug, r.sharedTags.length ? `${t('page.sharedTag')} : ${r.sharedTags.join(', ')}` : '']),
+);
+const date = data?.updated ?? data?.created;
+const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.entry.filePath}` : undefined;
+---
+
+<BaseLayout
+  locale={locale}
+  slug={slug}
+  title={title}
+  description={data?.description ?? node?.description ?? ''}
+  theme={resolveTheme(tree, slug, data?.theme)}
+  contentLang={fallback ? 'fr' : locale}
+>
+  <Breadcrumbs trail={trail} locale={locale} />
+  {fallback && <p class="banner" role="note" lang={locale}>{t('page.fallback')}</p>}
+  <article>
+    <header class="page-head">
+      <h1>{title}</h1>
+      {
+        data && (
+          <p class="meta">
+            <span class={`status status--${data.status}`}>{t(`status.${data.status}`)}</span>
+            {date && <span>{t('page.updated')} {date.toLocaleDateString(locale)}</span>}
+            {data.tags.map((tag) => <span class="tag">#{tag}</span>)}
+          </p>
+        )
+      }
+    </header>
+    {data && <PageList heading={t('page.readFirst')} slugs={data.prerequisites} locale={locale} />}
+    <slot />
+    {node && <ChildCards nodes={node.children} locale={locale} heading={t('page.children')} />}
+    {data && <Sources sources={data.sources} heading={t('page.sources')} />}
+    {data && <PageList heading={t('page.further')} slugs={data.furtherReading} locale={locale} />}
+    <PageList heading={t('page.related')} slugs={related.map((r) => r.slug)} notes={notes} locale={locale} />
+    <PageList heading={t('page.backlinks')} slugs={backlinks} locale={locale} />
+  </article>
+  {editUrl && <p class="page-footer"><a href={editUrl}>{t('page.edit')}</a></p>}
+</BaseLayout>
+
+<style>
+  .page-head { border-bottom: 1px solid var(--color-border); padding-bottom: 0.8rem; margin-bottom: 1.5rem; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0.5rem 0 0; font-size: 0.95rem; color: var(--color-muted); }
+  .status { border: 1px solid currentColor; border-radius: 999px; padding: 0 0.6rem; }
+  .status--complete { color: var(--callout-example); }
+  .status--draft { color: var(--callout-warning); }
+  .banner { background: var(--color-surface); border: 1px dashed var(--color-ornament); padding: 0.6rem 1rem; border-radius: var(--radius); }
+  .page-footer { margin-top: 3rem; font-size: 0.95rem; }
+</style>
