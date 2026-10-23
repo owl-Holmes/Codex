@@ -1,0 +1,57 @@
+---
+/** Site header: brand, language switcher (keeps the current page) and mode toggle. */
+import { LOCALES, SITE, type Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { pageUrl } from '../../lib/urls';
+import ModeToggle from './ModeToggle.astro';
+
+interface Props {
+  locale: Locale;
+  slug: string;
+}
+const { locale, slug } = Astro.props;
+const t = useT(locale);
+---
+
+<header class="site-header">
+  <a class="brand" href={pageUrl(locale, '')}>
+    <span class="brand-mark" aria-hidden="true">❦</span>
+    {SITE.name}
+    <span class="brand-tagline">{t('site.tagline')}</span>
+  </a>
+  <nav aria-label={t('nav.language')} class="tools">
+    {
+      LOCALES.map((l) => (
+        <a href={pageUrl(l, slug)} hreflang={l} lang={l} aria-current={l === locale ? 'true' : undefined}>
+          {l.toUpperCase()}
+        </a>
+      ))
+    }
+    <ModeToggle label={t('nav.toggleMode')} />
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+  .brand {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .brand-mark { color: var(--color-ornament); }
+  .brand-tagline { font-size: 0.95rem; color: var(--color-muted); font-style: italic; }
+  .tools { display: flex; gap: 0.75rem; align-items: center; }
+  .tools a[aria-current] { font-weight: 700; text-decoration: none; }
+</style>

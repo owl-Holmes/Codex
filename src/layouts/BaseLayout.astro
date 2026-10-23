@@ -1,0 +1,61 @@
+---
+/**
+ * HTML shell shared by every page: <head>, light/dark mode bootstrap, header, sidebar.
+ * Used by PageLayout and the home page.
+ */
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../themes/themes.css';
+import Header from '../components/layout/Header.astro';
+import Sidebar from '../components/navigation/Sidebar.astro';
+import { SITE, type Locale } from '../config/site';
+import { useT } from '../i18n/ui';
+import { getTree } from '../lib/tree';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Current slug, used for nav highlighting and the language switcher. */
+  slug: string;
+  theme?: string;
+  /** Language of the main content when it differs (FR fallback on EN pages). */
+  contentLang?: Locale;
+}
+
+const { locale, title, description, slug, theme = 'base', contentLang } = Astro.props;
+const t = useT(locale);
+const tree = await getTree(locale);
+const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} type="image/svg+xml" />
+    <link rel="sitemap" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/sitemap-index.xml`} />
+    <script is:inline>
+      // Apply the saved or system light/dark mode before paint (no flash).
+      (() => {
+        let mode;
+        try { mode = localStorage.getItem('codex-mode'); } catch {}
+        if (!mode) mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.mode = mode;
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t('nav.skip')}</a>
+    <Header locale={locale} slug={slug} />
+    <div class="shell" data-theme={theme}>
+      <Sidebar tree={tree} locale={locale} current={slug} />
+      <main id="main" class="content" lang={contentLang ?? locale}>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

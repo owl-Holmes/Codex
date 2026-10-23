@@ -1,0 +1,37 @@
+---
+/** Light/dark toggle. The initial mode is set by an inline script in BaseLayout. */
+interface Props {
+  label: string;
+}
+const { label } = Astro.props;
+---
+
+<button type="button" class="mode-toggle" aria-label={label} title={label}>
+  <span aria-hidden="true">☾</span>
+</button>
+
+<script>
+  document.querySelector('.mode-toggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.dataset.mode === 'dark' ? 'light' : 'dark';
+    root.dataset.mode = next;
+    try {
+      localStorage.setItem('codex-mode', next);
+    } catch {
+      /* storage unavailable: the choice lasts for this page only */
+    }
+  });
+</script>
+
+<style>
+  .mode-toggle {
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 1.1rem;
+  }
+</style>
