@@ -35,7 +35,7 @@ src/
   i18n/ui.ts              ALL interface strings, FR + EN (typed)
   styles/                 tokens.css (design tokens), global.css (base + layout)
   themes/                 One CSS file per theme, registered in themes.css
-  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths
+  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths, [lang]/a-z, [lang]/previews.json, manifest.webmanifest, sw.js
 scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks
 .github/workflows/        deploy.yml (main → Pages), ci.yml (pull requests)
 ```
@@ -152,10 +152,10 @@ npm run i18n:status   # translation report
 - Numeric-looking YAML values (hashes) must be quoted.
 - JSX in Astro frontmatter (`---` block) is not allowed: build markup in the template.
 - The Pagefind index exists only after `npm run build` (search is empty in `npm run dev`).
+- The service worker (offline mode) only registers in production builds; after changing caching rules, bump `CACHE_VERSION` in `src/pages/sw.js.ts`.
 
 ## 11. Not built yet (planned, see PROMPT.md)
 
-Local graph on each page, link hover previews, A–Z
-index page, glossary auto-linking plugin, media components (Lottie, Chart, Gallery, Audio,
-Tabs, Quiz, Flashcards…), PWA/offline, link checker, theme contrast test, ESLint/Prettier/Vitest,
+Glossary auto-linking plugin, media components (Lottie, Chart, Gallery, Audio,
+Tabs, Quiz, Flashcards…), link checker, theme contrast test, ESLint/Prettier/Vitest,
 page-specific `styles` field, git-based `updated` dates.
