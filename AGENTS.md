@@ -13,6 +13,7 @@ Read this whole file before any change. These rules are mandatory.
 | Search | Pagefind (index built after `astro build`) |
 | CMS | Pages CMS (`.pages.yml`) |
 | Hosting | GitHub Pages via GitHub Actions, base path `/Codex` |
+| Quality | ESLint, Prettier, Vitest (`src/**/*.test.ts`), contrast + link + leak scripts |
 | Runtime | Node 24 (`.nvmrc`), npm with committed lockfile |
 
 ## 2. Architecture map
@@ -36,7 +37,8 @@ src/
   styles/                 tokens.css (design tokens), global.css (base + layout)
   themes/                 One CSS file per theme, registered in themes.css
   pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths, [lang]/a-z, [lang]/previews.json, manifest.webmanifest, sw.js
-scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks, check-links
+scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks, check-links, check-contrast
+src/plugins/              remark-glossary.mjs (automatic glossary links, opt-in per page)
 .github/workflows/        deploy.yml (main → Pages), ci.yml (pull requests)
 ```
 
@@ -83,7 +85,7 @@ At least 2 steps; unknown pages fail the build. Pages in a path automatically sh
 
 **Create a theme:** `src/themes/<name>.css` overriding tokens under `[data-theme='<name>']` AND
 `:root[data-mode='dark'] [data-theme='<name>']`; import it in `src/themes/themes.css`; keep WCAG AA
-contrast (≥ 4.5:1 for text). Apply with `theme: <name>` in a `section.yml` or page frontmatter.
+contrast (≥ 4.5:1 for text) — `npm run contrast` checks it. Apply with `theme: <name>` in a `section.yml` or page frontmatter.
 
 **Add an MDX component:** create `src/components/content/<Name>.astro` (header comment, typed Props,
 tokens-only styles, a stable class name for overrides), register it in `src/components/content/index.ts`,
@@ -133,7 +135,8 @@ A balance of **pedagogical** and **encyclopedic**:
 ## 8. Verification checklist (run before finishing ANY task, report results honestly)
 
 ```bash
-npm run validate      # astro check + leak audit
+npm run validate      # types, ESLint, Prettier check, Vitest, theme contrast, leak audit
+npm run format        # auto-format code (content files are never reformatted)
 npm run build         # site + Pagefind index
 npm run links         # internal links in dist/
 npm run i18n:status   # translation report
@@ -157,6 +160,5 @@ npm run i18n:status   # translation report
 
 ## 11. Not built yet (planned, see PROMPT.md)
 
-Glossary auto-linking plugin, media components (Lottie, Chart, Audio…), theme contrast test,
-ESLint/Prettier/Vitest,
-page-specific `styles` field, git-based `updated` dates.
+Audio component, page-specific `styles` frontmatter field, git-based `updated` dates,
+Lighthouse audit in CI.

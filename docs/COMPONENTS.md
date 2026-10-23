@@ -101,6 +101,30 @@ Click or Enter reveals the answer (native `<details>`, no JS). Override: `--flas
 Optimized thumbnails + lightbox (Esc / click outside to close). Without JS, thumbnails link to the image.
 `alt` is required. Override: `--gallery-min`, `.lightbox`.
 
+## Chart
+
+```mdx
+<Chart data="histoire/methodes.csv" x="periode" y="empreintes" title="Titre" />
+<Chart data="histoire/methodes.csv" x="periode" y={['a', 'b']} type="line" unit="%" title="Titre" />
+```
+Bar (default) or line chart rendered to **static SVG at build time** (no JavaScript), with the data table
+in a collapsible block. `data` is relative to `src/assets/data/` (CSV with a header row, or a JSON array of
+objects). Override: `--chart-1` … `--chart-4`.
+
+## Lottie
+
+```mdx
+<Lottie src="sciences/molecule.json" title="Description de l'animation" loop={false} />
+```
+JSON animations from `src/assets/lottie/`. The player loads only on pages using it, a pause button is
+always shown, and "reduce motion" starts it paused.
+
+## Automatic glossary links
+
+Add `autoGlossary: true` to a page's frontmatter: the first occurrence of each glossary term (or alias)
+in the text becomes a `<Term>` link. Headings, links, code and terms already written by hand are skipped.
+Plugin: `src/plugins/remark-glossary.mjs`.
+
 ## Adding a component
 
 1. Create `src/components/content/<Name>.astro` (header comment, typed `Props`, tokens-only CSS, stable class).

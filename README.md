@@ -15,7 +15,10 @@ npm run dev        # http://localhost:4321/Codex/
 | `npm run dev` | Serveur local avec rechargement (brouillons visibles) |
 | `npm run build` | Génère le site dans `dist/` + l'index de recherche |
 | `npm run preview` | Sert le site généré |
-| `npm run validate` | Vérification des types + audit de fuites |
+| `npm run validate` | Types, lint, format, tests, contraste, audit de fuites |
+| `npm run format` | Reformate le code (jamais le contenu) |
+| `npm run test` | Tests unitaires (Vitest) |
+| `npm run contrast` | Vérifie le contraste WCAG AA de chaque thème |
 | `npm run links` | Vérifie les liens internes du site généré |
 | `npm run new:page -- chemin/de/la-page` | Crée une page FR (brouillon) |
 | `npm run i18n:status` | Traductions manquantes / obsolètes |
