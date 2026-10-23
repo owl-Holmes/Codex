@@ -24,17 +24,18 @@ src/
   content/docs/fr/**      FR pages, unlimited depth. index.mdx = folder page. section.yml = folder metadata
   content/docs/en/**      EN translations, SAME relative paths as FR
   content/glossary/{fr,en} Glossary terms (file name = term id)
+  content/paths/{fr,en}   Thematic paths (YAML: title, description, ordered steps)
   assets/images/<section>/ Central media folder (mirrors the content tree)
   components/content/     MDX components, auto-registered in components/content/index.ts
   components/knowledge/   Page lists, child cards, sources
   components/navigation/  Sidebar tree, breadcrumbs
   components/layout/      Header, mode toggle
   layouts/                BaseLayout (shell), PageLayout (content pages)
-  lib/                    Pure logic: pages.ts (index), tree.ts (nav + themes), knowledge.ts (refs, related), urls.ts
+  lib/                    Pure logic: pages, tree (nav + themes), knowledge (refs, related), tags, graph, paths, urls
   i18n/ui.ts              ALL interface strings, FR + EN (typed)
   styles/                 tokens.css (design tokens), global.css (base + layout)
   themes/                 One CSS file per theme, registered in themes.css
-  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary
+  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths
 scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks
 .github/workflows/        deploy.yml (main → Pages), ci.yml (pull requests)
 ```
@@ -68,6 +69,17 @@ A folder without `index.mdx` gets an auto-generated index (cards of its children
 
 **Add a glossary term:** `src/content/glossary/fr/<id>.md` (+ `en/<id>.md`) with `term`, `definition`;
 use it in MDX with `<Term id="<id>">word</Term>`.
+
+**Add a thematic path:** `src/content/paths/fr/<id>.yml` (+ `en/<id>.yml`):
+```yaml
+title: De la trace à la preuve
+description: …
+steps:
+  - page: histoire/naissance-police-scientifique
+    note: Optional short note.
+  - page: enquete/analyse-de-traces
+```
+At least 2 steps; unknown pages fail the build. Pages in a path automatically show a step banner.
 
 **Create a theme:** `src/themes/<name>.css` overriding tokens under `[data-theme='<name>']` AND
 `:root[data-mode='dark'] [data-theme='<name>']`; import it in `src/themes/themes.css`; keep WCAG AA
@@ -143,7 +155,7 @@ npm run i18n:status   # translation report
 
 ## 11. Not built yet (planned, see PROMPT.md)
 
-Interactive knowledge graph, thematic paths, Ctrl+K palette, link hover previews, A–Z
+Local graph on each page, link hover previews, A–Z
 index page, glossary auto-linking plugin, media components (Lottie, Chart, Gallery, Audio,
 Tabs, Quiz, Flashcards…), PWA/offline, link checker, theme contrast test, ESLint/Prettier/Vitest,
 page-specific `styles` field, git-based `updated` dates.
