@@ -1,4 +1,5 @@
 # scripts
 
-Node maintenance scripts, run through npm (see README): `new-page`, `new-section`, `i18n-status`, `i18n-stamp`, `audit-leaks`, `check-links`, `check-contrast`.
+Node maintenance scripts, run through npm (see README): `new-page`, `new-section`, `i18n-status`, `i18n-stamp`, `audit-leaks`, `check-links`, `check-contrast`, and
+`art/library.mjs` + `art/patterns.mjs` (`npm run art:backgrounds`: regenerate the page background SVGs).
 `i18n-lib.mjs` holds helpers shared by the i18n scripts.
