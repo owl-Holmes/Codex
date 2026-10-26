@@ -66,8 +66,18 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
   <PathBanner locale={locale} slug={slug} />
   <article>
     {trail[0] && (
-      <span hidden data-pagefind-filter="section">
+      <span hidden data-pagefind-filter={t('search.filterSection')}>
         {trail[0].title}
+      </span>
+    )}
+    {data?.tags.map((tag) => (
+      <span hidden data-pagefind-filter={t('search.filterTag')}>
+        {tag}
+      </span>
+    ))}
+    {data && (
+      <span hidden data-pagefind-filter={t('search.filterStatus')}>
+        {t(`status.${data.status}`)}
       </span>
     )}
     <PageHeader title={title} locale={locale} page={page} />
