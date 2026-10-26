@@ -1,0 +1,43 @@
+---
+/** A titled block of the home page (heading with an ornamental rule, optional intro). Used by pages/[lang]/index.astro. */
+interface Props {
+  /** Heading id, also usable as an anchor (#id). */
+  id: string;
+  title: string;
+  intro?: string;
+}
+const { id, title, intro } = Astro.props;
+---
+
+<section class="home-block" aria-labelledby={id}>
+  <header class="home-block-head">
+    <h2 id={id}>{title}</h2>
+    {intro && <p>{intro}</p>}
+  </header>
+  <slot />
+</section>
+
+<style>
+  .home-block {
+    margin-top: 2.8rem;
+  }
+  .home-block-head {
+    margin-bottom: 1.4rem;
+  }
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0;
+  }
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-ornament), transparent);
+  }
+  p {
+    margin: 0.4rem 0 0;
+    color: var(--color-muted);
+  }
+</style>

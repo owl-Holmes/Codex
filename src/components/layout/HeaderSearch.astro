@@ -1,0 +1,83 @@
+---
+/**
+ * Header search field: submits to the full search page; the Ctrl K button opens the quick-search palette.
+ * Used by Header.astro (styled for the dark wood bar).
+ */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useT(locale);
+---
+
+<form class="search" role="search" action={pageUrl(locale, 'search')}>
+  <label class="visually-hidden" for="q">
+    {t('nav.search')}
+  </label>
+  <input id="q" name="q" type="search" placeholder={`${t('nav.search')}…`} />
+  <button type="button" class="palette-button" data-open-palette>
+    <kbd>Ctrl K</kbd>
+    <span class="visually-hidden"> — {t('palette.open')}</span>
+  </button>
+</form>
+
+<style>
+  .search {
+    position: relative;
+    flex: 1 1 11rem;
+    max-width: 26rem;
+  }
+  input {
+    width: 100%;
+    padding: 0.55rem 5rem 0.55rem 0.9rem;
+    border: 1px solid var(--on-wood-line);
+    border-radius: 999px;
+    background: var(--on-wood-faint);
+    color: var(--color-on-wood);
+    font: inherit;
+    font-size: var(--text-sm);
+    transition:
+      border-color var(--duration) var(--ease),
+      background var(--duration) var(--ease);
+  }
+  input::placeholder {
+    color: var(--color-on-wood-muted);
+  }
+  input:focus {
+    border-color: var(--color-brass);
+    background: var(--on-wood-soft);
+  }
+  .palette-button {
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    translate: 0 -50%;
+    min-height: 1.9rem;
+    padding: 0 0.6rem;
+    border: 1px solid var(--on-wood-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-on-wood-muted);
+    font: inherit;
+    font-size: var(--text-xs);
+    cursor: pointer;
+  }
+  .palette-button:hover {
+    color: var(--color-brass);
+    border-color: var(--color-brass);
+  }
+  kbd {
+    font-family: inherit;
+  }
+  @media (max-width: 960px) {
+    .search {
+      order: 3;
+      flex-basis: 100%;
+      max-width: none;
+    }
+  }
+</style>

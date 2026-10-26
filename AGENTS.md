@@ -31,6 +31,7 @@ src/
   components/content/     MDX components, auto-registered in components/content/index.ts
   components/knowledge/   Page lists, child cards, sources
   components/navigation/  Sidebar tree, breadcrumbs, table of contents, prev/next, random page
+  components/home/        Home page blocks (recent pages, path cards)
   components/layout/      Header, mode toggle, Ctrl+K palette, link previews, SEO meta
   layouts/                BaseLayout (shell), PageLayout (content pages)
   lib/                    Pure logic: pages, tree (nav + themes), knowledge (refs, related), tags, graph, paths, urls

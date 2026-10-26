@@ -3,6 +3,7 @@
 import { LOCALES, SITE, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
 import { pageUrl } from '../../lib/urls';
+import HeaderSearch from './HeaderSearch.astro';
 import ModeToggle from './ModeToggle.astro';
 
 interface Props {
@@ -24,18 +25,9 @@ const tools = [
   <div class="header-inner">
     <a class="brand" href={pageUrl(locale, '')}>
       <span class="brand-name">{SITE.name}</span>
-      <span class="brand-tagline">{t('site.tagline')}</span>
+      <span class="ui-label brand-tagline">{t('site.tagline')}</span>
     </a>
-    <form class="search" role="search" action={pageUrl(locale, 'search')}>
-      <label class="visually-hidden" for="q">
-        {t('nav.search')}
-      </label>
-      <input id="q" name="q" type="search" placeholder={`${t('nav.search')}…`} />
-      <button type="button" class="palette-button" data-open-palette>
-        <kbd>Ctrl K</kbd>
-        <span class="visually-hidden"> — {t('palette.open')}</span>
-      </button>
-    </form>
+    <HeaderSearch locale={locale} />
     <nav aria-label={t('nav.tools')} class="tools">
       {tools.map(([path, label]) => (
         <a href={pageUrl(locale, path)} aria-current={slug === path ? 'page' : undefined}>
@@ -95,57 +87,7 @@ const tools = [
     text-shadow: 0 0 18px var(--color-lamp);
   }
   .brand-tagline {
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--color-on-wood-muted);
-  }
-  .search {
-    position: relative;
-    flex: 1 1 11rem;
-    max-width: 26rem;
-  }
-  .search input {
-    width: 100%;
-    padding: 0.55rem 5rem 0.55rem 0.9rem;
-    border: 1px solid color-mix(in srgb, var(--color-on-wood) 25%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--color-on-wood) 8%, transparent);
-    color: var(--color-on-wood);
-    font: inherit;
-    font-size: var(--text-sm);
-    transition:
-      border-color var(--duration) var(--ease),
-      background var(--duration) var(--ease);
-  }
-  .search input::placeholder {
-    color: var(--color-on-wood-muted);
-  }
-  .search input:focus {
-    border-color: var(--color-brass);
-    background: color-mix(in srgb, var(--color-on-wood) 14%, transparent);
-  }
-  .palette-button {
-    position: absolute;
-    right: 0.35rem;
-    top: 50%;
-    translate: 0 -50%;
-    min-height: 1.9rem;
-    padding: 0 0.6rem;
-    border: 1px solid color-mix(in srgb, var(--color-on-wood) 25%, transparent);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--color-on-wood-muted);
-    font: inherit;
-    font-size: var(--text-xs);
-    cursor: pointer;
-  }
-  .palette-button:hover {
-    color: var(--color-brass);
-    border-color: var(--color-brass);
-  }
-  .palette-button kbd {
-    font-family: inherit;
   }
   .tools,
   .settings {
@@ -182,7 +124,7 @@ const tools = [
   .tools a:hover,
   .settings a:hover {
     color: var(--color-lamp);
-    background: color-mix(in srgb, var(--color-on-wood) 8%, transparent);
+    background: var(--on-wood-faint);
   }
   .tools a:hover::after,
   .tools a[aria-current]::after {
@@ -192,7 +134,7 @@ const tools = [
     color: var(--color-brass);
     font-weight: 700;
   }
-  .site-header :focus-visible {
+  .site-header :global(:focus-visible) {
     outline-color: var(--color-lamp);
   }
   @media (max-width: 1200px) {
@@ -209,11 +151,6 @@ const tools = [
     }
     .header-inner {
       padding-inline: 1rem;
-    }
-    .search {
-      order: 3;
-      flex-basis: 100%;
-      max-width: none;
     }
     .tools {
       order: 4;

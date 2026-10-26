@@ -1,0 +1,49 @@
+---
+/** Home page list of the most recently created/updated pages, with their section and date. */
+import type { Locale } from '../../config/site';
+import { getAllPages } from '../../lib/pages';
+import type { TreeNode } from '../../lib/tree';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  locale: Locale;
+  /** Navigation tree, to name each page's top-level section. */
+  tree: TreeNode;
+  limit?: number;
+}
+const { locale, tree, limit = 6 } = Astro.props;
+const dateOf = (d: { updated?: Date; created: Date }) => d.updated ?? d.created;
+const recent = (await getAllPages())
+  .filter((p) => p.locale === 'fr' && p.slug)
+  .sort((a, b) => dateOf(b.entry.data).getTime() - dateOf(a.entry.data).getTime())
+  .slice(0, limit);
+const sectionTitle = new Map(tree.children.map((n) => [n.slug, n.title]));
+const formatDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+<ol class="card-list" role="list">
+  {recent.map((p) => (
+    <li>
+      <a class="link-card" href={pageUrl(locale, p.slug)}>
+        <span class="ui-label section">{sectionTitle.get(p.slug.split('/')[0])}</span>
+        <span class="link-card-title">{p.entry.data.title}</span>
+        <time class="ui-label" datetime={dateOf(p.entry.data).toISOString()}>
+          {formatDate.format(dateOf(p.entry.data))}
+        </time>
+      </a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .link-card {
+    grid-template-columns: 1fr auto;
+  }
+  .section {
+    grid-column: 1 / -1;
+    color: var(--color-accent);
+  }
+  time {
+    align-self: center;
+  }
+</style>

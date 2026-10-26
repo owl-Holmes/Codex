@@ -1,0 +1,44 @@
+---
+/** Home page list of thematic paths (title, description, step count) and a link to all paths. */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import type { getPaths } from '../../lib/paths';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  locale: Locale;
+  paths: Awaited<ReturnType<typeof getPaths>>;
+}
+const { locale, paths } = Astro.props;
+const t = useT(locale);
+---
+
+<ul class="card-list" role="list">
+  {paths.map((p) => (
+    <li>
+      <a class="link-card" href={pageUrl(locale, `paths/${p.id}`)}>
+        <span class="link-card-title">{p.data.title}</span>
+        <span class="desc">{p.data.description}</span>
+        <span class="ui-label">
+          {p.data.steps.length} {t('paths.steps')} →
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>
+<a class="more" href={pageUrl(locale, 'paths')}>
+  {t('home.allPaths')} →
+</a>
+
+<style>
+  .desc {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .more {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+  }
+</style>
