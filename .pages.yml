@@ -71,6 +71,7 @@ content:
         label: Icône
         type: select
         options: { values: [book, flask, magnifier, scroll, atom, quill, globe, compass, leaf, palette, music, scales] }
+      - { name: color, label: 'Couleur (ex. #2f6b5a)', type: string }
 
   - name: glossary-fr
     label: Glossaire (FR)

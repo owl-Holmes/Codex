@@ -60,6 +60,11 @@ const sections = defineCollection({
     theme: z.string().optional(),
     /** Built-in icon shown on section cards (see src/lib/icons.ts). */
     icon: z.enum(ICON_NAMES).optional(),
+    /** Card colour, e.g. "#2f6b5a" (otherwise a leather tone is picked automatically). */
+    color: z
+      .string()
+      .regex(/^#[0-9a-f]{6}$/i)
+      .optional(),
   }),
 });
 

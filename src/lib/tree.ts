@@ -15,6 +15,8 @@ export interface TreeNode {
   theme?: string;
   /** Section icon from section.yml (folders only). */
   icon?: IconName;
+  /** Card colour from section.yml (folders only). */
+  color?: string;
   /** True when the node is a folder (has children or a section.yml). */
   isSection: boolean;
   children: TreeNode[];
@@ -26,6 +28,7 @@ interface SectionMeta {
   order: number;
   theme?: string;
   icon?: IconName;
+  color?: string;
 }
 
 /** Section metadata keyed by folder slug, e.g. "sciences/chimie". */
@@ -59,6 +62,7 @@ export async function getTree(locale: Locale): Promise<TreeNode> {
       order: meta?.order ?? page?.entry.data.order ?? 100,
       theme: meta?.theme ?? page?.entry.data.theme,
       icon: meta?.icon,
+      color: meta?.color,
       isSection: Boolean(meta),
       children: [],
     };

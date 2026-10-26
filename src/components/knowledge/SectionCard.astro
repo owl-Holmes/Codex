@@ -1,8 +1,9 @@
 ---
 /**
- * "Book" card for a section or page: coloured spine (theme accent), icon, title, description,
- * page count and up to three sub-sections. The whole card is clickable (stretched title link).
- * Used by the home page shelves and by ChildCards on section pages.
+ * Compact "book" card for a section or page: name, page count, a colour (section.yml `color`,
+ * otherwise a leather tone picked from its position, so neighbours differ) and the section icon
+ * as a tilted watermark.
+ * The whole card is clickable (stretched title link). Used by the home page and ChildCards.
  */
 import type { Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
@@ -13,7 +14,7 @@ import SectionIcon from './SectionIcon.astro';
 interface Props {
   node: TreeNode;
   locale: Locale;
-  /** Position in the list, used to stagger the entrance animation. */
+  /** Position in the list: default colour and staggered entrance animation. */
   index?: number;
   /** Heading level of the title, to keep the outline correct where the card is used. */
   level?: 2 | 3;
@@ -21,54 +22,46 @@ interface Props {
 const { node, locale, index = 0, level = 3 } = Astro.props;
 const t = useT(locale);
 const Heading = `h${level}` as const;
+const isFolder = node.children.length > 0;
 const pages = countPages(node);
-const subsections = node.children.filter((c) => c.children.length).slice(0, 3);
+const color = node.color ?? `var(--leather-${(index % 8) + 1})`;
 ---
 
-<article class="book-card" data-theme={node.theme} style={`--i: ${index}`}>
-  <span class="spine" aria-hidden="true"></span>
-  <div class="book-body">
-    {(node.icon || node.isSection) && (
-      <span class="book-icon">
-        <SectionIcon name={node.icon} />
-      </span>
-    )}
-    <Heading class="book-title">
-      <a href={pageUrl(locale, node.slug)}>{node.title}</a>
-    </Heading>
-    {node.description && <p class="book-desc">{node.description}</p>}
-    {subsections.length > 0 && (
-      <ul class="book-subs" role="list">
-        {subsections.map((s) => (
-          <li>
-            <a href={pageUrl(locale, s.slug)}>{s.title}</a>
-          </li>
-        ))}
-      </ul>
-    )}
-    {node.children.length > 0 && (
-      <p class="book-meta">
-        {pages} {t(pages === 1 ? 'home.page' : 'home.pages')}
-        <span class="arrow" aria-hidden="true">
-          →
-        </span>
-      </p>
-    )}
-  </div>
+<article class="book-card" style={`--card: ${color}; --i: ${index}`}>
+  <span class="watermark" aria-hidden="true">
+    <SectionIcon name={node.icon ?? (isFolder ? 'book' : 'quill')} size="5.5rem" />
+  </span>
+  <Heading class="book-title">
+    <a href={pageUrl(locale, node.slug)}>{node.title}</a>
+  </Heading>
+  {isFolder && (
+    <p class="book-meta">
+      {pages} {t(pages === 1 ? 'home.page' : 'home.pages')}
+    </p>
+  )}
 </article>
 
 <style>
   .book-card {
     position: relative;
     display: flex;
-    min-height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.4rem;
+    min-height: 6.5rem;
+    padding: 0.9rem 1rem 0.8rem 1.2rem;
     overflow: hidden;
-    background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-left: 5px solid var(--card);
+    border-radius: var(--radius);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--card) 22%, var(--color-surface)),
+      var(--color-surface) 75%
+    );
     box-shadow: var(--shadow-sm);
-    animation: rise 600ms var(--ease) backwards;
-    animation-delay: calc(var(--i) * 80ms);
+    animation: rise 500ms var(--ease) backwards;
+    animation-delay: calc(var(--i) * 50ms);
     transition:
       translate var(--duration) var(--ease),
       box-shadow var(--duration) var(--ease),
@@ -76,54 +69,35 @@ const subsections = node.children.filter((c) => c.children.length).slice(0, 3);
   }
   .book-card:hover,
   .book-card:focus-within {
-    translate: 0 -6px;
-    border-color: var(--color-ornament);
-    box-shadow: var(--shadow-lg), var(--glow);
+    translate: 0 -4px;
+    border-color: var(--card);
+    box-shadow:
+      var(--shadow-lg),
+      0 0 0 1px var(--card);
   }
-  .spine {
-    flex: none;
-    width: 0.9rem;
-    background:
-      linear-gradient(
-        180deg,
-        transparent 1.2rem,
-        var(--color-brass) 1.2rem 1.35rem,
-        transparent 1.35rem calc(100% - 1.35rem),
-        var(--color-brass) calc(100% - 1.35rem) calc(100% - 1.2rem),
-        transparent calc(100% - 1.2rem)
-      ),
-      var(--color-accent);
-    transition: width var(--duration) var(--ease);
-  }
-  .book-card:hover .spine {
-    width: 1.2rem;
-  }
-  .book-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1.4rem 1.5rem 1.2rem;
-    flex: 1;
-  }
-  .book-icon {
-    display: inline-grid;
-    place-items: center;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    color: var(--color-accent);
-    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  .watermark {
+    position: absolute;
+    right: -0.9rem;
+    bottom: -1.1rem;
+    color: var(--card);
+    opacity: 0.3;
+    rotate: -14deg;
+    pointer-events: none;
     transition:
-      rotate 400ms var(--ease),
-      background var(--duration) var(--ease);
+      rotate 450ms var(--ease),
+      scale 450ms var(--ease),
+      opacity var(--duration) var(--ease);
   }
-  .book-card:hover .book-icon {
-    rotate: -8deg;
-    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+  .book-card:hover .watermark {
+    rotate: -4deg;
+    scale: 1.12;
+    opacity: 0.5;
   }
   .book-title {
     margin: 0;
-    font-size: var(--text-lg);
+    padding-right: 2.5rem;
+    font-size: var(--text-md);
+    line-height: 1.25;
   }
   .book-title a {
     color: var(--color-text);
@@ -134,62 +108,25 @@ const subsections = node.children.filter((c) => c.children.length).slice(0, 3);
     position: absolute;
     inset: 0;
   }
-  .book-title a:focus-visible {
-    outline: none;
-  }
   .book-card:has(.book-title a:focus-visible) {
     outline: 3px solid var(--color-accent);
     outline-offset: 2px;
   }
-  .book-desc {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: var(--text-md);
-  }
-  .book-subs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin: 0.2rem 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  .book-subs a {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    padding: 0.15rem 0.65rem;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    text-decoration: none;
-  }
-  .book-subs a:hover {
-    border-color: var(--color-accent);
+  .book-title a:focus-visible {
+    outline: none;
   }
   .book-meta {
-    display: flex;
-    justify-content: space-between;
-    margin: auto 0 0;
-    padding-top: 0.6rem;
+    margin: 0;
     font-family: var(--font-ui);
     font-size: var(--text-xs);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-muted);
   }
-  .arrow {
-    color: var(--color-accent);
-    transition: translate var(--duration) var(--ease);
-  }
-  .book-card:hover .arrow {
-    translate: 0.35rem 0;
-  }
   @keyframes rise {
     from {
       opacity: 0;
-      translate: 0 14px;
+      translate: 0 10px;
     }
   }
 </style>
