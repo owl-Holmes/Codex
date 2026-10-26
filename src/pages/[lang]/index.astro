@@ -1,8 +1,7 @@
 ---
-/** Language home: library hero, section "shelves", recent pages, thematic paths and the knowledge graph. */
-import { getCollection } from 'astro:content';
+/** Language home: short intro, section "shelves", recent pages, thematic paths and the knowledge graph. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import HomeHero from '../../components/home/HomeHero.astro';
+import RandomPage from '../../components/navigation/RandomPage.astro';
 import SectionCard from '../../components/knowledge/SectionCard.astro';
 import KnowledgeGraph from '../../components/knowledge/KnowledgeGraph.astro';
 import { LOCALES, type Locale } from '../../config/site';
@@ -27,17 +26,28 @@ const recent = (await getAllPages())
 const sectionTitle = new Map(tree.children.map((n) => [n.slug, n.title]));
 const formatDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 const paths = (await getPaths(locale)).slice(0, 3);
-const terms = (await getCollection('glossary')).filter((g) => g.id.startsWith('fr/')).length;
-const stats = { pages: countPages(tree), sections: tree.children.filter((n) => n.isSection).length, terms };
+const pageCount = countPages(tree);
 ---
 
-<BaseLayout locale={locale} slug="" title={t('home.title')} description={t('home.intro')} sidebar={false} wide>
-  <HomeHero slot="hero" locale={locale} stats={stats} />
+<BaseLayout locale={locale} slug="" title={t('home.title')} description={t('home.intro')} wide indexable={false}>
+  <header class="home-head">
+    <p class="eyebrow">{t('home.eyebrow')}</p>
+    <h1>{t('home.title')}</h1>
+    <p class="intro">{t('home.intro')}</p>
+    <div class="actions">
+      <button type="button" class="search-cta" data-open-palette>
+        {t('home.searchCta')} <kbd>Ctrl K</kbd>
+      </button>
+      <RandomPage locale={locale} />
+      <span class="count">
+        {pageCount} {t('home.pages')}
+      </span>
+    </div>
+  </header>
 
   <section id="shelves" class="block" aria-labelledby="shelves-title">
     <header class="block-head">
       <h2 id="shelves-title">{t('home.shelves')}</h2>
-      <p>{t('home.shelvesIntro')}</p>
     </header>
     <div class="shelves">
       {tree.children.map((node, i) => (
@@ -100,8 +110,72 @@ const stats = { pages: countPages(tree), sections: tree.children.filter((n) => n
 </BaseLayout>
 
 <style>
+  .home-head {
+    padding-bottom: 0.5rem;
+  }
+  .eyebrow {
+    margin: 0 0 0.3rem;
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-ornament);
+  }
+  .home-head h1 {
+    font-family: var(--font-brand);
+    letter-spacing: 0.08em;
+  }
+  .intro {
+    margin: 0.4rem 0 1.2rem;
+    font-size: var(--text-lg);
+    font-style: italic;
+    color: var(--color-muted);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .search-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--color-ornament);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition:
+      translate var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
+  }
+  .search-cta:hover {
+    translate: 0 -2px;
+    box-shadow: var(--glow);
+  }
+  .search-cta kbd {
+    padding: 0 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+  .count {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
   .block {
-    margin-top: 3.5rem;
+    margin-top: 2.8rem;
   }
   .block-head {
     margin-bottom: 1.4rem;
@@ -124,8 +198,8 @@ const stats = { pages: countPages(tree), sections: tree.children.filter((n) => n
   }
   .shelves {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-    gap: 1.4rem;
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: 0.9rem;
   }
   .columns {
     display: grid;
