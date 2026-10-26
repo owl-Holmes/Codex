@@ -42,17 +42,26 @@ const tipId = `term-${id}-${Math.random().toString(36).slice(2, 7)}`;
     top: 100%;
     z-index: 5;
     width: max-content;
-    max-width: 22rem;
+    max-width: min(22rem, calc(100vw - 2rem));
     padding: 0.6rem 0.8rem;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
     font-size: 0.95rem;
-    box-shadow: 0 4px 14px rgb(0 0 0 / 0.15);
-    visibility: hidden;
+    box-shadow: var(--shadow-lg);
+    display: none; /* not just hidden: a hidden box still widens the page on phones */
   }
   .term:hover .term-tip,
   .term:focus-within .term-tip {
-    visibility: visible;
+    display: block;
+  }
+  /* Phones: show the definition as a card pinned to the bottom of the screen, never off-screen. */
+  @media (max-width: 600px) {
+    .term-tip {
+      position: fixed;
+      inset: auto 1rem 1rem;
+      width: auto;
+      max-width: none;
+    }
   }
 </style>
