@@ -33,8 +33,9 @@ const t = useT(locale);
     <a href={pageUrl(locale, 'paths')}>{t('nav.paths')}</a>
     <a href={pageUrl(locale, 'graph')}>{t('nav.graph')}</a>
     <a href={pageUrl(locale, 'a-z')}>{t('nav.az')}</a>
-    <button type="button" class="palette-button" data-open-palette aria-label={t('palette.open')}>
+    <button type="button" class="palette-button" data-open-palette>
       <kbd>Ctrl K</kbd>
+      <span class="visually-hidden"> — {t('palette.open')}</span>
     </button>
   </nav>
   <nav aria-label={t('nav.language')} class="tools">

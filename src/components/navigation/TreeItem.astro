@@ -48,6 +48,9 @@ const ariaCurrent = isCurrent ? 'page' : undefined;
     border-left: 1px solid var(--color-border);
   }
   a {
+    display: inline-block;
+    min-height: 24px; /* WCAG 2.5.8 target size */
+    padding-block: 0.1rem;
     color: var(--color-text);
     text-decoration: none;
   }
