@@ -26,9 +26,11 @@ interface Props {
   contentLang?: Locale;
   /** False to keep the page out of the search index (e.g. the search page itself). */
   indexable?: boolean;
+  /** Full-width content column (frontmatter `layout: wide`). */
+  wide?: boolean;
 }
 
-const { locale, title, description, slug, theme = 'base', contentLang, indexable = true } = Astro.props;
+const { locale, title, description, slug, theme = 'base', contentLang, indexable = true, wide = false } = Astro.props;
 const t = useT(locale);
 const tree = await getTree(locale);
 const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
@@ -64,6 +66,7 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
         }
         if (!mode) mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.dataset.mode = mode;
+        document.documentElement.classList.add('js'); // enables JS-only UI such as the mobile drawer
       })();
     </script>
   </head>
@@ -74,7 +77,12 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
     <Header locale={locale} slug={slug} />
     <div class="shell" data-theme={theme}>
       <Sidebar tree={tree} locale={locale} current={slug} />
-      <main id="main" class="content" lang={contentLang ?? locale} data-pagefind-body={indexable ? '' : undefined}>
+      <main
+        id="main"
+        class:list={['content', { 'content--wide': wide }]}
+        lang={contentLang ?? locale}
+        data-pagefind-body={indexable ? '' : undefined}
+      >
         <slot />
       </main>
     </div>

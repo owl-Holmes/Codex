@@ -1,5 +1,9 @@
 ---
-/** Left navigation: collapsible tree of unlimited depth (no JavaScript, <details> based). */
+/**
+ * Left navigation: collapsible tree of unlimited depth (<details> based).
+ * Below 960px it becomes a drawer opened by a "Sections" button; without JavaScript the tree
+ * simply stays visible above the content (the `js` class is set on <html> by BaseLayout).
+ */
 import type { Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
 import type { TreeNode } from '../../lib/tree';
@@ -14,19 +18,42 @@ const { tree, locale, current } = Astro.props;
 const t = useT(locale);
 ---
 
-<nav class="sidebar" aria-label={t('nav.sections')}>
-  <ul class="tree" role="list">
-    {tree.children.map((node) => (
-      <TreeItem node={node} locale={locale} current={current} />
-    ))}
-  </ul>
-</nav>
+<div class="sidebar-wrap">
+  <button type="button" class="sidebar-toggle" aria-expanded="false" aria-controls="sidebar-nav">
+    ☰ {t('nav.sections')}
+  </button>
+  <nav class="sidebar" id="sidebar-nav" aria-label={t('nav.sections')}>
+    <ul class="tree" role="list">
+      {tree.children.map((node) => (
+        <TreeItem node={node} locale={locale} current={current} />
+      ))}
+    </ul>
+  </nav>
+</div>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.sidebar-toggle');
+  const nav = document.getElementById('sidebar-nav');
+  const setOpen = (open: boolean) => {
+    toggle?.setAttribute('aria-expanded', String(open));
+    nav?.classList.toggle('is-open', open);
+  };
+  toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav?.classList.contains('is-open')) {
+      setOpen(false);
+      toggle?.focus();
+    }
+  });
+</script>
 
 <style>
-  .sidebar {
+  .sidebar-wrap {
+    align-self: start;
     position: sticky;
     top: 1rem;
-    align-self: start;
+  }
+  .sidebar {
     max-height: calc(100vh - 2rem);
     overflow-y: auto;
     font-size: 1rem;
@@ -36,11 +63,34 @@ const t = useT(locale);
     margin: 0;
     list-style: none;
   }
+  .sidebar-toggle {
+    display: none;
+    min-height: 2.5rem;
+    padding: 0.3rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+  }
   @media (max-width: 960px) {
-    .sidebar {
+    .sidebar-wrap {
       position: static;
-      max-height: none;
       border-bottom: 1px solid var(--color-border);
+      padding-bottom: 0.6rem;
+    }
+    .sidebar {
+      max-height: none;
+    }
+    :global(html.js) .sidebar-toggle {
+      display: inline-block;
+    }
+    :global(html.js) .sidebar:not(.is-open) {
+      display: none;
+    }
+    .sidebar.is-open {
+      margin-top: 0.6rem;
     }
   }
 </style>
