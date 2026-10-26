@@ -1,0 +1,47 @@
+---
+/**
+ * Not-found page (GitHub Pages serves dist/404.html for unknown URLs).
+ * Shown in the default language, with a link to the other language, the search and the home page.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { DEFAULT_LOCALE, LOCALES } from '../config/site';
+import { useT } from '../i18n/ui';
+import { pageUrl } from '../lib/urls';
+
+const locale = DEFAULT_LOCALE;
+const t = useT(locale);
+const others = LOCALES.filter((l) => l !== locale);
+---
+
+<BaseLayout locale={locale} slug="" title={t('notFound.title')} description={t('notFound.text')} indexable={false}>
+  <h1>{t('notFound.title')}</h1>
+  <p>{t('notFound.text')}</p>
+  <form role="search" action={pageUrl(locale, 'search')}>
+    <label class="visually-hidden" for="nf-q">
+      {t('nav.search')}
+    </label>
+    <input id="nf-q" name="q" type="search" placeholder={`${t('nav.search')}…`} />
+  </form>
+  <p>
+    <a href={pageUrl(locale, '')}>← {t('home.title')}</a>
+  </p>
+  {others.map((l) => (
+    <p lang={l}>
+      <a href={pageUrl(l, '')} hreflang={l}>
+        {useT(l)('notFound.title')} — {useT(l)('home.title')}
+      </a>
+    </p>
+  ))}
+</BaseLayout>
+
+<style>
+  input {
+    width: min(28rem, 100%);
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+  }
+</style>
