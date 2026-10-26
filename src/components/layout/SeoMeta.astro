@@ -1,0 +1,31 @@
+---
+/**
+ * SEO and sharing tags for <head>: canonical URL, hreflang alternates (one per locale + x-default)
+ * and Open Graph. Every route exists in every locale, so alternates always point to real pages.
+ */
+import { DEFAULT_LOCALE, LOCALES, SITE, type Locale } from '../../config/site';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  locale: Locale;
+  slug: string;
+  title: string;
+  description: string;
+}
+const { locale, slug, title, description } = Astro.props;
+const absolute = (l: Locale) => new URL(pageUrl(l, slug), SITE.url).href;
+const OG_LOCALES: Record<Locale, string> = { fr: 'fr_FR', en: 'en_US' };
+---
+
+<link rel="canonical" href={absolute(locale)} />
+{LOCALES.map((l) => (
+  <link rel="alternate" hreflang={l} href={absolute(l)} />
+))}
+<link rel="alternate" hreflang="x-default" href={absolute(DEFAULT_LOCALE)} />
+<meta property="og:type" content={slug ? 'article' : 'website'} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={absolute(locale)} />
+<meta property="og:locale" content={OG_LOCALES[locale]} />
+<meta name="twitter:card" content="summary" />
