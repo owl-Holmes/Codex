@@ -29,14 +29,14 @@ src/
   assets/images/<section>/ Central media folder (mirrors the content tree)
   components/content/     MDX components, auto-registered in components/content/index.ts
   components/knowledge/   Page lists, child cards, sources
-  components/navigation/  Sidebar tree, breadcrumbs
-  components/layout/      Header, mode toggle
+  components/navigation/  Sidebar tree, breadcrumbs, table of contents, prev/next, random page
+  components/layout/      Header, mode toggle, Ctrl+K palette, link previews, SEO meta
   layouts/                BaseLayout (shell), PageLayout (content pages)
   lib/                    Pure logic: pages, tree (nav + themes), knowledge (refs, related), tags, graph, paths, urls
   i18n/ui.ts              ALL interface strings, FR + EN (typed)
   styles/                 tokens.css (design tokens), global.css (base + layout)
   themes/                 One CSS file per theme, registered in themes.css
-  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths, [lang]/a-z, [lang]/previews.json, manifest.webmanifest, sw.js
+  pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths, [lang]/a-z, [lang]/previews.json, manifest.webmanifest, sw.js, 404
 scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks, check-links, check-contrast
 src/plugins/              remark-glossary.mjs (automatic glossary links, opt-in per page)
 .github/workflows/        deploy.yml (main → Pages), ci.yml (pull requests)
@@ -160,5 +160,7 @@ npm run i18n:status   # translation report
 
 ## 11. Not built yet (planned, see PROMPT.md)
 
-Audio component, page-specific `styles` frontmatter field, git-based `updated` dates,
-Lighthouse audit in CI.
+Components: Audio, Embed, Map, Steps, Columns, Card, Badge, Kbd, PullQuote, KeyFacts, Comparison,
+ProsCons, SourceRef, PageLink, inline themeable Svg, Gif with pause. Frontmatter: `styles`, `layout`,
+`cover`; git-based `updated` dates; tag descriptions; path progress memory; search filter UI
+(tag/status); mobile sidebar drawer; self-hosted fonts; `new:section` script; Lighthouse in CI.
