@@ -1,0 +1,73 @@
+---
+/**
+ * Infobox (Wikipedia-style key facts), floated to the right on wide screens.
+ * Usage: <KeyFacts title="Edmond Locard" facts={{ Naissance: '1877', Domaine: 'Criminalistique' }} />
+ * Optional `image` (relative to src/assets/images/) and `alt`. Override: .key-facts
+ */
+import { Image } from 'astro:assets';
+import { resolveImage } from '../../lib/images';
+
+interface Props {
+  title: string;
+  facts: Record<string, string>;
+  image?: string;
+  alt?: string;
+}
+const { title, facts, image, alt = '' } = Astro.props;
+if (image && !alt) throw new Error(`KeyFacts "${title}": "alt" is required with an image.`);
+const picture = image ? await resolveImage(image, 'KeyFacts') : undefined;
+---
+
+<aside class="key-facts" aria-label={title}>
+  <p class="key-facts-title">{title}</p>
+  {picture && <Image src={picture} alt={alt} width={280} />}
+  <dl>
+    {Object.entries(facts).map(([label, value]) => (
+      <div>
+        <dt>{label}</dt>
+        <dd>{value}</dd>
+      </div>
+    ))}
+  </dl>
+</aside>
+
+<style>
+  .key-facts {
+    margin: 0 0 1rem;
+    padding: 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    font-size: 0.95rem;
+  }
+  @media (min-width: 900px) {
+    .key-facts {
+      float: right;
+      width: 17rem;
+      margin-left: 1.5rem;
+    }
+  }
+  .key-facts-title {
+    margin: 0 0 0.5rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  dl {
+    margin: 0.5rem 0 0;
+  }
+  dl > div {
+    display: grid;
+    grid-template-columns: 40% 1fr;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+  dt {
+    font-weight: 700;
+  }
+  dd {
+    margin: 0;
+  }
+</style>

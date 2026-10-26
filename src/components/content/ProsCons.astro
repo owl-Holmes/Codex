@@ -1,0 +1,68 @@
+---
+/**
+ * Two-column comparison of advantages and drawbacks.
+ * Usage: <ProsCons pros={['Rapide', 'Peu coûteux']} cons={['Moins précis']} />
+ * Optional `prosTitle` / `consTitle`. Override: .pros-cons
+ */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+interface Props {
+  pros: string[];
+  cons: string[];
+  prosTitle?: string;
+  consTitle?: string;
+}
+const t = useT((Astro.currentLocale ?? 'fr') as Locale);
+const { pros, cons, prosTitle = t('proscons.pros'), consTitle = t('proscons.cons') } = Astro.props;
+---
+
+<div class="pros-cons">
+  <section class="pros">
+    <p class="pc-title">＋ {prosTitle}</p>
+    <ul>
+      {pros.map((p) => (
+        <li>{p}</li>
+      ))}
+    </ul>
+  </section>
+  <section class="cons">
+    <p class="pc-title">− {consTitle}</p>
+    <ul>
+      {cons.map((c) => (
+        <li>{c}</li>
+      ))}
+    </ul>
+  </section>
+</div>
+
+<style>
+  .pros-cons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+    margin-block: 1.25rem;
+  }
+  section {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--pc-color);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+  .pros {
+    --pc-color: var(--callout-example);
+  }
+  .cons {
+    --pc-color: var(--callout-warning);
+  }
+  .pc-title {
+    margin: 0 0 0.3rem;
+    font-weight: 700;
+    color: var(--pc-color);
+  }
+  ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+</style>
