@@ -1,12 +1,17 @@
 ---
 title: Component showcase
 description: Every component available in pages, with its rendering — copy the examples.
+sources:
+  - title: Sample source cited with SourceRef
+    publisher: Codex
+    year: 2026
 status: complete
 created: 2026-10-24
 order: 999
 tags: [exemple]
+styles: vitrine.css
 translationOf: vitrine-composants
-sourceHash: "8fd19786c3f0"
+sourceHash: "9ecd080e26c5"
 ---
 
 This page shows every component. The code of each example lives in
@@ -130,3 +135,47 @@ $$
 ## Lottie animation
 
 <Lottie src="sciences/molecule.json" title="An atom moving back and forth along an axis (sample animation)." />
+
+## Layout
+
+<KeyFacts title="Edmond Locard" facts={{ Born: '1877', Died: '1966', Field: 'Forensic science' }} />
+
+<Steps>
+1. Locate the trace.
+2. Photograph and collect it.
+3. Analyse it in the lab.
+</Steps>
+
+<Columns>
+  <div>**Column 1** — columns stack on small screens.</div>
+  <div>**Column 2** — each direct child becomes a column.</div>
+</Columns>
+
+<CardGrid>
+  <Card title="Chemistry" icon="⚗">See <PageLink to="sciences/chimie/chimie-analytique/chromatographie" />.</Card>
+  <Card title="Investigation" icon="🔍">See <PageLink to="enquete/analyse-de-traces">trace analysis</PageLink>.</Card>
+</CardGrid>
+
+<ProsCons pros={['Fast', 'Cheap']} cons={['Less precise than HPLC']} />
+
+<PullQuote author="Edmond Locard">Every contact leaves a trace.</PullQuote>
+
+## Small elements
+
+Status: <Badge>New</Badge> <Badge variant="warning">Disputed</Badge> — shortcut: <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> — citation<SourceRef n={1} />.
+
+## Inline SVG (theme colors)
+
+<Svg src="sciences/atome.svg" title="Stylized atom whose colors follow the theme." caption="Toggle light / dark mode: the diagram changes colors." />
+
+## GIF with pause
+
+<Gif src="sciences/pixel.gif" poster="sciences/phases.svg" alt="GIF player demo (sample image)." />
+
+## Audio
+
+<Audio src="sciences/la440.wav" title="Tuning-fork A (440 Hz)">A pure 440 hertz tone, used to tune instruments.</Audio>
+
+## External embed
+
+<Embed src="https://www.openstreetmap.org/export/embed.html?bbox=4.80%2C45.73%2C4.88%2C45.78&layer=mapnik" title="Map of Lyon (OpenStreetMap)" ratio="4 / 3" />

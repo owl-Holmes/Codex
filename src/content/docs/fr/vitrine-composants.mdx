@@ -1,10 +1,15 @@
 ---
 title: Vitrine des composants
 description: Tous les composants disponibles dans les pages, avec leur rendu — copiez les exemples.
+sources:
+  - title: Exemple de source citée avec SourceRef
+    publisher: Codex
+    year: 2026
 status: complete
 created: 2026-10-24
 order: 999
 tags: [exemple]
+styles: vitrine.css
 ---
 
 Cette page montre chaque composant. Le code de chaque exemple est dans
@@ -128,3 +133,47 @@ $$
 ## Animation Lottie
 
 <Lottie src="sciences/molecule.json" title="Un atome qui va et vient sur un axe (animation d’exemple)." />
+
+## Mise en page
+
+<KeyFacts title="Edmond Locard" facts={{ Naissance: '1877', Mort: '1966', Domaine: 'Criminalistique' }} />
+
+<Steps>
+1. Repérer la trace.
+2. La photographier et la prélever.
+3. L’analyser au laboratoire.
+</Steps>
+
+<Columns>
+  <div>**Colonne 1** — les colonnes s’empilent sur petit écran.</div>
+  <div>**Colonne 2** — chaque enfant direct devient une colonne.</div>
+</Columns>
+
+<CardGrid>
+  <Card title="Chimie" icon="⚗">Voir <PageLink to="sciences/chimie/chimie-analytique/chromatographie" />.</Card>
+  <Card title="Enquête" icon="🔍">Voir <PageLink to="enquete/analyse-de-traces">l’analyse de traces</PageLink>.</Card>
+</CardGrid>
+
+<ProsCons pros={['Rapide', 'Peu coûteuse']} cons={['Moins précise que la HPLC']} />
+
+<PullQuote author="Edmond Locard">Tout contact laisse une trace.</PullQuote>
+
+## Petits éléments
+
+Statuts : <Badge>Nouveau</Badge> <Badge variant="warning">Controversé</Badge> — raccourci : <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> — citation<SourceRef n={1} />.
+
+## SVG intégré (couleurs du thème)
+
+<Svg src="sciences/atome.svg" title="Atome stylisé dont les couleurs suivent le thème." caption="Basculez le mode clair / sombre : le schéma change de couleurs." />
+
+## GIF avec pause
+
+<Gif src="sciences/pixel.gif" poster="sciences/phases.svg" alt="Démonstration du lecteur de GIF (image d’exemple)." />
+
+## Audio
+
+<Audio src="sciences/la440.wav" title="Le la du diapason (440 Hz)">Un son pur de 440 hertz, utilisé pour accorder les instruments.</Audio>
+
+## Intégration externe
+
+<Embed src="https://www.openstreetmap.org/export/embed.html?bbox=4.80%2C45.73%2C4.88%2C45.78&layer=mapnik" title="Carte de Lyon (OpenStreetMap)" ratio="4 / 3" />
