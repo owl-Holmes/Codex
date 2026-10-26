@@ -15,18 +15,10 @@ const { nodes, locale, heading } = Astro.props;
 {nodes.length > 0 && (
   <section>
     <h2>{heading}</h2>
-    <div class="cards">
+    <div class="card-grid">
       {nodes.map((n, i) => (
         <SectionCard node={n} locale={locale} index={i} />
       ))}
     </div>
   </section>
 )}
-
-<style>
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
-    gap: 0.9rem;
-  }
-</style>

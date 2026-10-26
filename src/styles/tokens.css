@@ -2,7 +2,7 @@
  * Design tokens — the "old library" identity: walnut shelves, leather bindings, brass and lamplight.
  * Components use ONLY these variables. Themes (src/themes/*.css) override them.
  * Light = "reading room by day", dark = "library at night". The wood tokens stay dark in both
- * modes: they paint the header, the home hero and other "shelf" surfaces.
+ * modes: they paint the header, tooltips and other "shelf" surfaces.
  */
 @layer tokens {
   :root {
@@ -28,6 +28,10 @@
     --color-on-wood-muted: #cdb796;
     --color-brass: #d4ab5f;
     --color-lamp: #f5c56b;
+    /* Translucent light-on-wood layers (header fields, hovers, outlines). */
+    --on-wood-faint: color-mix(in srgb, var(--color-on-wood) 8%, transparent);
+    --on-wood-soft: color-mix(in srgb, var(--color-on-wood) 14%, transparent);
+    --on-wood-line: color-mix(in srgb, var(--color-on-wood) 25%, transparent);
     --page-veil: rgb(244 237 225 / 0.82);
     /* Page artwork (background shorthand); themes swap it. Files: src/assets/images/backgrounds/. */
     --page-art: url('../assets/images/backgrounds/library.svg') center / cover no-repeat;
