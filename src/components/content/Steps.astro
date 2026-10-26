@@ -1,0 +1,47 @@
+---
+/**
+ * Numbered procedure: wrap a Markdown ordered list.
+ * Usage:
+ *   <Steps>
+ *   1. Première étape
+ *   2. Deuxième étape
+ *   </Steps>
+ * Override: .steps, --steps-color
+ */
+---
+
+<div class="steps">
+  <slot />
+</div>
+
+<style>
+  .steps {
+    --steps-color: var(--color-accent);
+    margin-block: 1.25rem;
+  }
+  .steps :global(ol) {
+    list-style: none;
+    counter-reset: step;
+    padding-left: 2.6rem;
+    border-left: 2px solid var(--color-border);
+    margin-left: 1rem;
+  }
+  .steps :global(ol > li) {
+    counter-increment: step;
+    position: relative;
+    margin-bottom: 0.9rem;
+  }
+  .steps :global(ol > li)::before {
+    content: counter(step);
+    position: absolute;
+    left: -3.85rem;
+    width: 2.1rem;
+    height: 2.1rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--steps-color);
+    color: var(--color-accent-contrast);
+    font-weight: 700;
+  }
+</style>

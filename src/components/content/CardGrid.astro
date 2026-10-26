@@ -1,0 +1,21 @@
+---
+/**
+ * Responsive grid of <Card> elements.
+ * Usage: <CardGrid><Card title="A">…</Card><Card title="B">…</Card></CardGrid>
+ * Override: .card-grid, --card-grid-min
+ */
+---
+
+<div class="card-grid">
+  <slot />
+</div>
+
+<style>
+  .card-grid {
+    --card-grid-min: 14rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--card-grid-min), 100%), 1fr));
+    gap: 1rem;
+    margin-block: 1.25rem;
+  }
+</style>

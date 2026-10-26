@@ -1,0 +1,44 @@
+---
+/**
+ * Content card, optionally a link. Put several in <CardGrid>.
+ * Usage: <Card title="Titre" href="/Codex/fr/…" icon="⚗">Texte court</Card>
+ * Prefer <PageLink> inside the card body for internal links (validated). Override: .card, --card-accent
+ */
+interface Props {
+  title: string;
+  href?: string;
+  icon?: string;
+}
+const { title, href, icon } = Astro.props;
+const Title = href ? 'a' : 'span';
+---
+
+<div class="card">
+  <p class="card-title">
+    {icon && <span aria-hidden="true">{icon} </span>}
+    <Title href={href}>{title}</Title>
+  </p>
+  <div class="card-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .card {
+    --card-accent: var(--color-ornament);
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--card-accent);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+  .card-title {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .card-body :global(> :last-child) {
+    margin-bottom: 0;
+  }
+</style>

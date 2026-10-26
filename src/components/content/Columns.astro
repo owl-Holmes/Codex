@@ -1,0 +1,27 @@
+---
+/**
+ * Side-by-side columns that stack on narrow screens. Each direct child becomes a column.
+ * Usage: <Columns><div>…</div><div>…</div></Columns>   (prop `min` = minimum column width)
+ * Override: .columns, --columns-min
+ */
+interface Props {
+  min?: string;
+}
+const { min = '16rem' } = Astro.props;
+---
+
+<div class="columns" style={`--columns-min: ${min}`}>
+  <slot />
+</div>
+
+<style>
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--columns-min), 100%), 1fr));
+    gap: 1.5rem;
+    margin-block: 1.25rem;
+  }
+  .columns > :global(*) > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>
