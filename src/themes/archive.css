@@ -1,6 +1,7 @@
 /* Theme "archive" — history: oxblood ink and gilt. Tokens only. */
 @layer themes {
   [data-theme='archive'] {
+    --page-art: url('../assets/images/backgrounds/tiles.svg') 0 0 / 120px 120px repeat;
     --color-accent: #7b1e23;
     --color-ornament: #a47c2c;
   }

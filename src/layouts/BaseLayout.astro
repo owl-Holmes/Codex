@@ -1,14 +1,13 @@
 ---
 /**
  * HTML shell shared by every page: <head>, light/dark mode bootstrap, header, sidebar.
- * Used by PageLayout and the home page. The page background is the library wall illustration
- * (src/assets/images/home/library.svg) behind a veil, see global.css.
+ * Used by PageLayout and the home page. The page background (`--page-art`) follows the theme,
+ * see global.css and src/assets/images/backgrounds/.
  */
 import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../themes/themes.css';
-import library from '../assets/images/home/library.svg';
 import Header from '../components/layout/Header.astro';
 import Sidebar from '../components/navigation/Sidebar.astro';
 import CommandPalette from '../components/layout/CommandPalette.astro';
@@ -73,7 +72,7 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
       })();
     </script>
   </head>
-  <body style={`--library: url(${library.src})`}>
+  <body>
     <a class="skip-link" href="#main">
       {t('nav.skip')}
     </a>

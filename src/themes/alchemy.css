@@ -1,6 +1,7 @@
 /* Theme "alchemy" — sciences: verdigris and copper. Tokens only. */
 @layer themes {
   [data-theme='alchemy'] {
+    --page-art: url('../assets/images/backgrounds/celestial.svg') center / cover no-repeat;
     --color-accent: #1f5f55;
     --color-ornament: #b06a2c;
     --color-border: #c8d3c0;

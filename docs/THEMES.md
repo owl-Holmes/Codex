@@ -21,6 +21,7 @@
 | `--callout-*` | Callout colors (definition, remember, warning, example, tip) |
 | `--color-wood`, `--color-wood-2`, `--color-on-wood`, `--color-on-wood-muted` | Dark "shelf" surfaces (header, home hero, tooltips) and their text — dark in both modes |
 | `--color-brass`, `--color-lamp` | Gilded accents and warm highlights |
+| `--page-art`, `--page-veil` | Page background (a `background` shorthand: library, celestial chart, damask, tiles — files in `src/assets/images/backgrounds/`) and the veil that keeps text readable |
 | `--text-xs` … `--text-xl` | Font size scale |
 | `--shadow-sm`, `--shadow-lg`, `--glow` | Elevation and hover glow |
 | `--ease`, `--duration` | Animation curve and speed (disabled by `prefers-reduced-motion`) |

@@ -1,6 +1,7 @@
 /* Theme "noir" — investigation: case-file greys, typewriter headings. Tokens only. */
 @layer themes {
   [data-theme='noir'] {
+    --page-art: url('../assets/images/backgrounds/damask.svg') 0 0 / 160px 220px repeat;
     --font-display: 'Courier Prime', 'Courier New', monospace;
     --color-surface: #f1efe9;
     --color-accent: #8c1c13;
