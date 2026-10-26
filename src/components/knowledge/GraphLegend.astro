@@ -1,0 +1,54 @@
+---
+/** Legend of the knowledge graph edges (prerequisite, link, shared tag), as the figure caption. Used by GraphCanvas. */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const t = useT(Astro.props.locale);
+---
+
+<figcaption class="legend">
+  <span>
+    <i class="key key--prerequisite"></i>
+    {t('graph.prerequisite')}
+  </span>
+  <span>
+    <i class="key key--related"></i>
+    {t('graph.related')}
+  </span>
+  <span>
+    <i class="key key--tag"></i>
+    {t('graph.tag')}
+  </span>
+</figcaption>
+
+<style>
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 0.6rem;
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+  .key {
+    display: inline-block;
+    width: 1.6rem;
+    height: 0;
+    border-top: 2px solid var(--color-border);
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+  .key--prerequisite {
+    border-color: var(--callout-warning);
+  }
+  .key--related {
+    border-color: var(--color-ornament);
+  }
+  .key--tag {
+    border-top-style: dashed;
+  }
+</style>

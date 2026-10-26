@@ -1,0 +1,81 @@
+/*
+ * Shared UI patterns used across components (cascade layer `components`; a component's scoped
+ * styles may refine them): .ui-label, .pill, .card-grid, .card-list, .link-card.
+ * Imported once by BaseLayout.
+ */
+@layer components {
+  /* Small uppercase interface label: counts, dates, eyebrows, section names. */
+  .ui-label {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  /* Rounded action button or link. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      translate var(--duration) var(--ease),
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
+  }
+  .pill:hover {
+    translate: 0 -2px;
+    border-color: var(--color-ornament);
+    box-shadow: var(--glow);
+  }
+  /* Responsive grid of SectionCard tiles. */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: 0.9rem;
+  }
+  /* Unstyled vertical list of cards. */
+  .card-list {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Clickable list row (recent pages, paths): surface, brass edge, slides on hover. */
+  .link-card {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-ornament);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      translate var(--duration) var(--ease),
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
+  }
+  .link-card:hover {
+    translate: 4px 0;
+    border-color: var(--color-ornament);
+    border-left-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+  .link-card-title {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 600;
+  }
+}

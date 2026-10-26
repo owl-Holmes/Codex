@@ -36,7 +36,7 @@ src/
   layouts/                BaseLayout (shell), PageLayout (content pages)
   lib/                    Pure logic: pages, tree (nav + themes), knowledge (refs, related), tags, graph, paths, urls
   i18n/ui.ts              ALL interface strings, FR + EN (typed)
-  styles/                 tokens.css (design tokens), global.css (base + layout)
+  styles/                 tokens.css (design tokens), global.css (base + layout), components.css (shared UI classes)
   themes/                 One CSS file per theme, registered in themes.css
   pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths, [lang]/a-z, [lang]/previews.json, manifest.webmanifest, sw.js, 404
 scripts/                  i18n-status, i18n-stamp, new-page, new-section, audit-leaks, check-links, check-contrast
