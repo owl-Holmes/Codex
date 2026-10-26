@@ -1,0 +1,66 @@
+---
+/** "Previous / next" links between sibling pages of the same folder (tree order). */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { findNode, type TreeNode } from '../../lib/tree';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  tree: TreeNode;
+  slug: string;
+  locale: Locale;
+}
+const { tree, slug, locale } = Astro.props;
+const t = useT(locale);
+const parent = findNode(tree, slug.includes('/') ? slug.slice(0, slug.lastIndexOf('/')) : '');
+const siblings = parent?.children ?? [];
+const index = siblings.findIndex((n) => n.slug === slug);
+const prev = index > 0 ? siblings[index - 1] : undefined;
+const next = index >= 0 ? siblings[index + 1] : undefined;
+---
+
+{(prev || next) && (
+  <nav class="prev-next" aria-label={t('nav.siblings')}>
+    {prev && (
+      <a class="prev" href={pageUrl(locale, prev.slug)} rel="prev">
+        <small>← {t('paths.prev')}</small>
+        {prev.title}
+      </a>
+    )}
+    {next && (
+      <a class="next" href={pageUrl(locale, next.slug)} rel="next">
+        <small>{t('paths.next')} →</small>
+        {next.title}
+      </a>
+    )}
+  </nav>
+)}
+
+<style>
+  .prev-next {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  a {
+    display: block;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+  }
+  small {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+  .next {
+    grid-column: 2;
+    text-align: right;
+  }
+</style>

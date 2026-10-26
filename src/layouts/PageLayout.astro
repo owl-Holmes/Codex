@@ -4,7 +4,10 @@
  * body, children cards, sources, further reading, related pages and backlinks.
  */
 import 'katex/dist/katex.min.css';
+import type { MarkdownHeading } from 'astro';
 import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/navigation/TableOfContents.astro';
+import PrevNext from '../components/navigation/PrevNext.astro';
 import Breadcrumbs from '../components/navigation/Breadcrumbs.astro';
 import PageList from '../components/knowledge/PageList.astro';
 import ChildCards from '../components/knowledge/ChildCards.astro';
@@ -25,8 +28,10 @@ interface Props {
   /** Undefined for a folder without index.mdx (auto-generated index). */
   page?: Page;
   fallback?: boolean;
+  /** Headings of the rendered page, for the table of contents. */
+  headings?: MarkdownHeading[];
 }
-const { locale, slug, page, fallback = false } = Astro.props;
+const { locale, slug, page, fallback = false, headings = [] } = Astro.props;
 const t = useT(locale);
 const tree = await getTree(locale);
 const node = findNode(tree, slug);
@@ -82,6 +87,7 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
       )}
     </header>
     {data && <PageList heading={t('page.readFirst')} slugs={data.prerequisites} locale={locale} />}
+    <TableOfContents headings={headings} locale={locale} />
     <slot />
     {node && <ChildCards nodes={node.children} locale={locale} heading={t('page.children')} />}
     {data && <Sources sources={data.sources} heading={t('page.sources')} />}
@@ -89,6 +95,7 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
     <PageList heading={t('page.related')} slugs={related.map((r) => r.slug)} notes={notes} locale={locale} />
     <PageList heading={t('page.backlinks')} slugs={backlinks} locale={locale} />
     {data && <KnowledgeGraph locale={locale} focus={slug} />}
+    <PrevNext tree={tree} slug={slug} locale={locale} />
   </article>
   {editUrl && (
     <p class="page-footer">
