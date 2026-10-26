@@ -1,0 +1,72 @@
+---
+/**
+ * Animated GIF that starts paused on a still poster and plays on demand (WCAG 2.2.2).
+ * Usage: <Gif src="sciences/demo.gif" poster="sciences/demo-poster.png" alt="…" />
+ * Both paths are relative to src/assets/images/. Override: .gif, .gif-toggle
+ */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+interface Props {
+  src: string;
+  poster: string;
+  alt: string;
+}
+const { src, poster, alt } = Astro.props;
+if (!alt) throw new Error(`Gif "${src}": "alt" is required.`);
+const t = useT((Astro.currentLocale ?? 'fr') as Locale);
+const files = import.meta.glob<string>('/src/assets/images/**/*', { query: '?url', import: 'default' });
+const url = async (path: string) => {
+  const load = files[`/src/assets/images/${path}`];
+  if (!load) throw new Error(`Gif: file not found in src/assets/images/: "${path}"`);
+  return load();
+};
+const [gifUrl, posterUrl] = await Promise.all([url(src), url(poster)]);
+---
+
+<figure class="gif" data-gif={gifUrl} data-poster={posterUrl}>
+  <img src={posterUrl} alt={alt} loading="lazy" />
+  <button
+    type="button"
+    class="gif-toggle"
+    aria-pressed="false"
+    data-play={t('animation.play')}
+    data-pause={t('animation.pause')}
+  >
+    ▶ {t('animation.play')}
+  </button>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.gif').forEach((figure) => {
+    const img = figure.querySelector('img')!;
+    const button = figure.querySelector<HTMLButtonElement>('.gif-toggle')!;
+    button.addEventListener('click', () => {
+      const playing = button.getAttribute('aria-pressed') === 'true';
+      img.src = (playing ? figure.dataset.poster : figure.dataset.gif) ?? img.src;
+      button.setAttribute('aria-pressed', String(!playing));
+      button.textContent = playing ? `▶ ${button.dataset.play}` : `❚❚ ${button.dataset.pause}`;
+    });
+  });
+</script>
+
+<style>
+  .gif {
+    margin-block: 1.5rem;
+    text-align: center;
+  }
+  img {
+    margin-inline: auto;
+    border-radius: var(--radius);
+  }
+  .gif-toggle {
+    margin-top: 0.4rem;
+    padding: 0.25rem 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+  }
+</style>

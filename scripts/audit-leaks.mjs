@@ -16,7 +16,7 @@ const RULES = [
   { name: 'Generic secret', re: /\b(?:api[_-]?key|secret|password|token)\s*[:=]\s*['"][^'"\s]{12,}['"]/i },
 ];
 const FORBIDDEN_FILES = /(^|\/)(\.env(\..+)?|.*\.pem|.*\.key|id_rsa.*)$/;
-const BINARY = /\.(png|jpe?g|gif|webp|avif|ico|mp4|webm|woff2?|ttf|pdf)$/i;
+const BINARY = /\.(png|jpe?g|gif|webp|avif|ico|mp4|webm|woff2?|ttf|pdf|mp3|wav|ogg)$/i;
 
 const files = execSync('git ls-files --cached --others --exclude-standard', { encoding: 'utf8' })
   .split('\n')

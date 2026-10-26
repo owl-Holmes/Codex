@@ -1,0 +1,52 @@
+---
+/**
+ * Audio player for a local file in src/assets/audio/, with an optional transcript (slot, collapsible).
+ * Usage: <Audio src="histoire/discours.mp3" title="…">Transcription…</Audio>
+ * Override: .audio
+ */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+interface Props {
+  src: string;
+  title: string;
+}
+const { src, title } = Astro.props;
+const t = useT((Astro.currentLocale ?? 'fr') as Locale);
+const files = import.meta.glob<string>('/src/assets/audio/**/*', { query: '?url', import: 'default' });
+const load = files[`/src/assets/audio/${src}`];
+if (!load) throw new Error(`Audio: file not found in src/assets/audio/: "${src}"`);
+const url = await load();
+---
+
+<figure class="audio">
+  <figcaption>{title}</figcaption>
+  <audio controls preload="metadata" src={url}></audio>
+  {Astro.slots.has('default') && (
+    <details>
+      <summary>{t('audio.transcript')}</summary>
+      <slot />
+    </details>
+  )}
+</figure>
+
+<style>
+  .audio {
+    margin-block: 1.25rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+  figcaption {
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  audio {
+    width: 100%;
+  }
+  details {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+</style>
