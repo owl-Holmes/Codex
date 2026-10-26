@@ -116,6 +116,9 @@
   .content {
     max-width: var(--measure);
   }
+  .content--wide {
+    max-width: none;
+  }
   @media (max-width: 960px) {
     .shell {
       grid-template-columns: 1fr;

@@ -35,6 +35,13 @@ const docs = defineCollection({
     sources: z.array(source).default([]),
     theme: z.string().optional(),
     order: z.number().optional(),
+    /** Page-specific stylesheet: file name in src/styles/pages/ (see src/lib/page-styles.ts). */
+    styles: z.string().optional(),
+    /** `wide` removes the reading-width limit (tables, galleries, timelines). */
+    layout: z.enum(['default', 'wide']).default('default'),
+    /** Cover image, relative to src/assets/images/, with its required alternative text. */
+    cover: z.string().optional(),
+    coverAlt: z.string().optional(),
     /** Link the first occurrence of each glossary term automatically (src/plugins/remark-glossary.mjs). */
     autoGlossary: z.boolean().default(false),
     /** EN pages only: FR source path and its hash at translation time (see scripts/i18n-*). */

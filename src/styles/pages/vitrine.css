@@ -1,0 +1,7 @@
+/* Page-specific styles of the component showcase (frontmatter `styles: vitrine.css`). Example only. */
+@layer page {
+  .content h2 {
+    border-bottom: 1px dashed var(--color-ornament);
+    padding-bottom: 0.2rem;
+  }
+}

@@ -14,13 +14,13 @@ import ChildCards from '../components/knowledge/ChildCards.astro';
 import Sources from '../components/knowledge/Sources.astro';
 import PathBanner from '../components/knowledge/PathBanner.astro';
 import KnowledgeGraph from '../components/knowledge/KnowledgeGraph.astro';
+import PageHeader from '../components/knowledge/PageHeader.astro';
 import { SITE, type Locale } from '../config/site';
 import { useT } from '../i18n/ui';
 import type { Page } from '../lib/pages';
 import { findNode, getTrail, getTree, resolveTheme } from '../lib/tree';
 import { getBacklinks, getRelated } from '../lib/knowledge';
-import { tagSlug } from '../lib/tags';
-import { pageUrl } from '../lib/urls';
+import { pageStyles } from '../lib/page-styles';
 
 interface Props {
   locale: Locale;
@@ -43,7 +43,7 @@ const backlinks = await getBacklinks(slug);
 const notes = Object.fromEntries(
   related.map((r) => [r.slug, r.sharedTags.length ? `${t('page.sharedTag')} : ${r.sharedTags.join(', ')}` : '']),
 );
-const date = data?.updated ?? data?.created;
+const customCss = await pageStyles(data?.styles);
 const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.entry.filePath}` : undefined;
 ---
 
@@ -54,7 +54,9 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
   description={data?.description ?? node?.description ?? ''}
   theme={resolveTheme(tree, slug, data?.theme)}
   contentLang={fallback ? 'fr' : locale}
+  wide={data?.layout === 'wide'}
 >
+  {customCss && <style is:inline set:html={customCss} />}
   <Breadcrumbs trail={trail} locale={locale} />
   {fallback && (
     <p class="banner" role="note" lang={locale}>
@@ -68,24 +70,7 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
         {trail[0].title}
       </span>
     )}
-    <header class="page-head">
-      <h1>{title}</h1>
-      {data && (
-        <p class="meta">
-          <span class={`status status--${data.status}`}>{t(`status.${data.status}`)}</span>
-          {date && (
-            <span>
-              {t('page.updated')} {date.toLocaleDateString(locale)}
-            </span>
-          )}
-          {data.tags.map((tag) => (
-            <a class="tag" href={pageUrl(locale, `tags/${tagSlug(tag)}`)}>
-              #{tag}
-            </a>
-          ))}
-        </p>
-      )}
-    </header>
+    <PageHeader title={title} locale={locale} page={page} />
     {data && <PageList heading={t('page.readFirst')} slugs={data.prerequisites} locale={locale} />}
     <TableOfContents headings={headings} locale={locale} />
     <slot />
@@ -105,30 +90,6 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
 </BaseLayout>
 
 <style>
-  .page-head {
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 0.8rem;
-    margin-bottom: 1.5rem;
-  }
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin: 0.5rem 0 0;
-    font-size: 0.95rem;
-    color: var(--color-muted);
-  }
-  .status {
-    border: 1px solid currentColor;
-    border-radius: 999px;
-    padding: 0 0.6rem;
-  }
-  .status--complete {
-    color: var(--callout-example);
-  }
-  .status--draft {
-    color: var(--callout-warning);
-  }
   .banner {
     background: var(--color-surface);
     border: 1px dashed var(--color-ornament);
