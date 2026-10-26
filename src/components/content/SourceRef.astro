@@ -1,0 +1,20 @@
+---
+/**
+ * Citation marker pointing to an entry of the page's `sources` list (rendered at the bottom).
+ * Usage: Le laboratoire est fondé en 1910<SourceRef n={1} />.   (n = position in `sources`, from 1)
+ */
+interface Props {
+  n: number;
+}
+const { n } = Astro.props;
+---
+
+<!-- prettier-ignore -->
+<sup class="source-ref"><a href={`#source-${n}`} aria-label={`Source ${n}`}>[{n}]</a></sup>
+
+<style>
+  .source-ref a {
+    text-decoration: none;
+    font-size: 0.8em;
+  }
+</style>

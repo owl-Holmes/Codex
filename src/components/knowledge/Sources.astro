@@ -19,8 +19,8 @@ const { sources, heading } = Astro.props;
   <section class="sources">
     <h2>{heading}</h2>
     <ol>
-      {sources.map((s) => (
-        <li>
+      {sources.map((s, i) => (
+        <li id={`source-${i + 1}`}>
           {s.author && <>{s.author}, </>}
           {s.url ? (
             <a href={s.url}>

@@ -1,0 +1,22 @@
+---
+/**
+ * Internal link validated at build time (a wrong path fails the build), with the page title as
+ * default text and the right language + base path automatically.
+ * Usage: <PageLink to="sciences/chimie/chimie-analytique/chromatographie" />  or  <PageLink to="…">texte</PageLink>
+ */
+import type { Locale } from '../../config/site';
+import { resolvePage } from '../../lib/pages';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  to: string;
+}
+const { to } = Astro.props;
+const locale = (Astro.currentLocale ?? 'fr') as Locale;
+const target = await resolvePage(locale, to);
+if (!target) throw new Error(`PageLink: unknown page "${to}"`);
+const hasText = Astro.slots.has('default');
+---
+
+<!-- prettier-ignore -->
+<a class="page-link" href={pageUrl(locale, to)}>{hasText ? <slot /> : target.page.entry.data.title}</a>
