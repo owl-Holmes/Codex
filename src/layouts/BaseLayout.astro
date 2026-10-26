@@ -1,7 +1,7 @@
 ---
 /**
  * HTML shell shared by every page: <head>, light/dark mode bootstrap, header, sidebar.
- * Used by PageLayout and the home page.
+ * Used by PageLayout and the home page. The optional `hero` slot renders full-width above the shell.
  */
 import '../styles/fonts.css';
 import '../styles/tokens.css';
@@ -29,9 +29,21 @@ interface Props {
   indexable?: boolean;
   /** Full-width content column (frontmatter `layout: wide`). */
   wide?: boolean;
+  /** False to hide the section tree (the home page lays its sections out itself). */
+  sidebar?: boolean;
 }
 
-const { locale, title, description, slug, theme = 'base', contentLang, indexable = true, wide = false } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  slug,
+  theme = 'base',
+  contentLang,
+  indexable = true,
+  wide = false,
+  sidebar = true,
+} = Astro.props;
 const t = useT(locale);
 const tree = await getTree(locale);
 const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
@@ -47,7 +59,7 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
     <SeoMeta locale={locale} slug={slug} title={title} description={description} />
     <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} type="image/svg+xml" />
     <link rel="manifest" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/manifest.webmanifest`} />
-    <meta name="theme-color" content="#7a3b12" />
+    <meta name="theme-color" content="#23150d" />
     {import.meta.env.PROD && <script
       is:inline
       define:vars={{ sw: `${import.meta.env.BASE_URL.replace(/\/$/, '')}/sw.js` }}
@@ -76,8 +88,9 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
       {t('nav.skip')}
     </a>
     <Header locale={locale} slug={slug} />
-    <div class="shell" data-theme={theme}>
-      <Sidebar tree={tree} locale={locale} current={slug} />
+    <slot name="hero" />
+    <div class:list={['shell', { 'shell--full': !sidebar }]} data-theme={theme}>
+      {sidebar && <Sidebar tree={tree} locale={locale} current={slug} />}
       <main
         id="main"
         class:list={['content', { 'content--wide': wide }]}

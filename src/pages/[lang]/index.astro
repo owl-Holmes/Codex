@@ -1,14 +1,15 @@
 ---
-/** Language home: intro, random page, top-level sections, featured paths, recent pages and the knowledge graph. */
+/** Language home: library hero, section "shelves", recent pages, thematic paths and the knowledge graph. */
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ChildCards from '../../components/knowledge/ChildCards.astro';
+import HomeHero from '../../components/home/HomeHero.astro';
+import SectionCard from '../../components/knowledge/SectionCard.astro';
 import KnowledgeGraph from '../../components/knowledge/KnowledgeGraph.astro';
-import RandomPage from '../../components/navigation/RandomPage.astro';
 import { LOCALES, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
 import { getAllPages } from '../../lib/pages';
 import { getPaths } from '../../lib/paths';
-import { getTree } from '../../lib/tree';
+import { countPages, getTree } from '../../lib/tree';
 import { pageUrl } from '../../lib/urls';
 
 export function getStaticPaths() {
@@ -18,51 +19,183 @@ export function getStaticPaths() {
 const locale = Astro.params.lang as Locale;
 const t = useT(locale);
 const tree = await getTree(locale);
-const dateOf = (d: { updated?: Date; created: Date }) => (d.updated ?? d.created).getTime();
+const dateOf = (d: { updated?: Date; created: Date }) => d.updated ?? d.created;
 const recent = (await getAllPages())
   .filter((p) => p.locale === 'fr' && p.slug)
-  .sort((a, b) => dateOf(b.entry.data) - dateOf(a.entry.data))
+  .sort((a, b) => dateOf(b.entry.data).getTime() - dateOf(a.entry.data).getTime())
   .slice(0, 6);
+const sectionTitle = new Map(tree.children.map((n) => [n.slug, n.title]));
+const formatDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 const paths = (await getPaths(locale)).slice(0, 3);
+const terms = (await getCollection('glossary')).filter((g) => g.id.startsWith('fr/')).length;
+const stats = { pages: countPages(tree), sections: tree.children.filter((n) => n.isSection).length, terms };
 ---
 
-<BaseLayout locale={locale} slug="" title={t('home.title')} description={t('home.intro')}>
-  <h1>{t('home.title')}</h1>
-  <p class="intro">{t('home.intro')}</p>
-  <RandomPage locale={locale} />
-  <ChildCards nodes={tree.children} locale={locale} heading={t('nav.sections')} />
-  <section>
-    <h2>{t('home.recent')}</h2>
-    <ul>
-      {recent.map((p) => (
-        <li>
-          <a href={pageUrl(locale, p.slug)}>{p.entry.data.title}</a>
-        </li>
+<BaseLayout locale={locale} slug="" title={t('home.title')} description={t('home.intro')} sidebar={false} wide>
+  <HomeHero slot="hero" locale={locale} stats={stats} />
+
+  <section id="shelves" class="block" aria-labelledby="shelves-title">
+    <header class="block-head">
+      <h2 id="shelves-title">{t('home.shelves')}</h2>
+      <p>{t('home.shelvesIntro')}</p>
+    </header>
+    <div class="shelves">
+      {tree.children.map((node, i) => (
+        <SectionCard node={node} locale={locale} index={i} />
       ))}
-    </ul>
+    </div>
   </section>
-  {paths.length > 0 && (
-    <section>
-      <h2>{t('paths.title')}</h2>
-      <ul>
-        {paths.map((p) => (
+
+  <div class="columns">
+    <section class="block" aria-labelledby="recent-title">
+      <header class="block-head">
+        <h2 id="recent-title">{t('home.recent')}</h2>
+      </header>
+      <ol class="recent" role="list">
+        {recent.map((p) => (
           <li>
-            <a href={pageUrl(locale, `paths/${p.id}`)}>{p.data.title}</a> — {p.data.description}
+            <a href={pageUrl(locale, p.slug)}>
+              <span class="recent-section">{sectionTitle.get(p.slug.split('/')[0])}</span>
+              <span class="recent-title">{p.entry.data.title}</span>
+              <time datetime={dateOf(p.entry.data).toISOString()}>{formatDate.format(dateOf(p.entry.data))}</time>
+            </a>
           </li>
         ))}
-      </ul>
+      </ol>
     </section>
-  )}
-  <section>
-    <h2>{t('graph.title')}</h2>
+
+    {paths.length > 0 && (
+      <section class="block" aria-labelledby="paths-title">
+        <header class="block-head">
+          <h2 id="paths-title">{t('paths.title')}</h2>
+          <p>{t('paths.intro')}</p>
+        </header>
+        <ul class="paths" role="list">
+          {paths.map((p) => (
+            <li>
+              <a href={pageUrl(locale, `paths/${p.id}`)}>
+                <span class="path-title">{p.data.title}</span>
+                <span class="path-desc">{p.data.description}</span>
+                <span class="path-steps">
+                  {p.data.steps.length} {t('paths.steps')} →
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a class="more" href={pageUrl(locale, 'paths')}>
+          {t('home.allPaths')} →
+        </a>
+      </section>
+    )}
+  </div>
+
+  <section class="block" aria-labelledby="graph-title">
+    <header class="block-head">
+      <h2 id="graph-title">{t('graph.title')}</h2>
+      <p>{t('graph.intro')}</p>
+    </header>
     <KnowledgeGraph locale={locale} />
   </section>
 </BaseLayout>
 
 <style>
-  .intro {
-    font-size: 1.3rem;
-    font-style: italic;
+  .block {
+    margin-top: 3.5rem;
+  }
+  .block-head {
+    margin-bottom: 1.4rem;
+  }
+  .block-head h2 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .block-head h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-ornament), transparent);
+  }
+  .block-head p {
+    margin: 0.4rem 0 0;
     color: var(--color-muted);
+  }
+  .shelves {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1.4rem;
+  }
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 0 3rem;
+  }
+  .recent,
+  .paths {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .recent a,
+  .paths a {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-ornament);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      translate var(--duration) var(--ease),
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
+  }
+  .recent a:hover,
+  .paths a:hover {
+    translate: 4px 0;
+    border-color: var(--color-ornament);
+    border-left-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+  .recent a {
+    grid-template-columns: 1fr auto;
+  }
+  .recent-section,
+  .path-steps,
+  .recent time {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .recent-section {
+    grid-column: 1 / -1;
+    color: var(--color-accent);
+  }
+  .recent-title,
+  .path-title {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 600;
+  }
+  .recent time {
+    align-self: center;
+  }
+  .path-desc {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .more {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
   }
 </style>

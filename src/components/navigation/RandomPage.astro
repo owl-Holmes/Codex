@@ -9,13 +9,15 @@ import { pageUrl, withBase } from '../../lib/urls';
 
 interface Props {
   locale: Locale;
+  /** Extra class for context-specific styling (e.g. the home hero). */
+  class?: string;
 }
-const { locale } = Astro.props;
+const { locale, class: className } = Astro.props;
 const t = useT(locale);
 const index = withBase(`${locale}/previews.json`).replace(/\/$/, '');
 ---
 
-<a class="random-page" href={pageUrl(locale, 'a-z')} data-index={index}>
+<a class:list={['random-page', className]} href={pageUrl(locale, 'a-z')} data-index={index}>
   ⚄ {t('nav.random')}
 </a>
 
@@ -42,5 +44,12 @@ const index = withBase(`${locale}/previews.json`).replace(/\/$/, '');
     border-radius: var(--radius);
     background: var(--color-surface);
     text-decoration: none;
+    transition:
+      border-color var(--duration) var(--ease),
+      translate var(--duration) var(--ease);
+  }
+  .random-page:hover {
+    border-color: var(--color-ornament);
+    translate: 0 -2px;
   }
 </style>
