@@ -1,10 +1,13 @@
 ---
-/** Language home: intro, top-level sections as themed cards, recently updated pages. */
+/** Language home: intro, random page, top-level sections, featured paths, recent pages and the knowledge graph. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChildCards from '../../components/knowledge/ChildCards.astro';
+import KnowledgeGraph from '../../components/knowledge/KnowledgeGraph.astro';
+import RandomPage from '../../components/navigation/RandomPage.astro';
 import { LOCALES, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
 import { getAllPages } from '../../lib/pages';
+import { getPaths } from '../../lib/paths';
 import { getTree } from '../../lib/tree';
 import { pageUrl } from '../../lib/urls';
 
@@ -20,11 +23,13 @@ const recent = (await getAllPages())
   .filter((p) => p.locale === 'fr' && p.slug)
   .sort((a, b) => dateOf(b.entry.data) - dateOf(a.entry.data))
   .slice(0, 6);
+const paths = (await getPaths(locale)).slice(0, 3);
 ---
 
 <BaseLayout locale={locale} slug="" title={t('home.title')} description={t('home.intro')}>
   <h1>{t('home.title')}</h1>
   <p class="intro">{t('home.intro')}</p>
+  <RandomPage locale={locale} />
   <ChildCards nodes={tree.children} locale={locale} heading={t('nav.sections')} />
   <section>
     <h2>{t('home.recent')}</h2>
@@ -35,6 +40,22 @@ const recent = (await getAllPages())
         </li>
       ))}
     </ul>
+  </section>
+  {paths.length > 0 && (
+    <section>
+      <h2>{t('paths.title')}</h2>
+      <ul>
+        {paths.map((p) => (
+          <li>
+            <a href={pageUrl(locale, `paths/${p.id}`)}>{p.data.title}</a> — {p.data.description}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+  <section>
+    <h2>{t('graph.title')}</h2>
+    <KnowledgeGraph locale={locale} />
   </section>
 </BaseLayout>
 
