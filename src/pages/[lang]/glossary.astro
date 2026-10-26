@@ -1,5 +1,8 @@
 ---
-/** Glossary: every term of the locale (FR fallback), alphabetical, each with a stable anchor (#id). */
+/**
+ * Glossary: every term of the locale (FR fallback), alphabetical, each with a stable anchor (#id).
+ * Each term is a heading with that id, so Pagefind returns it as its own search sub-result.
+ */
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LOCALES, type Locale } from '../../config/site';
@@ -23,34 +26,29 @@ const terms = await Promise.all(
 
 <BaseLayout locale={locale} slug="glossary" title={t('glossary.title')} description={t('glossary.title')}>
   <h1>{t('glossary.title')}</h1>
-  <dl class="glossary">
+  <div class="glossary">
     {terms.map(({ id, entry, Body }) => (
-      <div id={id} class="glossary-entry" lang={entry.id.startsWith(`${locale}/`) ? locale : 'fr'}>
-        <dt>{entry.data.term}</dt>
-        <dd>
-          <p>{entry.data.definition}</p>
-          <Body />
-        </dd>
-      </div>
+      <section class="glossary-entry" lang={entry.id.startsWith(`${locale}/`) ? locale : 'fr'}>
+        <h2 id={id} class="term">
+          {entry.data.term}
+        </h2>
+        <p>{entry.data.definition}</p>
+        <Body />
+      </section>
     ))}
-  </dl>
+  </div>
 </BaseLayout>
 
 <style>
   .glossary-entry {
     padding-block: 0.8rem;
     border-bottom: 1px solid var(--color-border);
-    scroll-margin-top: 1rem;
   }
-  .glossary-entry:target {
+  .glossary-entry:has(:target) {
     background: var(--color-surface);
   }
-  dt {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 600;
-  }
-  dd {
-    margin: 0.2rem 0 0;
+  .term {
+    margin: 0 0 0.2rem;
+    font-size: var(--text-lg);
   }
 </style>

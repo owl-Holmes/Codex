@@ -3,8 +3,12 @@
  * debounced search and listbox keyboard navigation.
  */
 
+interface PagefindHit {
+  url: string;
+  excerpt: string;
+}
 interface PagefindResult {
-  data: () => Promise<{ url: string; meta: { title?: string }; excerpt: string }>;
+  data: () => Promise<PagefindHit & { meta: { title?: string }; sub_results?: (PagefindHit & { title: string })[] }>;
 }
 interface Pagefind {
   search: (q: string) => Promise<{ results: PagefindResult[] }>;
@@ -45,13 +49,16 @@ export function setupPalette(dialog: HTMLDialogElement): void {
         const li = document.createElement('li');
         li.id = `palette-option-${i}`;
         li.setAttribute('role', 'option');
-        li.dataset.url = d.url;
+        // Prefer the matching heading (e.g. one glossary term) over the top of the page.
+        const sub = d.sub_results?.find((s) => s.url.includes('#'));
+        const url = sub?.url ?? d.url;
+        li.dataset.url = url;
         const title = document.createElement('span');
-        title.textContent = d.meta.title ?? d.url;
+        title.textContent = sub ? `${d.meta.title ?? ''} › ${sub.title}` : (d.meta.title ?? d.url);
         const excerpt = document.createElement('small');
-        excerpt.textContent = d.excerpt.replace(/<[^>]+>/g, '');
+        excerpt.textContent = (sub ?? d).excerpt.replace(/<[^>]+>/g, '');
         li.append(title, excerpt);
-        li.addEventListener('click', () => location.assign(d.url));
+        li.addEventListener('click', () => location.assign(url));
         return li;
       });
       if (!items.length) {
