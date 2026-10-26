@@ -1,6 +1,6 @@
 ---
 /** Pages sharing one tag, across every category (the main cross-category discovery view). */
-import { getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PageList from '../../../components/knowledge/PageList.astro';
 import { LOCALES, type Locale } from '../../../config/site';
@@ -16,7 +16,8 @@ const locale = Astro.params.lang as Locale;
 const tag = Astro.params.tag!;
 const t = useT(locale);
 const pages = (await getTagIndex()).get(tag) ?? [];
-const info = await getEntry('tags', tag);
+// getCollection (not getEntry) so tags without a description do not log a warning.
+const info = (await getCollection('tags')).find((entry) => entry.id === tag);
 ---
 
 <BaseLayout
