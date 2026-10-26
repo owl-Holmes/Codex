@@ -9,7 +9,8 @@ const en = new Set(listPages(join(DOCS, 'en')));
 const missing = [];
 const outdated = [];
 
-for (const page of fr) {
+// Drafts are never published, so they are not reported as missing translations.
+for (const page of fr.filter((p) => readField(join(DOCS, 'fr', p), 'status') !== 'draft')) {
   if (!en.has(page)) {
     missing.push(page);
     continue;
