@@ -1,0 +1,9 @@
+/*
+ * Self-hosted fonts (bundled from npm, no external request), latin subset only, font-display: swap.
+ * Body text uses system serif fonts (see --font-body in tokens.css) for speed and readability.
+ * To add a font: npm install @fontsource/<name>, import the needed weights here, reference it in a token.
+ */
+@import '@fontsource/cormorant-garamond/latin-600.css';
+@import '@fontsource/cormorant-garamond/latin-700.css';
+@import '@fontsource/courier-prime/latin-400.css';
+@import '@fontsource/courier-prime/latin-700.css';
