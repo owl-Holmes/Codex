@@ -1,0 +1,21 @@
+---
+/**
+ * Keyboard key(s). Usage: <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>   Override: .kbd
+ */
+---
+
+<!-- prettier-ignore -->
+<kbd class="kbd"><slot /></kbd>
+
+<style>
+  .kbd {
+    display: inline-block;
+    padding: 0 0.4rem;
+    border: 1px solid var(--color-border);
+    border-bottom-width: 3px;
+    border-radius: 4px;
+    background: var(--color-surface);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+</style>

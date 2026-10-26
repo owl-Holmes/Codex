@@ -1,0 +1,29 @@
+---
+/**
+ * Small inline label.
+ * Usage: <Badge>Nouveau</Badge>  <Badge variant="warning">Controversé</Badge>
+ * Variants map to callout colors. Override: .badge, --badge-color
+ */
+interface Props {
+  variant?: 'default' | 'definition' | 'remember' | 'warning' | 'example' | 'tip';
+}
+const { variant = 'default' } = Astro.props;
+const color = variant === 'default' ? 'var(--color-accent)' : `var(--callout-${variant})`;
+---
+
+<!-- prettier-ignore -->
+<span class="badge" style={`--badge-color: ${color}`}><slot /></span>
+
+<style>
+  .badge {
+    display: inline-block;
+    padding: 0 0.55rem;
+    border: 1px solid var(--badge-color);
+    border-radius: 999px;
+    color: var(--badge-color);
+    font-size: 0.8em;
+    font-weight: 700;
+    line-height: 1.6;
+    vertical-align: middle;
+  }
+</style>
