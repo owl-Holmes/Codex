@@ -1,0 +1,40 @@
+# Themes
+
+## How it works
+
+- `src/styles/tokens.css` defines the **base** identity (grimoire / ancient library) as CSS custom
+  properties, for light (`:root`) and dark (`:root[data-mode='dark']`) modes.
+- A **theme** is one file `src/themes/<name>.css` that overrides some tokens under
+  `[data-theme='<name>']`, and again under `:root[data-mode='dark'] [data-theme='<name>']`.
+- Every component uses tokens only, so a theme restyles everything without touching components.
+- Resolution for a page: its own `theme` frontmatter > nearest ancestor folder `theme` (`section.yml`) > `base`.
+
+## Main tokens
+
+| Token | Role |
+|---|---|
+| `--font-display`, `--font-body`, `--font-mono` | Headings, text, code |
+| `--color-bg`, `--color-surface` | Page background, cards and boxes |
+| `--color-text`, `--color-muted` | Main and secondary text |
+| `--color-accent`, `--color-accent-contrast` | Links, highlights; text on accent backgrounds |
+| `--color-border`, `--color-ornament` | Lines; decorative accents |
+| `--callout-*` | Callout colors (definition, remember, warning, example, tip) |
+| `--radius`, `--measure`, `--sidebar-width` | Shape and layout |
+
+## Create a theme
+
+```css
+/* src/themes/ocean.css */
+@layer themes {
+  [data-theme='ocean'] { --color-accent: #0b5d7a; --color-ornament: #3a8fb7; }
+  :root[data-mode='dark'] [data-theme='ocean'] { --color-accent: #7fd0ee; --color-ornament: #5fb3d9; }
+}
+```
+
+Then `@import './ocean.css';` in `src/themes/themes.css`, set `theme: ocean` in a `section.yml`,
+and run `npm run contrast` (WCAG AA, every theme and mode).
+
+## Component-level overrides
+
+Each component documents its override hooks in [COMPONENTS.md](COMPONENTS.md) (e.g. `--callout-color`,
+`--timeline-color`, `--chart-1`). A theme may target them under its `[data-theme]` selector.
