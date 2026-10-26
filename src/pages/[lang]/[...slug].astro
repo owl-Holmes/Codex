@@ -26,9 +26,16 @@ export async function getStaticPaths() {
 const lang = Astro.params.lang as Locale;
 const slug = Astro.params.slug ?? '';
 const resolved = await resolvePage(lang, slug);
-const Content = resolved ? (await render(resolved.page.entry)).Content : undefined;
+const rendered = resolved ? await render(resolved.page.entry) : undefined;
+const Content = rendered?.Content;
 ---
 
-<PageLayout locale={lang} slug={slug} page={resolved?.page} fallback={resolved?.fallback}>
+<PageLayout
+  locale={lang}
+  slug={slug}
+  page={resolved?.page}
+  fallback={resolved?.fallback}
+  headings={rendered?.headings ?? []}
+>
   {Content && <Content components={mdxComponents} />}
 </PageLayout>

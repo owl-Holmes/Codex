@@ -1,0 +1,93 @@
+---
+/**
+ * Table of contents of the current page (h2/h3), with scroll-spy highlighting.
+ * Wide screens: fixed in the right margin. Narrower screens: a collapsible block above the content.
+ * Hidden when the page has fewer than 2 headings.
+ */
+import type { MarkdownHeading } from 'astro';
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+
+interface Props {
+  headings: MarkdownHeading[];
+  locale: Locale;
+}
+const { headings, locale } = Astro.props;
+const t = useT(locale);
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{items.length >= 2 && (
+  <details class="toc" open>
+    <summary>{t('toc.title')}</summary>
+    <nav aria-label={t('toc.title')}>
+      <ol>
+        {items.map((h) => (
+          <li class={`toc-depth-${h.depth}`}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  </details>
+)}
+
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+  const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter(Boolean);
+  if (targets.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((e) => e.isIntersecting);
+        if (!visible) return;
+        links.forEach((a) => a.toggleAttribute('aria-current', a.hash === `#${visible.target.id}`));
+      },
+      { rootMargin: '0px 0px -70% 0px' },
+    );
+    targets.forEach((el) => observer.observe(el!));
+  }
+</script>
+
+<style>
+  .toc {
+    margin-bottom: 1.5rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    font-size: 0.95rem;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 700;
+  }
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0.4rem 0 0;
+  }
+  .toc-depth-3 {
+    padding-left: 1rem;
+  }
+  a {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  a:hover,
+  a[aria-current] {
+    color: var(--color-accent);
+  }
+  a[aria-current] {
+    font-weight: 700;
+  }
+  @media (min-width: 1360px) {
+    .toc {
+      position: fixed;
+      top: 6rem;
+      right: max(1rem, calc((100vw - 90rem) / 2 + 1rem));
+      width: 15rem;
+      max-height: calc(100vh - 8rem);
+      overflow-y: auto;
+    }
+  }
+</style>
