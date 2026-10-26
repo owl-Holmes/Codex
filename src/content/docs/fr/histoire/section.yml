@@ -2,3 +2,4 @@ title: { fr: Histoire, en: History }
 description: { fr: "Événements, époques et personnages.", en: "Events, eras and people." }
 order: 30
 theme: archive
+icon: scroll

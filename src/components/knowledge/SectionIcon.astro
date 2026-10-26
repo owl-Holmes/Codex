@@ -1,0 +1,25 @@
+---
+/** Decorative section icon (inline SVG from src/lib/icons.ts). Used by the home page and section cards. */
+import { ICONS, type IconName } from '../../lib/icons';
+
+interface Props {
+  name?: IconName;
+  /** Rendered size in CSS units. */
+  size?: string;
+}
+const { name = 'book', size = '1.75rem' } = Astro.props;
+---
+
+<svg
+  class="section-icon"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={ICONS[name]}
+/>

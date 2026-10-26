@@ -31,6 +31,7 @@ src/
   components/content/     MDX components, auto-registered in components/content/index.ts
   components/knowledge/   Page lists, child cards, sources
   components/navigation/  Sidebar tree, breadcrumbs, table of contents, prev/next, random page
+  components/home/        Home page hero
   components/layout/      Header, mode toggle, Ctrl+K palette, link previews, SEO meta
   layouts/                BaseLayout (shell), PageLayout (content pages)
   lib/                    Pure logic: pages, tree (nav + themes), knowledge (refs, related), tags, graph, paths, urls
@@ -60,6 +61,7 @@ title: { fr: Physique, en: Physics }
 description: { fr: "…", en: "…" }
 order: 20          # position among siblings
 theme: alchemy     # optional, inherited by all descendants
+icon: atom         # optional card icon, see src/lib/icons.ts
 ```
 A folder without `index.mdx` gets an auto-generated index (cards of its children).
 

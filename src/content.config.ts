@@ -7,6 +7,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { ICON_NAMES } from './lib/icons';
 
 const source = z.object({
   title: z.string(),
@@ -57,6 +58,8 @@ const sections = defineCollection({
     description: z.object({ fr: z.string(), en: z.string() }).optional(),
     order: z.number().default(100),
     theme: z.string().optional(),
+    /** Built-in icon shown on section cards (see src/lib/icons.ts). */
+    icon: z.enum(ICON_NAMES).optional(),
   }),
 });
 

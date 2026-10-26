@@ -4,6 +4,7 @@
  */
 import { getCollection } from 'astro:content';
 import type { Locale } from '../config/site';
+import type { IconName } from './icons';
 import { getPageMap } from './pages';
 
 export interface TreeNode {
@@ -12,6 +13,8 @@ export interface TreeNode {
   description?: string;
   order: number;
   theme?: string;
+  /** Section icon from section.yml (folders only). */
+  icon?: IconName;
   /** True when the node is a folder (has children or a section.yml). */
   isSection: boolean;
   children: TreeNode[];
@@ -22,6 +25,7 @@ interface SectionMeta {
   description?: Record<Locale, string>;
   order: number;
   theme?: string;
+  icon?: IconName;
 }
 
 /** Section metadata keyed by folder slug, e.g. "sciences/chimie". */
@@ -54,6 +58,7 @@ export async function getTree(locale: Locale): Promise<TreeNode> {
       description: meta?.description?.[locale] ?? page?.entry.data.description,
       order: meta?.order ?? page?.entry.data.order ?? 100,
       theme: meta?.theme ?? page?.entry.data.theme,
+      icon: meta?.icon,
       isSection: Boolean(meta),
       children: [],
     };
@@ -83,6 +88,11 @@ export function findNode(root: TreeNode, slug: string): TreeNode | undefined {
     if (slug === child.slug || slug.startsWith(`${child.slug}/`)) return findNode(child, slug);
   }
   return undefined;
+}
+
+/** Number of pages below a node (folders themselves are not counted). */
+export function countPages(node: TreeNode): number {
+  return node.children.reduce((sum, c) => sum + (c.children.length ? countPages(c) : 1), 0);
 }
 
 /** Ancestors from the top-level section down to the node itself (root excluded). */

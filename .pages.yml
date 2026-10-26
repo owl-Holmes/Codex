@@ -67,6 +67,10 @@ content:
           - { name: en, label: English, type: string }
       - { name: order, label: Ordre, type: number }
       - { name: theme, label: Thème, type: string }
+      - name: icon
+        label: Icône
+        type: select
+        options: { values: [book, flask, magnifier, scroll, atom, quill, globe, compass, leaf, palette, music, scales] }
 
   - name: glossary-fr
     label: Glossaire (FR)
