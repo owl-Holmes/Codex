@@ -16,6 +16,7 @@ import LinkPreviews from '../components/layout/LinkPreviews.astro';
 import SeoMeta from '../components/layout/SeoMeta.astro';
 import { SITE, type Locale } from '../config/site';
 import { useT } from '../i18n/ui';
+import { BRAND } from '../lib/brand';
 import { getTree } from '../lib/tree';
 
 interface Props {
@@ -49,7 +50,7 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
     <SeoMeta locale={locale} slug={slug} title={title} description={description} />
     <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} type="image/svg+xml" />
     <link rel="manifest" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/manifest.webmanifest`} />
-    <meta name="theme-color" content="#23150d" />
+    <meta name="theme-color" content={BRAND.wood} />
     {import.meta.env.PROD && <script
       is:inline
       define:vars={{ sw: `${import.meta.env.BASE_URL.replace(/\/$/, '')}/sw.js` }}

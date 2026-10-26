@@ -47,10 +47,10 @@ const t = useT(Astro.props.locale);
     border-radius: var(--radius);
     background: var(--color-surface);
     color: var(--color-text);
-    box-shadow: 0 12px 40px rgb(0 0 0 / 0.3);
+    box-shadow: var(--shadow-lg);
   }
   .palette::backdrop {
-    background: rgb(0 0 0 / 0.4);
+    background: var(--backdrop);
   }
   .palette-input {
     width: 100%;

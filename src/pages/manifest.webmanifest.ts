@@ -3,6 +3,7 @@
  */
 import type { APIRoute } from 'astro';
 import { DEFAULT_LOCALE, SITE } from '../config/site';
+import { BRAND } from '../lib/brand';
 import { pageUrl, withBase } from '../lib/urls';
 
 export const GET: APIRoute = () =>
@@ -13,8 +14,8 @@ export const GET: APIRoute = () =>
       start_url: pageUrl(DEFAULT_LOCALE, ''),
       scope: withBase(''),
       display: 'standalone',
-      background_color: '#f5efe0',
-      theme_color: '#7a3b12',
+      background_color: BRAND.parchment,
+      theme_color: BRAND.wood,
       icons: [{ src: withBase('favicon.svg').replace(/\/$/, ''), sizes: 'any', type: 'image/svg+xml' }],
     }),
     { headers: { 'Content-Type': 'application/manifest+json' } },

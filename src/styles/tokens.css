@@ -68,6 +68,8 @@
     --shadow-sm: 0 1px 2px rgb(35 21 13 / 0.08), 0 2px 6px rgb(35 21 13 / 0.06);
     --shadow-lg: 0 14px 34px rgb(35 21 13 / 0.18), 0 4px 10px rgb(35 21 13 / 0.1);
     --glow: 0 0 0 1px var(--color-ornament), 0 10px 30px rgb(212 171 95 / 0.25);
+    /* Dimmed page behind dialogs (search palette, image viewer). */
+    --backdrop: rgb(10 6 3 / 0.6);
     --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
     --duration: 220ms;
   }
