@@ -12,6 +12,7 @@ Every dependency is pinned to an exact version. Add one only when it is clearly 
 | `@astrojs/sitemap` | Generates `sitemap-index.xml` for search engines. |
 | `remark-math` + `rehype-katex` + `katex` | LaTeX math rendered to HTML at build time. |
 | `mermaid` | Text-defined diagrams; lazy-loaded only on pages using `<Mermaid>`. |
+| `@fontsource/cormorant-garamond`, `@fontsource/courier-prime` | Self-hosted heading fonts (latin subset), bundled at build — no external font request. |
 | `lottie-web` | Lottie animations; light player lazy-loaded only on pages using `<Lottie>`. |
 
 ## Development

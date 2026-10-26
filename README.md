@@ -21,6 +21,7 @@ npm run dev        # http://localhost:4321/Codex/
 | `npm run contrast` | Vérifie le contraste WCAG AA de chaque thème |
 | `npm run links` | Vérifie les liens internes du site généré |
 | `npm run new:page -- chemin/de/la-page` | Crée une page FR (brouillon) |
+| `npm run new:section -- chemin "Titre FR" "Title EN"` | Crée une section (dossier) |
 | `npm run i18n:status` | Traductions manquantes / obsolètes |
 | `npm run i18n:stamp -- chemin.mdx` | Marque une traduction comme à jour |
 | `npm run audit:leaks` | Cherche chemins locaux, e-mails et secrets dans les fichiers suivis |

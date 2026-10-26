@@ -4,5 +4,6 @@
 - `docs/en/` — translations with the same relative paths
 - `glossary/{fr,en}/` — glossary terms
 - `paths/{fr,en}/` — thematic paths (YAML)
+- `tags/` — optional tag descriptions (YAML)
 
 Schemas: src/content.config.ts. Workflow: AGENTS.md §4.

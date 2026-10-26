@@ -21,6 +21,12 @@
 | `--callout-*` | Callout colors (definition, remember, warning, example, tip) |
 | `--radius`, `--measure`, `--sidebar-width` | Shape and layout |
 
+## Fonts
+
+Heading fonts are self-hosted from npm (`src/styles/fonts.css`, latin subset, `font-display: swap`).
+To use another font in a theme: `npm install @fontsource/<name>`, import the weights in `fonts.css`,
+then set `--font-display` (or `--font-body`) in the theme.
+
 ## Create a theme
 
 ```css

@@ -26,6 +26,7 @@ src/
   content/docs/en/**      EN translations, SAME relative paths as FR
   content/glossary/{fr,en} Glossary terms (file name = term id)
   content/paths/{fr,en}   Thematic paths (YAML: title, description, ordered steps)
+  content/tags/           Optional tag descriptions (YAML, FR + EN)
   assets/images/<section>/ Central media folder (mirrors the content tree)
   components/content/     MDX components, auto-registered in components/content/index.ts
   components/knowledge/   Page lists, child cards, sources
@@ -37,7 +38,7 @@ src/
   styles/                 tokens.css (design tokens), global.css (base + layout)
   themes/                 One CSS file per theme, registered in themes.css
   pages/                  Routes: index (redirect), [lang]/index, [lang]/[...slug], [lang]/search, [lang]/tags, [lang]/glossary, [lang]/graph, [lang]/paths, [lang]/a-z, [lang]/previews.json, manifest.webmanifest, sw.js, 404
-scripts/                  i18n-status, i18n-stamp, new-page, audit-leaks, check-links, check-contrast
+scripts/                  i18n-status, i18n-stamp, new-page, new-section, audit-leaks, check-links, check-contrast
 src/plugins/              remark-glossary.mjs (automatic glossary links, opt-in per page)
 .github/workflows/        deploy.yml (main → Pages), ci.yml (pull requests)
 ```
@@ -53,7 +54,7 @@ src/plugins/              remark-glossary.mjs (automatic glossary links, opt-in 
 **Add a page:** `npm run new:page -- section/sub/slug` → edit the created `.mdx` → set `status` when ready.
 Slugs: lowercase ASCII kebab-case, no accents (`chimie-analytique`), accents stay in titles.
 
-**Add a section (folder):** create `src/content/docs/fr/<path>/section.yml`:
+**Add a section (folder):** `npm run new:section -- <path> "Titre FR" "Title EN"`, or create `src/content/docs/fr/<path>/section.yml`:
 ```yaml
 title: { fr: Physique, en: Physics }
 description: { fr: "…", en: "…" }
@@ -71,6 +72,8 @@ A folder without `index.mdx` gets an auto-generated index (cards of its children
 
 **Add a glossary term:** `src/content/glossary/fr/<id>.md` (+ `en/<id>.md`) with `term`, `definition`;
 use it in MDX with `<Term id="<id>">word</Term>`.
+
+**Describe a tag:** `src/content/tags/<tag-slug>.yml` with `description: { fr: …, en: … }` (shown on the tag page).
 
 **Add a thematic path:** `src/content/paths/fr/<id>.yml` (+ `en/<id>.yml`):
 ```yaml
@@ -159,8 +162,9 @@ npm run i18n:status   # translation report
 - The Pagefind index exists only after `npm run build` (search is empty in `npm run dev`).
 - The service worker (offline mode) only registers in production builds; after changing caching rules, bump `CACHE_VERSION` in `src/pages/sw.js.ts`.
 
-## 11. Not built yet (planned, see PROMPT.md)
+## 11. Not built yet / known limits
 
-Map component with offline tiles (use `<Embed>` with OpenStreetMap meanwhile), tag descriptions,
-path progress memory, search filter UI (tag/status), self-hosted fonts, `new:section` script,
-Lighthouse in CI.
+- Map component with offline tiles (use `<Embed>` with OpenStreetMap meanwhile).
+- Lighthouse is run locally, not in CI. Last local run (desktop): Performance 98–99, Accessibility 100,
+  SEO 100; Best Practices 81 only because the local server is http (GitHub Pages is https) and Mermaid
+  ships without source maps.
