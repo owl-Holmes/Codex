@@ -34,6 +34,11 @@
 Then `@import './ocean.css';` in `src/themes/themes.css`, set `theme: ocean` in a `section.yml`,
 and run `npm run contrast` (WCAG AA, every theme and mode).
 
+## Page-level styles
+
+A single page can get its own CSS with `styles: <file>.css` (file in `src/styles/pages/`), inlined only on
+that page. Write rules inside `@layer page { … }` and scope them to `.content`.
+
 ## Component-level overrides
 
 Each component documents its override hooks in [COMPONENTS.md](COMPONENTS.md) (e.g. `--callout-color`,

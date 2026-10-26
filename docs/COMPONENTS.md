@@ -125,6 +125,73 @@ Add `autoGlossary: true` to a page's frontmatter: the first occurrence of each g
 in the text becomes a `<Term>` link. Headings, links, code and terms already written by hand are skipped.
 Plugin: `src/plugins/remark-glossary.mjs`.
 
+## Layout components
+
+```mdx
+<Steps>
+1. Première étape
+2. Deuxième étape
+</Steps>
+
+<Columns min="16rem"><div>…</div><div>…</div></Columns>
+
+<CardGrid>
+  <Card title="Titre" icon="⚗">Texte, avec <PageLink to="sciences/chimie" />.</Card>
+</CardGrid>
+
+<KeyFacts title="Edmond Locard" facts={{ Naissance: '1877', Domaine: 'Criminalistique' }} image="…" alt="…" />
+<ProsCons pros={['Rapide']} cons={['Moins précis']} />
+<PullQuote author="Auteur" source="Œuvre">Citation.</PullQuote>
+```
+Overrides: `--steps-color`, `--columns-min`, `--card-accent`, `--card-grid-min`, `.key-facts`, `.pros-cons`, `.pull-quote`.
+
+## Inline elements
+
+```mdx
+<Badge>Nouveau</Badge> <Badge variant="warning">Controversé</Badge>
+<Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+Une affirmation sourcée<SourceRef n={1} />.          (n = position in the page's `sources`)
+<PageLink to="enquete/analyse-de-traces" />           (validated at build; text = page title by default)
+```
+
+## Svg (inline, themeable)
+
+```mdx
+<Svg src="sciences/atome.svg" title="Description" caption="Optionnel" />
+```
+The SVG markup is inserted in the page, so inside the file you can use `currentColor` and tokens such as
+`var(--color-accent)`: the drawing follows the theme and light/dark mode. Use `<Figure>` for a plain image.
+
+## Gif
+
+```mdx
+<Gif src="sciences/demo.gif" poster="sciences/demo-poster.png" alt="Description" />
+```
+Starts on the still poster; a button plays/pauses (WCAG 2.2.2).
+
+## Audio
+
+```mdx
+<Audio src="histoire/discours.mp3" title="Titre">Transcription (optionnelle).</Audio>
+```
+Files in `src/assets/audio/`. The transcript is shown in a collapsible block.
+
+## Embed
+
+```mdx
+<Embed src="https://…" title="Titre accessible" ratio="4 / 3" />
+```
+Generic lazy iframe (maps, simulations, documents). https only; `title` required.
+
+## Page-level options (frontmatter)
+
+| Field | Effect |
+|---|---|
+| `styles: ma-page.css` | Inlines `src/styles/pages/ma-page.css` on this page only (write rules in `@layer page`, scoped to `.content`). |
+| `layout: wide` | Removes the reading-width limit. |
+| `cover` + `coverAlt` | Cover image at the top (path in `src/assets/images/`). |
+| `updated` | Optional: without it, the date of the file's last git commit is shown. |
+
 ## Adding a component
 
 1. Create `src/components/content/<Name>.astro` (header comment, typed `Props`, tokens-only CSS, stable class).

@@ -106,6 +106,7 @@ page → `npm run i18n:stamp -- <path>.mdx`.
 ## 5. Content rules
 
 - Frontmatter fields and types: see `src/content.config.ts`. `title`, `description` (≤ 200 chars), `created` are required.
+- Optional presentation fields: `styles` (file in `src/styles/pages/`), `layout: wide`, `cover` + `coverAlt`; `updated` falls back to the last git commit date.
 - `prerequisites` = needed to understand the page; `furtherReading` = helps go further; `related` = manual cross-links.
   Refs are paths relative to the language root (`sciences/chimie`), validated at build.
 - Factual claims need `sources`. **Never invent a source**, an author, a date or a URL.
@@ -160,7 +161,6 @@ npm run i18n:status   # translation report
 
 ## 11. Not built yet (planned, see PROMPT.md)
 
-Components: Audio, Embed, Map, Steps, Columns, Card, Badge, Kbd, PullQuote, KeyFacts, Comparison,
-ProsCons, SourceRef, PageLink, inline themeable Svg, Gif with pause. Frontmatter: `styles`, `layout`,
-`cover`; git-based `updated` dates; tag descriptions; path progress memory; search filter UI
-(tag/status); mobile sidebar drawer; self-hosted fonts; `new:section` script; Lighthouse in CI.
+Map component with offline tiles (use `<Embed>` with OpenStreetMap meanwhile), tag descriptions,
+path progress memory, search filter UI (tag/status), self-hosted fonts, `new:section` script,
+Lighthouse in CI.
