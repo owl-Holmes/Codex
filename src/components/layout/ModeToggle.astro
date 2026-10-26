@@ -7,7 +7,12 @@ const { label } = Astro.props;
 ---
 
 <button type="button" class="mode-toggle" aria-label={label} title={label}>
-  <span aria-hidden="true">☾</span>
+  <span class="icon icon--moon" aria-hidden="true">
+    ☾
+  </span>
+  <span class="icon icon--sun" aria-hidden="true">
+    ☀
+  </span>
 </button>
 
 <script>
@@ -25,13 +30,33 @@ const { label } = Astro.props;
 
 <style>
   .mode-toggle {
+    display: inline-grid;
+    place-items: center;
     min-width: 2.25rem;
     min-height: 2.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    margin-left: 0.25rem;
+    border: 1px solid color-mix(in srgb, var(--color-on-wood) 25%, transparent);
+    border-radius: 999px;
     background: transparent;
-    color: var(--color-text);
+    color: var(--color-brass);
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    transition:
+      border-color var(--duration) var(--ease),
+      rotate 400ms var(--ease);
+  }
+  .mode-toggle:hover {
+    border-color: var(--color-brass);
+    rotate: 20deg;
+  }
+  .icon {
+    grid-area: 1 / 1;
+  }
+  .icon--sun,
+  :global([data-mode='dark']) .icon--moon {
+    display: none;
+  }
+  :global([data-mode='dark']) .icon--sun {
+    display: inline;
   }
 </style>

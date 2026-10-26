@@ -1,5 +1,5 @@
 ---
-/** Site header: brand, language switcher (keeps the current page) and mode toggle. */
+/** Site header (sticky "shelf" bar): wordmark, search, tool links, language switcher and mode toggle. */
 import { LOCALES, SITE, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
 import { pageUrl } from '../../lib/urls';
@@ -11,96 +11,214 @@ interface Props {
 }
 const { locale, slug } = Astro.props;
 const t = useT(locale);
+const tools = [
+  ['paths', t('nav.paths')],
+  ['glossary', t('nav.glossary')],
+  ['tags', t('nav.tags')],
+  ['graph', t('nav.graph')],
+  ['a-z', t('nav.az')],
+] as const;
 ---
 
 <header class="site-header">
-  <a class="brand" href={pageUrl(locale, '')}>
-    <span class="brand-mark" aria-hidden="true">
-      ❦
-    </span>
-    {SITE.name}
-    <span class="brand-tagline">{t('site.tagline')}</span>
-  </a>
-  <form class="search" role="search" action={pageUrl(locale, 'search')}>
-    <label class="visually-hidden" for="q">
-      {t('nav.search')}
-    </label>
-    <input id="q" name="q" type="search" placeholder={`${t('nav.search')}…`} />
-  </form>
-  <nav aria-label={t('nav.sections')} class="tools">
-    <a href={pageUrl(locale, 'tags')}>{t('nav.tags')}</a>
-    <a href={pageUrl(locale, 'glossary')}>{t('nav.glossary')}</a>
-    <a href={pageUrl(locale, 'paths')}>{t('nav.paths')}</a>
-    <a href={pageUrl(locale, 'graph')}>{t('nav.graph')}</a>
-    <a href={pageUrl(locale, 'a-z')}>{t('nav.az')}</a>
-    <button type="button" class="palette-button" data-open-palette>
-      <kbd>Ctrl K</kbd>
-      <span class="visually-hidden"> — {t('palette.open')}</span>
-    </button>
-  </nav>
-  <nav aria-label={t('nav.language')} class="tools">
-    {LOCALES.map((l) => (
-      <a href={pageUrl(l, slug)} hreflang={l} lang={l} aria-current={l === locale ? 'true' : undefined}>
-        {l.toUpperCase()}
-      </a>
-    ))}
-    <ModeToggle label={t('nav.toggleMode')} />
-  </nav>
+  <div class="header-inner">
+    <a class="brand" href={pageUrl(locale, '')}>
+      <span class="brand-name">{SITE.name}</span>
+      <span class="brand-tagline">{t('site.tagline')}</span>
+    </a>
+    <form class="search" role="search" action={pageUrl(locale, 'search')}>
+      <label class="visually-hidden" for="q">
+        {t('nav.search')}
+      </label>
+      <input id="q" name="q" type="search" placeholder={`${t('nav.search')}…`} />
+      <button type="button" class="palette-button" data-open-palette>
+        <kbd>Ctrl K</kbd>
+        <span class="visually-hidden"> — {t('palette.open')}</span>
+      </button>
+    </form>
+    <nav aria-label={t('nav.tools')} class="tools">
+      {tools.map(([path, label]) => (
+        <a href={pageUrl(locale, path)} aria-current={slug === path ? 'page' : undefined}>
+          {label}
+        </a>
+      ))}
+    </nav>
+    <nav aria-label={t('nav.language')} class="settings">
+      {LOCALES.map((l) => (
+        <a href={pageUrl(l, slug)} hreflang={l} lang={l} aria-current={l === locale ? 'true' : undefined}>
+          {l.toUpperCase()}
+        </a>
+      ))}
+      <ModeToggle label={t('nav.toggleMode')} />
+    </nav>
+  </div>
 </header>
 
 <style>
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(180deg, var(--color-wood-2), var(--color-wood));
+    border-bottom: 2px solid var(--color-brass);
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-ui);
+    color: var(--color-on-wood);
+  }
+  .header-inner {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    justify-content: space-between;
     align-items: center;
-    padding: 0.8rem 2rem;
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-surface);
+    gap: 0.75rem 1.75rem;
+    max-width: 96rem;
+    min-height: var(--header-height);
+    margin-inline: auto;
+    padding: 0.5rem 2rem;
   }
   .brand {
-    font-family: var(--font-display);
-    font-size: 1.7rem;
-    font-weight: 600;
-    color: var(--color-text);
-    text-decoration: none;
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    flex-direction: column;
+    line-height: 1.1;
+    color: var(--color-on-wood);
+    text-decoration: none;
   }
-  .brand-mark {
-    color: var(--color-ornament);
+  .brand-name {
+    font-family: var(--font-brand);
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+    transition: text-shadow var(--duration) var(--ease);
+  }
+  .brand:hover .brand-name {
+    text-shadow: 0 0 18px var(--color-lamp);
   }
   .brand-tagline {
-    font-size: 0.95rem;
-    color: var(--color-muted);
-    font-style: italic;
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-on-wood-muted);
+  }
+  .search {
+    position: relative;
+    flex: 1 1 11rem;
+    max-width: 26rem;
   }
   .search input {
-    width: min(22rem, 40vw);
-    padding: 0.4rem 0.7rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    background: var(--color-bg);
-    color: var(--color-text);
+    width: 100%;
+    padding: 0.55rem 5rem 0.55rem 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--color-on-wood) 25%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-on-wood) 8%, transparent);
+    color: var(--color-on-wood);
     font: inherit;
+    font-size: var(--text-sm);
+    transition:
+      border-color var(--duration) var(--ease),
+      background var(--duration) var(--ease);
+  }
+  .search input::placeholder {
+    color: var(--color-on-wood-muted);
+  }
+  .search input:focus {
+    border-color: var(--color-brass);
+    background: color-mix(in srgb, var(--color-on-wood) 14%, transparent);
   }
   .palette-button {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    translate: 0 -50%;
+    min-height: 1.9rem;
+    padding: 0 0.6rem;
+    border: 1px solid color-mix(in srgb, var(--color-on-wood) 25%, transparent);
+    border-radius: 999px;
     background: transparent;
-    color: var(--color-muted);
+    color: var(--color-on-wood-muted);
+    font: inherit;
+    font-size: var(--text-xs);
     cursor: pointer;
-    min-height: 2.25rem;
   }
-  .tools {
+  .palette-button:hover {
+    color: var(--color-brass);
+    border-color: var(--color-brass);
+  }
+  .palette-button kbd {
+    font-family: inherit;
+  }
+  .tools,
+  .settings {
     display: flex;
-    gap: 0.75rem;
     align-items: center;
+    gap: 0.25rem;
   }
-  .tools a[aria-current] {
-    font-weight: 700;
+  .settings {
+    margin-left: auto;
+  }
+  .tools a,
+  .settings a {
+    position: relative;
+    padding: 0.45rem 0.7rem;
+    border-radius: var(--radius);
+    color: var(--color-on-wood);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    white-space: nowrap;
     text-decoration: none;
+    transition:
+      color var(--duration) var(--ease),
+      background var(--duration) var(--ease);
+  }
+  .tools a::after {
+    content: '';
+    position: absolute;
+    inset: auto 0.7rem 0.2rem;
+    height: 2px;
+    background: var(--color-brass);
+    scale: 0 1;
+    transition: scale var(--duration) var(--ease);
+  }
+  .tools a:hover,
+  .settings a:hover {
+    color: var(--color-lamp);
+    background: color-mix(in srgb, var(--color-on-wood) 8%, transparent);
+  }
+  .tools a:hover::after,
+  .tools a[aria-current]::after {
+    scale: 1 1;
+  }
+  .settings a[aria-current] {
+    color: var(--color-brass);
+    font-weight: 700;
+  }
+  .site-header :focus-visible {
+    outline-color: var(--color-lamp);
+  }
+  @media (max-width: 1200px) {
+    .header-inner {
+      gap: 0.75rem 1rem;
+    }
+    .brand-tagline {
+      display: none;
+    }
+  }
+  @media (max-width: 960px) {
+    .site-header {
+      position: static;
+    }
+    .header-inner {
+      padding-inline: 1rem;
+    }
+    .search {
+      order: 3;
+      flex-basis: 100%;
+      max-width: none;
+    }
+    .tools {
+      order: 4;
+      width: 100%;
+      overflow-x: auto;
+    }
   }
 </style>
