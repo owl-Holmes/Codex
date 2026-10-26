@@ -1,0 +1,45 @@
+---
+/**
+ * Inline SVG (inserted in the HTML, not as an image), so it can use the theme: write
+ * `currentColor` or `var(--color-accent)`, `var(--color-ornament)`… inside the SVG file.
+ * Usage: <Svg src="sciences/atome.svg" title="Description du schéma" caption="Optionnel" />
+ * `src` is relative to src/assets/images/. Override: .svg-figure
+ */
+interface Props {
+  src: string;
+  title: string;
+  caption?: string;
+}
+const { src, title, caption } = Astro.props;
+const files = import.meta.glob<string>('/src/assets/images/**/*.svg', { query: '?raw', import: 'default' });
+const load = files[`/src/assets/images/${src}`];
+if (!load) throw new Error(`Svg: file not found in src/assets/images/: "${src}"`);
+// Drop the XML prolog and any width/height on the root so the SVG scales with its container.
+const markup = (await load())
+  .replace(/<\?xml[^>]*>/, '')
+  .replace(/<svg([^>]*?)\s(width|height)="[^"]*"/g, '<svg$1')
+  .replace(/<svg([^>]*?)\s(width|height)="[^"]*"/g, '<svg$1');
+---
+
+<figure class="svg-figure" role="img" aria-label={title}>
+  <Fragment set:html={markup} />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .svg-figure {
+    margin-block: 1.5rem;
+    color: var(--color-text);
+  }
+  .svg-figure :global(svg) {
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+  }
+  figcaption {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+</style>

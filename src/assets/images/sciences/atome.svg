@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Themeable: colors come from the site's design tokens. -->
+  <ellipse cx="100" cy="100" rx="85" ry="32" fill="none" stroke="var(--color-ornament)" stroke-width="3"/>
+  <ellipse cx="100" cy="100" rx="85" ry="32" fill="none" stroke="var(--color-ornament)" stroke-width="3" transform="rotate(60 100 100)"/>
+  <ellipse cx="100" cy="100" rx="85" ry="32" fill="none" stroke="var(--color-ornament)" stroke-width="3" transform="rotate(-60 100 100)"/>
+  <circle cx="100" cy="100" r="14" fill="var(--color-accent)"/>
+  <circle cx="185" cy="100" r="7" fill="currentColor"/>
+</svg>
