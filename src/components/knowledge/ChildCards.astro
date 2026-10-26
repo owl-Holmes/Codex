@@ -1,8 +1,8 @@
 ---
-/** Cards for the children of a folder: used by auto-generated section index pages. */
+/** Cards for the children of a folder: used by section pages (auto-generated or with index.mdx). */
 import type { Locale } from '../../config/site';
 import type { TreeNode } from '../../lib/tree';
-import { pageUrl } from '../../lib/urls';
+import SectionCard from './SectionCard.astro';
 
 interface Props {
   nodes: TreeNode[];
@@ -15,40 +15,18 @@ const { nodes, locale, heading } = Astro.props;
 {nodes.length > 0 && (
   <section>
     <h2>{heading}</h2>
-    <ul class="cards" role="list">
-      {nodes.map((n) => (
-        <li class="card" data-theme={n.theme}>
-          <a href={pageUrl(locale, n.slug)}>{n.title}</a>
-          {n.description && <p>{n.description}</p>}
-        </li>
+    <div class="cards">
+      {nodes.map((n, i) => (
+        <SectionCard node={n} locale={locale} index={i} />
       ))}
-    </ul>
+    </div>
   </section>
 )}
 
 <style>
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-    gap: 1rem;
-    padding: 0;
-    list-style: none;
-  }
-  .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-ornament);
-    border-radius: var(--radius);
-    padding: 1rem;
-  }
-  .card a {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-weight: 600;
-  }
-  .card p {
-    margin: 0.4rem 0 0;
-    font-size: 0.95rem;
-    color: var(--color-muted);
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1.2rem;
   }
 </style>
