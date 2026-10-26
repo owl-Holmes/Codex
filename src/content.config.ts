@@ -79,4 +79,10 @@ const paths = defineCollection({
   }),
 });
 
-export const collections = { docs, sections, glossary, paths };
+/** Optional tag descriptions: tags/<tag-slug>.yml, shown on the tag page. */
+const tags = defineCollection({
+  loader: glob({ pattern: '*.yml', base: './src/content/tags' }),
+  schema: z.object({ description: z.object({ fr: z.string(), en: z.string() }) }),
+});
+
+export const collections = { docs, sections, glossary, paths, tags };

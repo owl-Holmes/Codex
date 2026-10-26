@@ -1,5 +1,6 @@
 ---
 /** Pages sharing one tag, across every category (the main cross-category discovery view). */
+import { getEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PageList from '../../../components/knowledge/PageList.astro';
 import { LOCALES, type Locale } from '../../../config/site';
@@ -15,6 +16,7 @@ const locale = Astro.params.lang as Locale;
 const tag = Astro.params.tag!;
 const t = useT(locale);
 const pages = (await getTagIndex()).get(tag) ?? [];
+const info = await getEntry('tags', tag);
 ---
 
 <BaseLayout
@@ -28,5 +30,6 @@ const pages = (await getTagIndex()).get(tag) ?? [];
     <a href={pageUrl(locale, 'tags')}>← {t('tags.title')}</a>
   </p>
   <h1>#{tag}</h1>
+  {info && <p class="tag-description">{info.data.description[locale]}</p>}
   <PageList heading={t('tags.pages')} slugs={pages.map((p) => p.slug)} locale={locale} />
 </BaseLayout>
