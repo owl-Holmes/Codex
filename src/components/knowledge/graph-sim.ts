@@ -70,7 +70,11 @@ function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, 
   return node;
 }
 
-/** Draws the graph into `svg`. Nodes are keyboard-focusable links; edges are styled by kind; `focus` highlights a node. */
+/**
+ * Draws the graph into `svg`. Nodes are keyboard-focusable links; edges are styled by kind.
+ * Names are not drawn (they overlapped the dots): they appear in a tooltip on hover/focus,
+ * except for the `focus` node of a local graph, which keeps its label.
+ */
 export function renderGraph(svg: SVGSVGElement, data: GraphData, focus?: string): void {
   const { width, height } = svg.viewBox.baseVal;
   const pos = layout(data, width, height);
@@ -78,19 +82,60 @@ export function renderGraph(svg: SVGSVGElement, data: GraphData, focus?: string)
   for (const e of data.edges) {
     const s = pos.get(e.source);
     const g = pos.get(e.target);
-    if (s && g) edges.append(el('line', { x1: s.x, y1: s.y, x2: g.x, y2: g.y, class: `edge edge--${e.kind}` }));
+    if (s && g) {
+      const line = el('line', { x1: s.x, y1: s.y, x2: g.x, y2: g.y, class: `edge edge--${e.kind}` });
+      line.dataset.ends = `${e.source} ${e.target}`;
+      edges.append(line);
+    }
   }
   const nodes = el('g', { class: 'nodes' });
   for (const n of data.nodes) {
     const p = pos.get(n.id)!;
     const link = el('a', { href: n.url, class: n.id === focus ? 'node node--focus' : 'node', 'data-theme': n.theme });
+    link.dataset.id = n.id;
+    link.dataset.label = n.title;
+    link.dataset.section = n.section;
     const title = el('title', {});
     title.textContent = `${n.title} — ${n.section}`;
-    link.append(title, el('circle', { cx: p.x, cy: p.y, r: 9 }));
-    const label = el('text', { x: p.x + 13, y: p.y + 4 });
-    label.textContent = n.title;
-    link.append(label);
+    link.append(title, el('circle', { cx: p.x, cy: p.y, r: 8 }));
+    if (n.id === focus) {
+      const label = el('text', { x: p.x, y: p.y - 16, 'text-anchor': 'middle' });
+      label.textContent = n.title;
+      link.append(label);
+    }
     nodes.append(link);
   }
   svg.replaceChildren(edges, nodes);
+}
+
+/** Shows the hovered/focused node's name in `tip` and highlights its connections. */
+export function wireHover(figure: HTMLElement, svg: SVGSVGElement, tip: HTMLElement): void {
+  const show = (node: SVGAElement) => {
+    const id = node.dataset.id ?? '';
+    svg.classList.add('is-hovering');
+    svg.querySelectorAll<SVGLineElement>('.edge').forEach((line) => {
+      line.classList.toggle('is-active', (line.dataset.ends ?? '').split(' ').includes(id));
+    });
+    node.classList.add('is-active');
+    const box = node.querySelector('circle')!.getBoundingClientRect();
+    const frame = figure.getBoundingClientRect();
+    tip.replaceChildren(node.dataset.label ?? '');
+    const small = document.createElement('small');
+    small.textContent = node.dataset.section ?? '';
+    tip.append(small);
+    tip.style.left = `${box.left + box.width / 2 - frame.left}px`;
+    tip.style.top = `${box.top - frame.top}px`;
+    tip.hidden = false;
+  };
+  const hide = () => {
+    svg.classList.remove('is-hovering');
+    svg.querySelectorAll('.is-active').forEach((x) => x.classList.remove('is-active'));
+    tip.hidden = true;
+  };
+  svg.querySelectorAll<SVGAElement>('.node').forEach((node) => {
+    node.addEventListener('pointerenter', () => show(node));
+    node.addEventListener('focus', () => show(node));
+    node.addEventListener('pointerleave', hide);
+    node.addEventListener('blur', hide);
+  });
 }
