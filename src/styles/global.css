@@ -38,17 +38,7 @@
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
   }
-  /* Library wall behind every page, fixed, softened by a veil in the page colour (see tokens). */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: -8px;
-    z-index: -1;
-    background:
-      linear-gradient(var(--page-veil), var(--page-veil)),
-      var(--library) center / cover no-repeat;
-    filter: blur(1.5px);
-  }
+
   h1,
   h2,
   h3,
@@ -132,24 +122,37 @@
 }
 
 @layer layout {
+  /* Three columns: small sidebar on the left, the content column centred on the page,
+     an empty column on the right that balances the sidebar on wide screens. */
   .shell {
+    --content-width: var(--measure);
     display: grid;
-    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    gap: 3rem;
-    max-width: 96rem;
-    margin-inline: auto;
-    padding: 2rem 2rem 5rem;
+    grid-template-columns: minmax(var(--sidebar-width), 1fr) minmax(0, var(--content-width)) minmax(0, 1fr);
+    gap: 2.5rem;
+    padding: 2rem 1.5rem 5rem;
   }
-  .content {
-    max-width: var(--measure);
+  /* Theme artwork behind the page, fixed, softened by a veil in the page colour (see tokens). */
+  .shell::before {
+    content: '';
+    position: fixed;
+    inset: -8px;
+    z-index: -1;
+    background: linear-gradient(var(--page-veil), var(--page-veil)), var(--page-art);
+    filter: blur(1.2px);
   }
-  .content--wide {
-    max-width: none;
+  .shell:has(.content--wide) {
+    --content-width: 56rem;
+  }
+  .shell > .sidebar-wrap {
+    width: var(--sidebar-width);
   }
   @media (max-width: 960px) {
     .shell {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       padding-inline: 1rem;
+    }
+    .shell > .sidebar-wrap {
+      width: auto;
     }
   }
 }

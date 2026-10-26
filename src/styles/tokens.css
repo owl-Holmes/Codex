@@ -28,7 +28,9 @@
     --color-on-wood-muted: #cdb796;
     --color-brass: #d4ab5f;
     --color-lamp: #f5c56b;
-    --page-veil: rgb(244 237 225 / 0.85);
+    --page-veil: rgb(244 237 225 / 0.82);
+    /* Page artwork (background shorthand); themes swap it. Files: src/assets/images/backgrounds/. */
+    --page-art: url('../assets/images/backgrounds/library.svg') center / cover no-repeat;
 
     /* Leather tones for section cards without their own `color` (section.yml). */
     --leather-1: #8a3416;
@@ -56,7 +58,7 @@
     --radius-lg: 14px;
     --space: 1rem;
     --measure: 76ch;
-    --sidebar-width: 17rem;
+    --sidebar-width: 13rem;
     --header-height: 4rem;
 
     --shadow-sm: 0 1px 2px rgb(35 21 13 / 0.08), 0 2px 6px rgb(35 21 13 / 0.06);
@@ -79,7 +81,7 @@
 
     --color-wood: #120b06;
     --color-wood-2: #2a190d;
-    --page-veil: rgb(21 14 9 / 0.78);
+    --page-veil: rgb(21 14 9 / 0.7);
 
     --leather-1: #e07a50;
     --leather-2: #5fbfa3;
