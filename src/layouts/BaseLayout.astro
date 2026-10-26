@@ -1,12 +1,14 @@
 ---
 /**
  * HTML shell shared by every page: <head>, light/dark mode bootstrap, header, sidebar.
- * Used by PageLayout and the home page. The optional `hero` slot renders full-width above the shell.
+ * Used by PageLayout and the home page. The page background is the library wall illustration
+ * (src/assets/images/home/library.svg) behind a veil, see global.css.
  */
 import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../themes/themes.css';
+import library from '../assets/images/home/library.svg';
 import Header from '../components/layout/Header.astro';
 import Sidebar from '../components/navigation/Sidebar.astro';
 import CommandPalette from '../components/layout/CommandPalette.astro';
@@ -29,21 +31,9 @@ interface Props {
   indexable?: boolean;
   /** Full-width content column (frontmatter `layout: wide`). */
   wide?: boolean;
-  /** False to hide the section tree (the home page lays its sections out itself). */
-  sidebar?: boolean;
 }
 
-const {
-  locale,
-  title,
-  description,
-  slug,
-  theme = 'base',
-  contentLang,
-  indexable = true,
-  wide = false,
-  sidebar = true,
-} = Astro.props;
+const { locale, title, description, slug, theme = 'base', contentLang, indexable = true, wide = false } = Astro.props;
 const t = useT(locale);
 const tree = await getTree(locale);
 const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
@@ -83,14 +73,13 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
       })();
     </script>
   </head>
-  <body>
+  <body style={`--library: url(${library.src})`}>
     <a class="skip-link" href="#main">
       {t('nav.skip')}
     </a>
     <Header locale={locale} slug={slug} />
-    <slot name="hero" />
-    <div class:list={['shell', { 'shell--full': !sidebar }]} data-theme={theme}>
-      {sidebar && <Sidebar tree={tree} locale={locale} current={slug} />}
+    <div class="shell" data-theme={theme}>
+      <Sidebar tree={tree} locale={locale} current={slug} />
       <main
         id="main"
         class:list={['content', { 'content--wide': wide }]}

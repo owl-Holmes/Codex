@@ -38,6 +38,17 @@
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
   }
+  /* Library wall behind every page, fixed, softened by a veil in the page colour (see tokens). */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: -8px;
+    z-index: -1;
+    background:
+      linear-gradient(var(--page-veil), var(--page-veil)),
+      var(--library) center / cover no-repeat;
+    filter: blur(1.5px);
+  }
   h1,
   h2,
   h3,
@@ -128,10 +139,6 @@
     max-width: 96rem;
     margin-inline: auto;
     padding: 2rem 2rem 5rem;
-  }
-  .shell--full {
-    display: block;
-    max-width: 84rem;
   }
   .content {
     max-width: var(--measure);

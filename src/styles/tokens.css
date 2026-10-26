@@ -28,6 +28,17 @@
     --color-on-wood-muted: #cdb796;
     --color-brass: #d4ab5f;
     --color-lamp: #f5c56b;
+    --page-veil: rgb(244 237 225 / 0.85);
+
+    /* Leather tones for section cards without their own `color` (section.yml). */
+    --leather-1: #8a3416;
+    --leather-2: #2f6b5a;
+    --leather-3: #7b2440;
+    --leather-4: #2e5a7c;
+    --leather-5: #9a6b1f;
+    --leather-6: #5a3f8a;
+    --leather-7: #4f6b2a;
+    --leather-8: #8c4a2f;
 
     --callout-definition: #2f5d7c;
     --callout-remember: #6b4c9a;
@@ -68,6 +79,16 @@
 
     --color-wood: #120b06;
     --color-wood-2: #2a190d;
+    --page-veil: rgb(21 14 9 / 0.78);
+
+    --leather-1: #e07a50;
+    --leather-2: #5fbfa3;
+    --leather-3: #e0708f;
+    --leather-4: #6fa8d8;
+    --leather-5: #e0b050;
+    --leather-6: #a98be0;
+    --leather-7: #a3c46a;
+    --leather-8: #d99a72;
 
     --callout-definition: #8cc3e8;
     --callout-remember: #c4a8ee;
