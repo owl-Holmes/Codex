@@ -19,7 +19,7 @@ const memberships = await getPathsForPage(locale, slug);
   const prev = steps[index - 1];
   const next = steps[index + 1];
   return (
-    <nav class="path-banner" aria-label={path.data.title}>
+    <nav class="path-banner" data-slug={slug} aria-label={path.data.title}>
       <a href={pageUrl(locale, `paths/${path.id}`)}>{path.data.title}</a>
       <span>
         {t('paths.step')} {index + 1} {t('paths.of')} {steps.length}
@@ -31,6 +31,12 @@ const memberships = await getPathsForPage(locale, slug);
     </nav>
   );
 })}
+
+<script>
+  import { markVisited } from './visited';
+  const banner = document.querySelector<HTMLElement>('.path-banner');
+  if (banner?.dataset.slug) markVisited(banner.dataset.slug);
+</script>
 
 <style>
   .path-banner {

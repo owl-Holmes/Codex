@@ -31,9 +31,9 @@ const steps = await Promise.all(
   </p>
   <h1>{path.data.title}</h1>
   <p>{path.data.description}</p>
-  <ol class="steps">
+  <ol class="steps" data-visited-label={t('paths.visited')}>
     {steps.map((s) => (
-      <li>
+      <li data-page={s.page}>
         <a href={pageUrl(locale, s.page)}>{s.title}</a>
         {s.section && <small> · {s.section}</small>}
         {s.note && <p>{s.note}</p>}
@@ -42,7 +42,23 @@ const steps = await Promise.all(
   </ol>
 </BaseLayout>
 
+<script>
+  import { getVisited } from '../../../components/knowledge/visited';
+  const list = document.querySelector<HTMLElement>('.steps');
+  const visited = getVisited();
+  list?.querySelectorAll<HTMLElement>('li[data-page]').forEach((li) => {
+    if (!visited.has(li.dataset.page ?? '')) return;
+    li.classList.add('is-visited');
+    const mark = document.createElement('small');
+    mark.textContent = ` ✓ ${list.dataset.visitedLabel ?? ''}`;
+    li.querySelector('a')?.after(mark);
+  });
+</script>
+
 <style>
+  .steps :global(li.is-visited)::marker {
+    color: var(--callout-example);
+  }
   .steps li {
     margin-bottom: 0.8rem;
   }
