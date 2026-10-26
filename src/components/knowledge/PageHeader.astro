@@ -1,0 +1,81 @@
+---
+/**
+ * Header of a content page: title, status, last update (frontmatter `updated`, else git, else `created`),
+ * tags and optional cover image (`cover` + `coverAlt`). Used by PageLayout.
+ */
+import { Image } from 'astro:assets';
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { lastCommitDate } from '../../lib/git-dates';
+import { resolveImage } from '../../lib/images';
+import type { Page } from '../../lib/pages';
+import { tagSlug } from '../../lib/tags';
+import { pageUrl } from '../../lib/urls';
+
+interface Props {
+  title: string;
+  locale: Locale;
+  page?: Page;
+}
+const { title, locale, page } = Astro.props;
+const t = useT(locale);
+const data = page?.entry.data;
+const gitDate = page?.entry.filePath ? lastCommitDate(page.entry.filePath) : undefined;
+const date = data ? (data.updated ?? gitDate ?? data.created) : undefined;
+if (data?.cover && !data.coverAlt) throw new Error(`"${title}": "coverAlt" is required with "cover".`);
+const cover = data?.cover ? await resolveImage(data.cover, 'cover') : undefined;
+---
+
+<header class="page-head">
+  {cover && <Image class="page-cover" src={cover} alt={data?.coverAlt ?? ''} width={1200} loading="eager" />}
+  <h1>{title}</h1>
+  {data && (
+    <p class="meta">
+      <span class={`status status--${data.status}`}>{t(`status.${data.status}`)}</span>
+      {date && (
+        <span>
+          {t('page.updated')} <time datetime={date.toISOString()}>{date.toLocaleDateString(locale)}</time>
+        </span>
+      )}
+      {data.tags.map((tag) => (
+        <a class="tag" href={pageUrl(locale, `tags/${tagSlug(tag)}`)}>
+          #{tag}
+        </a>
+      ))}
+    </p>
+  )}
+</header>
+
+<style>
+  .page-head {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .page-cover {
+    width: 100%;
+    max-height: 22rem;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+  .status {
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0 0.6rem;
+  }
+  .status--complete {
+    color: var(--callout-example);
+  }
+  .status--draft {
+    color: var(--callout-warning);
+  }
+</style>
