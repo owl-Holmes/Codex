@@ -1,0 +1,209 @@
+---
+/**
+ * SVG drawing of a knowledge graph, laid out at build time (src/lib/graph-layout.ts): edges, nodes
+ * as links (name in a <title>), legend, and a tooltip + highlight on hover/focus (graph-hover.ts).
+ * Names are not drawn on the canvas (they overlapped the dots), except the `focus` node's.
+ * Used by KnowledgeGraph.astro.
+ */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import type { GraphData } from '../../lib/graph';
+import { layoutGraph } from '../../lib/graph-layout';
+
+interface Props {
+  data: GraphData;
+  locale: Locale;
+  width: number;
+  height: number;
+  /** Highlighted node of a local graph. */
+  focus?: string;
+}
+const { data, locale, width, height, focus } = Astro.props;
+const t = useT(locale);
+const pos = layoutGraph(data, width, height);
+const edges = data.edges.flatMap((e) => {
+  const s = pos.get(e.source);
+  const g = pos.get(e.target);
+  return s && g ? [{ ...e, s, g }] : [];
+});
+---
+
+<div class="graph-frame">
+  <svg class="graph-canvas" viewBox={`0 0 ${width} ${height}`} role="group" aria-label={t('graph.label')}>
+    <g>
+      {edges.map((e) => (
+        <line
+          x1={e.s.x}
+          y1={e.s.y}
+          x2={e.g.x}
+          y2={e.g.y}
+          class={`edge edge--${e.kind}`}
+          data-ends={`${e.source} ${e.target}`}
+        />
+      ))}
+    </g>
+    <g>
+      {data.nodes.map((n) => {
+        const p = pos.get(n.id)!;
+        return (
+          <a
+            href={n.url}
+            class:list={['node', { 'node--focus': n.id === focus }]}
+            data-theme={n.theme}
+            data-id={n.id}
+            data-label={n.title}
+            data-section={n.section}
+          >
+            <title>{`${n.title} — ${n.section}`}</title>
+            <circle cx={p.x} cy={p.y} r="8" />
+            {n.id === focus && (
+              <text x={p.x} y={p.y - 16} text-anchor="middle">
+                {n.title}
+              </text>
+            )}
+          </a>
+        );
+      })}
+    </g>
+  </svg>
+  <div class="graph-tip" aria-hidden="true" hidden></div>
+</div>
+<figcaption class="legend">
+  <span>
+    <i class="key key--prerequisite"></i>
+    {t('graph.prerequisite')}
+  </span>
+  <span>
+    <i class="key key--related"></i>
+    {t('graph.related')}
+  </span>
+  <span>
+    <i class="key key--tag"></i>
+    {t('graph.tag')}
+  </span>
+</figcaption>
+
+<script>
+  import { wireHover } from './graph-hover';
+  document.querySelectorAll<HTMLElement>('.graph-frame').forEach((frame) => {
+    const svg = frame.querySelector<SVGSVGElement>('.graph-canvas');
+    const tip = frame.querySelector<HTMLElement>('.graph-tip');
+    if (svg && tip) wireHover(frame, svg, tip);
+  });
+</script>
+
+<style>
+  .graph-frame {
+    position: relative;
+  }
+  .graph-canvas {
+    width: 100%;
+    height: auto;
+    background:
+      radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--color-lamp) 10%, transparent), transparent 70%),
+      var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  text {
+    fill: var(--color-text);
+    font-size: 14px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+  }
+  .edge {
+    stroke: var(--color-border);
+    stroke-width: 1.2;
+    transition:
+      opacity var(--duration) var(--ease),
+      stroke-width var(--duration) var(--ease);
+  }
+  .edge--prerequisite {
+    stroke: var(--callout-warning);
+    stroke-width: 2;
+  }
+  .edge--related,
+  .edge--further {
+    stroke: var(--color-ornament);
+    stroke-width: 1.5;
+  }
+  .edge--tag {
+    stroke-dasharray: 4 4;
+  }
+  .is-hovering .edge:not(.is-active) {
+    opacity: 0.2;
+  }
+  .is-hovering .edge.is-active {
+    stroke-width: 3;
+  }
+  circle {
+    fill: var(--color-accent);
+    stroke: var(--color-surface);
+    stroke-width: 2.5;
+    transition: r var(--duration) var(--ease);
+  }
+  .node:hover circle,
+  .node:focus circle,
+  .node.is-active circle,
+  .node--focus circle {
+    r: 12;
+    stroke: var(--color-brass);
+  }
+  .node--focus circle {
+    fill: var(--color-ornament);
+  }
+  .node:focus {
+    outline: none;
+  }
+  .graph-tip {
+    position: absolute;
+    z-index: 2;
+    translate: -50% calc(-100% - 12px);
+    display: grid;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--color-brass);
+    border-radius: var(--radius);
+    background: var(--color-wood);
+    color: var(--color-on-wood);
+    box-shadow: var(--shadow-lg);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .graph-tip[hidden] {
+    display: none;
+  }
+  .graph-tip :global(small) {
+    font-weight: 400;
+    font-size: var(--text-xs);
+    color: var(--color-on-wood-muted);
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 0.6rem;
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+  .key {
+    display: inline-block;
+    width: 1.6rem;
+    height: 0;
+    border-top: 2px solid var(--color-border);
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+  .key--prerequisite {
+    border-color: var(--callout-warning);
+  }
+  .key--related {
+    border-color: var(--color-ornament);
+  }
+  .key--tag {
+    border-top-style: dashed;
+  }
+</style>

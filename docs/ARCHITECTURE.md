@@ -34,7 +34,7 @@ GitHub Actions (validate, build, links) ──► GitHub Pages
 | Light/dark bootstrap | `BaseLayout.astro` (inline) | every page, tiny |
 | Mode toggle, palette, link previews | `components/layout/*` | every page, small |
 | Search UI | `pages/[lang]/search.astro` | search page |
-| Graph layout | `components/knowledge/graph-sim.ts` | pages with a graph |
+| Graph hover tooltip | `components/knowledge/graph-hover.ts` (layout is computed at build: `lib/graph-layout.ts`) | pages with a graph |
 | Tabs, quiz, gallery, video facade, TOC scroll-spy | their components | only pages using them |
 | Mermaid, Lottie | lazy `import()` | only pages using them |
 | Service worker | `pages/sw.js.ts` | production only |

@@ -1,0 +1,45 @@
+---
+/** Text alternative of the knowledge graph: every page with its relations, in a <details>. Used by KnowledgeGraph. */
+import type { Locale } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import type { GraphData } from '../../lib/graph';
+
+interface Props {
+  data: GraphData;
+  locale: Locale;
+}
+const { data, locale } = Astro.props;
+const t = useT(locale);
+const titleOf = new Map(data.nodes.map((n) => [n.id, n]));
+---
+
+<details class="graph-list">
+  <summary>{t('graph.textList')}</summary>
+  <ul>
+    {data.nodes.map((n) => (
+      <li>
+        <a href={n.url}>{n.title}</a> <small>({n.section})</small>
+        <ul>
+          {data.edges
+            .filter((e) => e.source === n.id || e.target === n.id)
+            .map((e) => {
+              const other = titleOf.get(e.source === n.id ? e.target : e.source);
+              return (
+                other && (
+                  <li>
+                    {t(`graph.${e.kind === 'further' ? 'related' : e.kind}`)} : {other.title}
+                  </li>
+                )
+              );
+            })}
+        </ul>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<style>
+  .graph-list {
+    margin-top: 1rem;
+  }
+</style>

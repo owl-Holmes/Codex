@@ -27,5 +27,5 @@ Every dependency is pinned to an exact version. Add one only when it is clearly 
 
 ## Written in-house on purpose (no dependency)
 
-Knowledge graph layout (`graph-sim.ts`), charts (`Chart.astro`), service worker (`sw.js.ts`),
+Knowledge graph layout (`lib/graph-layout.ts`, at build time), charts (`Chart.astro`), service worker (`sw.js.ts`),
 link checker, contrast checker, leak audit, i18n scripts.
