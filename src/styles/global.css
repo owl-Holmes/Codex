@@ -34,27 +34,35 @@
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
-    font-size: 1.125rem;
-    line-height: 1.65;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
   }
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
-    line-height: 1.2;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
     color: var(--color-text);
+    text-wrap: balance;
   }
   h1 {
-    font-size: 2.6rem;
+    font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem);
   }
   h2 {
-    font-size: 1.8rem;
-    margin-top: 2.2rem;
+    font-size: var(--text-xl);
+    margin-top: 2.4rem;
   }
   h3 {
-    font-size: 1.4rem;
+    font-size: var(--text-lg);
     margin-top: 1.6rem;
+  }
+  ::selection {
+    background: var(--color-lamp);
+    color: var(--color-wood);
   }
   p,
   ul,
@@ -66,8 +74,16 @@
     color: var(--color-accent);
     text-underline-offset: 0.18em;
   }
+  a {
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    transition: text-decoration-color var(--duration) var(--ease);
+  }
   a:hover {
+    text-decoration-color: currentColor;
     text-decoration-thickness: 2px;
+  }
+  [id] {
+    scroll-margin-top: calc(var(--header-height) + 1rem);
   }
   :focus-visible {
     outline: 3px solid var(--color-accent);
@@ -108,10 +124,14 @@
   .shell {
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    gap: 2.5rem;
-    max-width: 90rem;
+    gap: 3rem;
+    max-width: 96rem;
     margin-inline: auto;
-    padding: 1.5rem 2rem 4rem;
+    padding: 2rem 2rem 5rem;
+  }
+  .shell--full {
+    display: block;
+    max-width: 84rem;
   }
   .content {
     max-width: var(--measure);

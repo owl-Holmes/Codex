@@ -13,17 +13,23 @@
 
 | Token | Role |
 |---|---|
-| `--font-display`, `--font-body`, `--font-mono` | Headings, text, code |
+| `--font-brand`, `--font-display`, `--font-body`, `--font-ui`, `--font-mono` | Wordmark and eyebrows, headings, reading text, interface, code |
 | `--color-bg`, `--color-surface` | Page background, cards and boxes |
 | `--color-text`, `--color-muted` | Main and secondary text |
 | `--color-accent`, `--color-accent-contrast` | Links, highlights; text on accent backgrounds |
 | `--color-border`, `--color-ornament` | Lines; decorative accents |
 | `--callout-*` | Callout colors (definition, remember, warning, example, tip) |
-| `--radius`, `--measure`, `--sidebar-width` | Shape and layout |
+| `--color-wood`, `--color-wood-2`, `--color-on-wood`, `--color-on-wood-muted` | Dark "shelf" surfaces (header, home hero, tooltips) and their text — dark in both modes |
+| `--color-brass`, `--color-lamp` | Gilded accents and warm highlights |
+| `--text-xs` … `--text-xl` | Font size scale |
+| `--shadow-sm`, `--shadow-lg`, `--glow` | Elevation and hover glow |
+| `--ease`, `--duration` | Animation curve and speed (disabled by `prefers-reduced-motion`) |
+| `--radius`, `--radius-lg`, `--measure`, `--sidebar-width`, `--header-height` | Shape and layout |
 
 ## Fonts
 
-Heading fonts are self-hosted from npm (`src/styles/fonts.css`, latin subset, `font-display: swap`).
+Fonts are self-hosted from npm (`src/styles/fonts.css`, `font-display: swap`): Cinzel (wordmark),
+Fraunces (headings), Literata (reading text), Inter (interface), Courier Prime (the `noir` theme).
 To use another font in a theme: `npm install @fontsource/<name>`, import the weights in `fonts.css`,
 then set `--font-display` (or `--font-body`) in the theme.
 

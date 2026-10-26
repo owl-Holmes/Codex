@@ -1,9 +1,14 @@
 /*
- * Self-hosted fonts (bundled from npm, no external request), latin subset only, font-display: swap.
- * Body text uses system serif fonts (see --font-body in tokens.css) for speed and readability.
+ * Self-hosted fonts (bundled from npm, no external request), font-display: swap.
+ * Cinzel = engraved capitals (brand, eyebrows), Fraunces = headings, Literata = reading text,
+ * Inter = interface (header, buttons, labels). Variable fonts load only the subsets a page needs.
  * To add a font: npm install @fontsource/<name>, import the needed weights here, reference it in a token.
  */
-@import '@fontsource/cormorant-garamond/latin-600.css';
-@import '@fontsource/cormorant-garamond/latin-700.css';
+@import '@fontsource/cinzel/latin-500.css';
+@import '@fontsource/cinzel/latin-700.css';
+@import '@fontsource-variable/fraunces/wght.css';
+@import '@fontsource-variable/literata/wght.css';
+@import '@fontsource-variable/literata/wght-italic.css';
+@import '@fontsource-variable/inter/wght.css';
 @import '@fontsource/courier-prime/latin-400.css';
 @import '@fontsource/courier-prime/latin-700.css';

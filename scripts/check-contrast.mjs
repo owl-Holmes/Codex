@@ -12,6 +12,10 @@ const PAIRS = [
   ['--color-accent', '--color-bg'],
   ['--color-accent', '--color-surface'],
   ['--color-accent-contrast', '--color-accent'],
+  ['--color-on-wood', '--color-wood'],
+  ['--color-on-wood', '--color-wood-2'],
+  ['--color-on-wood-muted', '--color-wood-2'],
+  ['--color-brass', '--color-wood-2'],
   ...['definition', 'remember', 'warning', 'example', 'tip'].map((c) => [`--callout-${c}`, '--color-surface']),
 ];
 
