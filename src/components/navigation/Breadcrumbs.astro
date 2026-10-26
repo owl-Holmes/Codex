@@ -1,6 +1,6 @@
 ---
-/** Breadcrumb trail from the language home down to the current page. */
-import type { Locale } from '../../config/site';
+/** Breadcrumb trail from the language home down to the current page, plus BreadcrumbList structured data. */
+import { SITE, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
 import type { TreeNode } from '../../lib/tree';
 import { pageUrl } from '../../lib/urls';
@@ -11,6 +11,17 @@ interface Props {
 }
 const { trail, locale } = Astro.props;
 const t = useT(locale);
+const crumbs = [{ title: t('home.title'), slug: '' }, ...trail];
+const structured = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.title,
+    item: new URL(pageUrl(locale, c.slug), SITE.url).href,
+  })),
+};
 ---
 
 <nav aria-label={t('nav.breadcrumb')} class="breadcrumbs">
@@ -29,7 +40,7 @@ const t = useT(locale);
     ))}
   </ol>
 </nav>
-
+<script type="application/ld+json" is:inline set:html={JSON.stringify(structured)} />
 <style>
   ol {
     display: flex;
