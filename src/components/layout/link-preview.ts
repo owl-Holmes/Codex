@@ -1,7 +1,8 @@
 /**
  * Link hover previews: shows title, section and description of internal pages when a link
  * in the main content is hovered or focused. Data comes from /<lang>/previews.json (built once).
- * Disabled on touch devices. Escape or leaving the link hides it.
+ * Disabled on touch devices. Escape or leaving the link hides it. Skipped on cards that already
+ * show the title and description (.entry-card, .link-card) and inside any [data-no-preview].
  */
 interface Preview {
   title: string;
@@ -48,7 +49,10 @@ export function setupLinkPreviews(root: HTMLElement, indexUrl: string): void {
     link.setAttribute('aria-describedby', card.id);
   };
 
-  const target = (e: Event) => (e.target as Element).closest?.<HTMLAnchorElement>('a[href]');
+  const target = (e: Event) => {
+    const link = (e.target as Element).closest?.<HTMLAnchorElement>('a[href]');
+    return link?.closest('.entry-card, .link-card, [data-no-preview]') ? null : link;
+  };
   root.addEventListener('mouseover', (e) => {
     const link = target(e);
     if (link) show(link);
