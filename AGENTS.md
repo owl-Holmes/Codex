@@ -138,6 +138,8 @@ A balance of **pedagogical** and **encyclopedic**:
 5. TypeScript strict, no `any`. Zero JS by default; client JS only for real interactivity, wrapped in try/catch around storage.
 6. Accessibility WCAG 2.2 AA: semantic HTML, keyboard access, visible focus, `alt` texts, `lang` attributes, reduced motion respected.
 7. Naming: `kebab-case` files/folders, `PascalCase.astro` components.
+8. Visual design: before any UI or styling change, read `docs/STYLE.md` (the owner's visual conventions;
+   it wins over your own taste). Check light, dark and mobile (375 px) before finishing.
 
 ## 8. Verification checklist (run before finishing ANY task, report results honestly)
 
