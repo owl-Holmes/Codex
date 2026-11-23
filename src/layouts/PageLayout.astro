@@ -1,13 +1,12 @@
 ---
 /**
  * Layout of a content or section page: breadcrumbs, metadata, "read first",
- * body, children cards, sources, further reading, related pages and backlinks.
+ * body, children cards, sources, further reading, related pages, backlinks and local graph.
  */
 import 'katex/dist/katex.min.css';
 import type { MarkdownHeading } from 'astro';
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/navigation/TableOfContents.astro';
-import PrevNext from '../components/navigation/PrevNext.astro';
 import Breadcrumbs from '../components/navigation/Breadcrumbs.astro';
 import PageList from '../components/knowledge/PageList.astro';
 import ChildCards from '../components/knowledge/ChildCards.astro';
@@ -96,7 +95,6 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
     <PageList heading={t('page.related')} slugs={related.map((r) => r.slug)} notes={notes} locale={locale} />
     <PageList heading={t('page.backlinks')} slugs={backlinks} locale={locale} />
     {data && <KnowledgeGraph locale={locale} focus={slug} />}
-    <PrevNext tree={tree} slug={slug} locale={locale} />
   </article>
   {editUrl && (
     <p class="page-footer">
