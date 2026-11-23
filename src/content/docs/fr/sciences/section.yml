@@ -1,5 +1,5 @@
 title: { fr: Sciences, en: Sciences }
 description: { fr: "Chimie, physique, biologie et leurs méthodes.", en: "Chemistry, physics, biology and their methods." }
 order: 10
-theme: alchemy
+theme: lab
 icon: flask

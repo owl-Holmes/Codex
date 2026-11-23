@@ -2,7 +2,8 @@
 /**
  * HTML shell shared by every page: <head>, light/dark mode bootstrap, header, sidebar.
  * Used by PageLayout and the home page. The page background (`--page-art`) follows the theme,
- * see global.css and src/assets/images/backgrounds/.
+ * see global.css and src/assets/images/backgrounds/. `data-theme` sits on <body> so the theme
+ * also repaints the header.
  */
 import '../styles/fonts.css';
 import '../styles/tokens.css';
@@ -74,12 +75,12 @@ const pageTitle = slug ? `${title} · ${SITE.name}` : SITE.name;
       })();
     </script>
   </head>
-  <body>
+  <body data-theme={theme}>
     <a class="skip-link" href="#main">
       {t('nav.skip')}
     </a>
     <Header locale={locale} slug={slug} />
-    <div class="shell" data-theme={theme}>
+    <div class="shell">
       <Sidebar tree={tree} locale={locale} current={slug} />
       <main
         id="main"

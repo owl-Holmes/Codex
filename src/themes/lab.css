@@ -1,0 +1,105 @@
+/*
+ * Theme "lab" — sciences: a clean laboratory. White bench, graph-paper background, sans-serif
+ * reading text, IBM Plex throughout, monospace labels, instrument blue accent, thin precise rules. Tokens only.
+ * Light = white lab under neon light; dark = the same lab at night (blue-black, not brown).
+ * The "wood" tokens repaint the header, so the whole page turns white on lab pages.
+ */
+@layer themes {
+  [data-theme='lab'] {
+    --font-brand: 'IBM Plex Sans Variable', system-ui, sans-serif;
+    --font-display: 'IBM Plex Sans Variable', system-ui, 'Segoe UI', sans-serif;
+    --font-label: var(--font-mono);
+
+    --color-bg: #f7f9fb;
+    --color-surface: #ffffff;
+    --color-text: #0f1b2d;
+    --color-muted: #4a5a70;
+    --color-accent: #0b5cad;
+    --color-accent-contrast: #ffffff;
+    --color-border: #d5dde7;
+    --color-ornament: #5b84b1;
+
+    --color-wood: #ffffff;
+    --color-wood-2: #f4f7fa;
+    --color-on-wood: #0f1b2d;
+    --color-on-wood-muted: #4a5a70;
+    --color-brass: #0b5cad;
+    --color-lamp: #0b5cad;
+
+    --page-veil: rgb(247 249 251 / 0.3);
+    --page-art-blur: 0px;
+    /* Graph paper: 2 mm grid, darker line every 5 squares. */
+    --page-art:
+      linear-gradient(#d9e2ec 1px, transparent 1px) 0 0 / 110px 110px,
+      linear-gradient(90deg, #d9e2ec 1px, transparent 1px) 0 0 / 110px 110px,
+      linear-gradient(#ebf0f5 1px, transparent 1px) 0 0 / 22px 22px,
+      linear-gradient(90deg, #ebf0f5 1px, transparent 1px) 0 0 / 22px 22px, #f7f9fb;
+
+    --leather-1: #0b5cad;
+    --leather-2: #0e7c6b;
+    --leather-3: #6d3fb0;
+    --leather-4: #b4471f;
+    --leather-5: #1f6f9c;
+    --leather-6: #8a6a10;
+    --leather-7: #2f7a3a;
+    --leather-8: #a3284f;
+
+    --callout-definition: #1d5fa8;
+    --callout-remember: #6a3fb0;
+    --callout-warning: #b23a1a;
+    --callout-example: #237a3b;
+    --callout-tip: #7a5c00;
+
+    --radius: 4px;
+    --radius-lg: 8px;
+    --h2-rule: 1px solid #d5dde7;
+    --shadow-sm: 0 1px 2px rgb(15 27 45 / 0.06), 0 1px 4px rgb(15 27 45 / 0.05);
+    --shadow-lg: 0 12px 28px rgb(15 27 45 / 0.12), 0 3px 8px rgb(15 27 45 / 0.06);
+    --glow: 0 0 0 1px #0b5cad, 0 6px 18px rgb(11 92 173 / 0.15);
+  }
+
+  :root[data-mode='dark'] [data-theme='lab'] {
+    --color-bg: #0d1520;
+    --color-surface: #131d2b;
+    --color-text: #e6edf5;
+    --color-muted: #9fb0c4;
+    --color-accent: #6cb2ff;
+    --color-accent-contrast: #0d1520;
+    --color-border: #26364a;
+    --color-ornament: #5f86b0;
+
+    --color-wood: #0a111b;
+    --color-wood-2: #111b29;
+    --color-on-wood: #e6edf5;
+    --color-on-wood-muted: #9fb0c4;
+    --color-brass: #6cb2ff;
+    --color-lamp: #9ccaff;
+
+    --page-veil: rgb(13 21 32 / 0.35);
+    --page-art:
+      linear-gradient(#1c2a3c 1px, transparent 1px) 0 0 / 110px 110px,
+      linear-gradient(90deg, #1c2a3c 1px, transparent 1px) 0 0 / 110px 110px,
+      linear-gradient(#141f2e 1px, transparent 1px) 0 0 / 22px 22px,
+      linear-gradient(90deg, #141f2e 1px, transparent 1px) 0 0 / 22px 22px, #0d1520;
+
+    --leather-1: #6cb2ff;
+    --leather-2: #4fd1b5;
+    --leather-3: #b79cf5;
+    --leather-4: #f19a72;
+    --leather-5: #68c0ef;
+    --leather-6: #e3c35a;
+    --leather-7: #86d08f;
+    --leather-8: #f08aa9;
+
+    --callout-definition: #8cc3f2;
+    --callout-remember: #c4a8ee;
+    --callout-warning: #f4a07a;
+    --callout-example: #a7d48f;
+    --callout-tip: #e8cf7a;
+
+    --h2-rule: 1px solid #26364a;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4), 0 2px 6px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 14px 34px rgb(0 0 0 / 0.55), 0 4px 10px rgb(0 0 0 / 0.35);
+    --glow: 0 0 0 1px #6cb2ff, 0 6px 18px rgb(108 178 255 / 0.2);
+  }
+}
