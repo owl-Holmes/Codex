@@ -1,10 +1,14 @@
 /*
  * Shared UI patterns used across components (cascade layer `components`; a component's scoped
  * styles may refine them): .ui-label, .pill, .card-grid, .card-list, .link-card,
- * .entry-card (path steps), .badge, .letter-heading, .block-heading.
+ * .page-intro, .entry-card (path steps), .badge, .letter-heading, .block-heading.
  * Imported once by BaseLayout.
  */
 @layer components {
+  /* Muted lead paragraph under the h1 of index pages (A–Z, glossary, paths). */
+  .page-intro {
+    color: var(--color-muted);
+  }
   /* Small uppercase interface label: counts, dates, eyebrows, section names. */
   .ui-label {
     font-family: var(--font-label);

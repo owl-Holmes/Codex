@@ -1,5 +1,8 @@
 ---
-/** One thematic path: progress dots, then its ordered steps as a vertical timeline of clickable cards. */
+/**
+ * One thematic path: reading progress (StepProgress), then its ordered steps as a vertical timeline
+ * of fully clickable cards; steps already read in this browser get a filled number and a badge.
+ */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import StepProgress from '../../../components/knowledge/StepProgress.astro';
 import { LOCALES, type Locale } from '../../../config/site';
@@ -22,7 +25,7 @@ const steps = await resolveSteps(locale, path);
     <a href={pageUrl(locale, 'paths')}>← {t('paths.title')}</a>
   </p>
   <h1>{path.data.title}</h1>
-  <p class="intro">{path.data.description}</p>
+  <p class="page-intro">{path.data.description}</p>
   <StepProgress pages={steps.map((s) => s.page)} locale={locale} />
   <ol class="timeline" data-visited-label={t('paths.visited')}>
     {steps.map((s, i) => (
@@ -30,7 +33,7 @@ const steps = await resolveSteps(locale, path);
         <span class="num" aria-hidden="true">
           {i + 1}
         </span>
-        <a class="entry-card step-card" href={pageUrl(locale, s.page)}>
+        <a class="entry-card" href={pageUrl(locale, s.page)} data-no-preview>
           <span class="meta">
             <span class="ui-label">
               {t('paths.step')} {i + 1}
@@ -59,9 +62,6 @@ const steps = await resolveSteps(locale, path);
 </script>
 
 <style>
-  .intro {
-    color: var(--color-muted);
-  }
   .timeline {
     position: relative;
     display: grid;

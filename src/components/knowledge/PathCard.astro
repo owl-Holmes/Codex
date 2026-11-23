@@ -164,7 +164,9 @@ const sections = [...new Set(steps.map((s) => s.section).filter(Boolean))];
     font-size: 0.72rem;
     font-weight: 700;
   }
+  /* min-width: 0 lets the flex item shrink so long titles end with an ellipsis. */
   .step-title {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

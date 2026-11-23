@@ -16,7 +16,7 @@ const paths = await getPaths(locale);
 
 <BaseLayout locale={locale} slug="paths" title={t('paths.title')} description={t('paths.intro')}>
   <h1>{t('paths.title')}</h1>
-  <p class="intro">{t('paths.intro')}</p>
+  <p class="page-intro">{t('paths.intro')}</p>
   <ul class="paths">
     {paths.map((p) => (
       <li>
@@ -27,9 +27,6 @@ const paths = await getPaths(locale);
 </BaseLayout>
 
 <style>
-  .intro {
-    color: var(--color-muted);
-  }
   .paths {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
