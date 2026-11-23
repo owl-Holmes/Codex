@@ -92,6 +92,8 @@ Une bonne demande donne des valeurs, pas des impressions :
 
 ## 8. Décisions du propriétaire (à compléter)
 
+- **La version Sciences (thème `lab`) est validée : très bien telle quelle.** Ne pas la modifier sans
+  demande explicite ; s'en inspirer pour les autres sections (lisibilité, sobriété, finition).
 - Pas de bloc « Précédent / Suivant » en bas des pages.
 - Pas de grande boîte autour de l'accueil.
 - La sidebar reste étroite ; les titres longs passent à la ligne entre les mots, jamais au milieu.
