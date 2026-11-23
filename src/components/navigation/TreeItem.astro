@@ -43,14 +43,18 @@ const ariaCurrent = isCurrent ? 'page' : undefined;
   }
   ul {
     list-style: none;
-    padding-left: 1rem;
-    margin: 0;
+    padding-left: 0.6rem;
+    margin: 0 0 0 0.3rem;
     border-left: 1px solid var(--color-border);
   }
   a {
     display: inline-block;
+    max-width: calc(100% - 1.1rem); /* stays beside the summary arrow in the narrow sidebar */
     min-height: 24px; /* WCAG 2.5.8 target size */
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem 0.4rem;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+    hyphens: auto;
     border-radius: var(--radius);
     color: var(--color-text);
     text-decoration: none;

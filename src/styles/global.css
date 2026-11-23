@@ -56,6 +56,8 @@
   h2 {
     font-size: var(--text-xl);
     margin-top: 2.4rem;
+    padding-bottom: 0.3rem;
+    border-bottom: var(--h2-rule);
   }
   h3 {
     font-size: var(--text-lg);
@@ -127,28 +129,41 @@
 }
 
 @layer layout {
-  /* Three columns: small sidebar on the left, the content column centred on the page,
-     an empty column on the right that balances the sidebar on wide screens. */
+  /* Centred page, no dead margins: narrow sidebar | content | table of contents (fixed, see
+     TableOfContents). Pages without a TOC, and `layout: wide` pages, give its column to the content. */
   .shell {
-    --content-width: var(--measure);
     display: grid;
-    grid-template-columns: minmax(var(--sidebar-width), 1fr) minmax(0, var(--content-width)) minmax(0, 1fr);
-    gap: 2.5rem;
-    padding: 2rem 1.5rem 5rem;
+    grid-template-columns: var(--sidebar-width) minmax(0, var(--content-max)) var(--toc-width);
+    justify-content: center;
+    gap: var(--shell-gap);
+    padding: 2rem var(--shell-padding) 5rem;
+  }
+  .shell:not(:has(.toc)),
+  .shell:has(.content--wide) {
+    grid-template-columns: var(--sidebar-width) minmax(
+        0,
+        calc(var(--content-max) + var(--toc-width) + var(--shell-gap))
+      );
   }
   /* Theme artwork behind the page, fixed, softened by a veil in the page colour (see tokens). */
   .shell::before {
     content: '';
     position: fixed;
-    inset: 0;
+    inset: calc(-2 * var(--page-art-blur));
     z-index: -1;
     background: linear-gradient(var(--page-veil), var(--page-veil)), var(--page-art);
+    filter: blur(var(--page-art-blur));
   }
-  .shell:has(.content--wide) {
-    --content-width: 56rem;
+  /* Medium screens: the TOC goes back above the content, two columns. */
+  @media (max-width: 1200px) {
+    .shell,
+    .shell:not(:has(.toc)) {
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    }
   }
   @media (max-width: 960px) {
-    .shell {
+    .shell,
+    .shell:not(:has(.toc)) {
       grid-template-columns: minmax(0, 1fr);
       padding-inline: 1rem;
     }
