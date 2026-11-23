@@ -29,6 +29,7 @@
     --page-veil: rgb(247 249 251 / 0.3);
     --page-art-blur: 0px;
     --page-art-saturation: 1;
+    --sheet-bg: #ffffff;
     /* Graph paper: 2 mm grid, darker line every 5 squares. */
     --page-art:
       linear-gradient(#d9e2ec 1px, transparent 1px) 0 0 / 110px 110px,
@@ -77,6 +78,7 @@
     --color-lamp: #9ccaff;
 
     --page-veil: rgb(13 21 32 / 0.35);
+    --sheet-bg: #111a27;
     --page-art:
       linear-gradient(#1c2a3c 1px, transparent 1px) 0 0 / 110px 110px,
       linear-gradient(90deg, #1c2a3c 1px, transparent 1px) 0 0 / 110px 110px,

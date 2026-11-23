@@ -129,8 +129,8 @@
 }
 
 @layer layout {
-  /* Centred page, no dead margins: narrow sidebar | content | table of contents (fixed, see
-     TableOfContents). Pages without a TOC, and `layout: wide` pages, give its column to the content. */
+  /* Centred, symmetric page: sidebar | content | table of contents (fixed, see TableOfContents).
+     Both side columns have the same width, so the content column sits in the middle of the screen. */
   .shell {
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, var(--content-max)) var(--toc-width);
@@ -138,12 +138,17 @@
     gap: var(--shell-gap);
     padding: 2rem var(--shell-padding) 5rem;
   }
-  .shell:not(:has(.toc)),
-  .shell:has(.content--wide) {
-    grid-template-columns: var(--sidebar-width) minmax(
-        0,
-        calc(var(--content-max) + var(--toc-width) + var(--shell-gap))
-      );
+  .content {
+    min-width: 0;
+  }
+  /* Reading sheet, on content pages only (PageLayout renders an <article>): an almost opaque panel
+     behind the text, above the page artwork. Home and index pages stay open on the background. */
+  .content:has(> article) {
+    padding: 2rem 2.5rem 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--sheet-bg);
+    box-shadow: var(--shadow-sm);
   }
   /* Theme artwork behind the page, fixed, blurred and desaturated (::before), then softened by a
      veil in the page colour (::after), so the veil keeps its exact tint (see tokens). */
@@ -165,16 +170,17 @@
   }
   /* Medium screens: the TOC goes back above the content, two columns. */
   @media (max-width: 1200px) {
-    .shell,
-    .shell:not(:has(.toc)) {
+    .shell {
       grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
     }
   }
   @media (max-width: 960px) {
-    .shell,
-    .shell:not(:has(.toc)) {
+    .shell {
       grid-template-columns: minmax(0, 1fr);
       padding-inline: 1rem;
+    }
+    .content:has(> article) {
+      padding: 1.2rem 1rem 1.5rem;
     }
   }
 }
