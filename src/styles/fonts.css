@@ -1,7 +1,8 @@
 /*
  * Self-hosted fonts (bundled from npm, no external request), font-display: swap.
- * Cinzel = engraved capitals (wordmark, home title), Fraunces = headings, Literata = reading text,
- * Inter = interface (header, buttons, labels). Variable fonts load only the subsets a page needs.
+ * Cinzel = engraved capitals (wordmark, home title), Fraunces = headings (library themes),
+ * IBM Plex Sans = reading text and interface (clean web + technical feel), IBM Plex Mono = code and
+ * lab labels. Literata and Inter stay available for themes. Variable fonts load only the subsets a page needs.
  * To add a font: npm install @fontsource/<name>, import the needed weights here, reference it in a token.
  */
 @import '@fontsource/cinzel/latin-700.css';
@@ -9,5 +10,9 @@
 @import '@fontsource-variable/literata/wght.css';
 @import '@fontsource-variable/literata/wght-italic.css';
 @import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/ibm-plex-sans/wght.css';
+@import '@fontsource-variable/ibm-plex-sans/wght-italic.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
 @import '@fontsource/courier-prime/latin-400.css';
 @import '@fontsource/courier-prime/latin-700.css';
