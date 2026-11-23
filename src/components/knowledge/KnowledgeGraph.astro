@@ -27,14 +27,8 @@ const empty = Boolean(focus) && data.nodes.length < 2;
 
 {!empty && (
   <figure class="graph">
-    {focus && <h2 class="graph-heading">{t('graph.local')}</h2>}
+    {focus && <h2 class="block-heading">{t('graph.local')}</h2>}
     <GraphCanvas data={data} locale={locale} width={width} height={height} focus={focus} />
   </figure>
 )}
 {!focus && <GraphTextList data={data} locale={locale} />}
-
-<style>
-  .graph-heading {
-    font-size: var(--text-lg);
-  }
-</style>

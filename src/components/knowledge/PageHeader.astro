@@ -1,7 +1,8 @@
 ---
 /**
  * Header of a content page: title, status, last update (frontmatter `updated`, else git, else `created`),
- * tags and optional cover image (`cover` + `coverAlt`). Used by PageLayout.
+ * tags and optional cover image (`cover` + `coverAlt`). Folder pages without index.mdx get a lede
+ * (section description) and their page count instead. Used by PageLayout.
  */
 import { Image } from 'astro:assets';
 import type { Locale } from '../../config/site';
@@ -16,8 +17,12 @@ interface Props {
   title: string;
   locale: Locale;
   page?: Page;
+  /** Folder pages: section description shown under the title. */
+  lede?: string;
+  /** Folder pages: number of pages inside. */
+  count?: number;
 }
-const { title, locale, page } = Astro.props;
+const { title, locale, page, lede, count } = Astro.props;
 const t = useT(locale);
 const data = page?.entry.data;
 const gitDate = page?.entry.filePath ? lastCommitDate(page.entry.filePath) : undefined;
@@ -29,6 +34,12 @@ const cover = data?.cover ? await resolveImage(data.cover, 'cover') : undefined;
 <header class="page-head">
   {cover && <Image class="page-cover" src={cover} alt={data?.coverAlt ?? ''} width={1200} loading="eager" />}
   <h1>{title}</h1>
+  {lede && <p class="lede">{lede}</p>}
+  {count !== undefined && (
+    <p class="ui-label count">
+      {count} {t('home.pages')}
+    </p>
+  )}
   {data && (
     <p class="meta">
       <span class={`status status--${data.status}`}>{t(`status.${data.status}`)}</span>
@@ -47,6 +58,14 @@ const cover = data?.cover ? await resolveImage(data.cover, 'cover') : undefined;
 </header>
 
 <style>
+  .lede {
+    margin: 0.6rem 0 0;
+    font-size: var(--text-lg);
+    color: var(--color-muted);
+  }
+  .count {
+    margin: 0.6rem 0 0;
+  }
   .page-head {
     border-bottom: 1px solid var(--color-border);
     padding-bottom: 0.8rem;

@@ -18,7 +18,7 @@ import PageHeader from '../components/knowledge/PageHeader.astro';
 import { SITE, type Locale } from '../config/site';
 import { useT } from '../i18n/ui';
 import type { Page } from '../lib/pages';
-import { findNode, getTrail, getTree, resolveTheme } from '../lib/tree';
+import { countPages, findNode, getTrail, getTree, resolveTheme } from '../lib/tree';
 import { getBacklinks, getRelated } from '../lib/knowledge';
 import { pageStyles } from '../lib/page-styles';
 
@@ -80,7 +80,13 @@ const editUrl = page?.entry.filePath ? `${SITE.repo}/edit/${SITE.branch}/${page.
         {t(`status.${data.status}`)}
       </span>
     )}
-    <PageHeader title={title} locale={locale} page={page} />
+    <PageHeader
+      title={title}
+      locale={locale}
+      page={page}
+      lede={data ? undefined : node?.description}
+      count={!data && node ? countPages(node) : undefined}
+    />
     {data && <PageList heading={t('page.readFirst')} slugs={data.prerequisites} locale={locale} />}
     <TableOfContents headings={headings} locale={locale} />
     <slot />

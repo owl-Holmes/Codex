@@ -1,7 +1,7 @@
 /*
  * Shared UI patterns used across components (cascade layer `components`; a component's scoped
  * styles may refine them): .ui-label, .pill, .card-grid, .card-list, .link-card,
- * .entry-card (path steps), .badge, .letter-heading.
+ * .entry-card (path steps), .badge, .letter-heading, .block-heading.
  * Imported once by BaseLayout.
  */
 @layer components {
@@ -154,5 +154,27 @@
     color: var(--color-accent-contrast);
     font-family: var(--font-label);
     font-size: var(--text-lg);
+  }
+  /* Heading of an automatic page block ("In this section", "Related pages", "Sources"…): small,
+     interface font, uppercase, followed by a hairline, so the page title always dominates. */
+  .block-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 2.5rem 0 1rem;
+    padding: 0;
+    border: 0;
+    font-family: var(--font-label);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .block-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
   }
 }

@@ -14,7 +14,7 @@ const { nodes, locale, heading } = Astro.props;
 
 {nodes.length > 0 && (
   <section>
-    <h2>{heading}</h2>
+    <h2 class="block-heading">{heading}</h2>
     <div class="card-grid">
       {nodes.map((n, i) => (
         <SectionCard node={n} locale={locale} index={i} />

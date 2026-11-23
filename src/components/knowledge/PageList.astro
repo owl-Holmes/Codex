@@ -17,7 +17,7 @@ const items = (await Promise.all(slugs.map((s) => resolvePage(locale, s)))).flat
 
 {items.length > 0 && (
   <section class="page-list">
-    <h2>{heading}</h2>
+    <h2 class="block-heading">{heading}</h2>
     <ul>
       {items.map((p) => (
         <li>
@@ -30,9 +30,6 @@ const items = (await Promise.all(slugs.map((s) => resolvePage(locale, s)))).flat
 )}
 
 <style>
-  .page-list h2 {
-    font-size: 1.3rem;
-  }
   .note {
     color: var(--color-muted);
     font-size: 0.95rem;
