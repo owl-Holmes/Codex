@@ -30,10 +30,11 @@ const resolve = async (path?: string) => {
 };
 const fileUrl = await resolve(src);
 const captionsUrl = await resolve(captions);
+// Ids are URL-encoded so a mistyped id cannot change the embed URL (path or query).
 const embed = youtube
-  ? `https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1`
+  ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(youtube)}?autoplay=1`
   : vimeo
-    ? `https://player.vimeo.com/video/${vimeo}?autoplay=1&dnt=1`
+    ? `https://player.vimeo.com/video/${encodeURIComponent(vimeo)}?autoplay=1&dnt=1`
     : undefined;
 if (!embed && !fileUrl) throw new Error(`Video "${title}": provide youtube, vimeo or src.`);
 ---
@@ -66,6 +67,9 @@ if (!embed && !fileUrl) throw new Error(`Video "${title}": provide youtube, vime
       iframe.title = button.dataset.title ?? '';
       iframe.allow = 'autoplay; fullscreen; picture-in-picture';
       iframe.allowFullscreen = true;
+      // Sandboxed like Embed: the player cannot navigate the page, submit forms or download.
+      iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-presentation');
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
       button.replaceWith(iframe);
       iframe.focus();
     });

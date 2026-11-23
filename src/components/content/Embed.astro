@@ -2,7 +2,9 @@
 /**
  * Generic iframe embed (maps, simulations, documents…), lazy-loaded, with a required accessible title.
  * Usage: <Embed src="https://www.openstreetmap.org/export/embed.html?bbox=…" title="Carte de Lyon" ratio="4 / 3" />
- * Only https URLs are accepted. Override: .embed, --embed-ratio
+ * Only https URLs are accepted. The iframe is sandboxed (no top-level navigation, no forms,
+ * no downloads); scripts, popups and fullscreen stay allowed for maps and players.
+ * Override: .embed, --embed-ratio
  */
 interface Props {
   src: string;
@@ -14,7 +16,14 @@ if (!src.startsWith('https://')) throw new Error(`Embed "${title}": only https:/
 ---
 
 <figure class="embed" style={`--embed-ratio: ${ratio}`}>
-  <iframe src={src} title={title} loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe>
+  <iframe
+    src={src}
+    title={title}
+    loading="lazy"
+    referrerpolicy="no-referrer"
+    sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
+    allowfullscreen
+  ></iframe>
   <figcaption>
     <a href={src}>{title}</a>
   </figcaption>

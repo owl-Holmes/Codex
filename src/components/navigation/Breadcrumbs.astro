@@ -2,6 +2,7 @@
 /** Breadcrumb trail from the language home down to the current page, plus BreadcrumbList structured data. */
 import { SITE, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
+import { jsonForScript } from '../../lib/sanitize';
 import type { TreeNode } from '../../lib/tree';
 import { pageUrl } from '../../lib/urls';
 
@@ -40,7 +41,7 @@ const structured = {
     ))}
   </ol>
 </nav>
-<script type="application/ld+json" is:inline set:html={JSON.stringify(structured)} />
+<script type="application/ld+json" is:inline set:html={jsonForScript(structured)} />
 <style>
   ol {
     display: flex;
