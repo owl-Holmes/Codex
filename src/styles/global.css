@@ -145,14 +145,23 @@
         calc(var(--content-max) + var(--toc-width) + var(--shell-gap))
       );
   }
-  /* Theme artwork behind the page, fixed, softened by a veil in the page colour (see tokens). */
-  .shell::before {
+  /* Theme artwork behind the page, fixed, blurred and desaturated (::before), then softened by a
+     veil in the page colour (::after), so the veil keeps its exact tint (see tokens). */
+  .shell::before,
+  .shell::after {
     content: '';
     position: fixed;
-    inset: calc(-2 * var(--page-art-blur));
     z-index: -1;
-    background: linear-gradient(var(--page-veil), var(--page-veil)), var(--page-art);
-    filter: blur(var(--page-art-blur));
+    pointer-events: none;
+  }
+  .shell::before {
+    inset: calc(-2 * var(--page-art-blur));
+    background: var(--page-art);
+    filter: blur(var(--page-art-blur)) saturate(var(--page-art-saturation));
+  }
+  .shell::after {
+    inset: 0;
+    background: var(--page-veil);
   }
   /* Medium screens: the TOC goes back above the content, two columns. */
   @media (max-width: 1200px) {

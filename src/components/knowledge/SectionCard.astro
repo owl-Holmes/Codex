@@ -56,8 +56,8 @@ const color = node.color ?? `var(--leather-${(index % 8) + 1})`;
     border-radius: var(--radius);
     background: linear-gradient(
       135deg,
-      color-mix(in srgb, var(--card) 22%, var(--color-surface)),
-      var(--color-surface) 75%
+      color-mix(in srgb, var(--card) 10%, var(--color-surface)),
+      var(--color-surface) 65%
     );
     box-shadow: var(--shadow-sm);
     animation: rise 500ms var(--ease) backwards;
@@ -80,7 +80,7 @@ const color = node.color ?? `var(--leather-${(index % 8) + 1})`;
     right: -0.9rem;
     bottom: -1.1rem;
     color: var(--card);
-    opacity: 0.3;
+    opacity: 0.22;
     rotate: -14deg;
     pointer-events: none;
     transition:

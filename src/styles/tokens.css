@@ -15,13 +15,13 @@
     /* Small uppercase labels (.ui-label); the lab theme switches them to monospace. */
     --font-label: var(--font-ui);
 
-    --color-bg: #f4ede1;
-    --color-surface: #fbf7f0;
+    --color-bg: #f7f2e9;
+    --color-surface: #fffdf9;
     --color-text: #2a1d14;
     --color-muted: #5d4938;
     --color-accent: #8a3416;
     --color-accent-contrast: #fff8ec;
-    --color-border: #ddcdb3;
+    --color-border: #e6d9c3;
     --color-ornament: #a87a35;
 
     --color-wood: #23150d;
@@ -34,9 +34,11 @@
     --on-wood-faint: color-mix(in srgb, var(--color-on-wood) 8%, transparent);
     --on-wood-soft: color-mix(in srgb, var(--color-on-wood) 14%, transparent);
     --on-wood-line: color-mix(in srgb, var(--color-on-wood) 25%, transparent);
-    --page-veil: rgb(244 237 225 / 0.86);
+    --page-veil: rgb(247 242 233 / 0.88);
     /* Blur of the page artwork, so text stays readable over it (0 = sharp, e.g. lab grid). */
     --page-art-blur: 6px;
+    /* Muted artwork: less colour behind the text (applied before the veil, see global.css). */
+    --page-art-saturation: 0.55;
     /* Page artwork (background shorthand); themes swap it. Files: src/assets/images/backgrounds/. */
     --page-art: url('../assets/images/backgrounds/library.svg') center / cover no-repeat;
 
@@ -80,8 +82,8 @@
     --h2-rule: 0 solid transparent;
     --header-height: 4rem;
 
-    --shadow-sm: 0 1px 2px rgb(35 21 13 / 0.08), 0 2px 6px rgb(35 21 13 / 0.06);
-    --shadow-lg: 0 14px 34px rgb(35 21 13 / 0.18), 0 4px 10px rgb(35 21 13 / 0.1);
+    --shadow-sm: 0 1px 2px rgb(35 21 13 / 0.05), 0 4px 14px rgb(35 21 13 / 0.06);
+    --shadow-lg: 0 18px 40px rgb(35 21 13 / 0.12), 0 4px 12px rgb(35 21 13 / 0.07);
     --glow: 0 0 0 1px var(--color-ornament), 0 10px 30px rgb(212 171 95 / 0.25);
     /* Dimmed page behind dialogs (search palette, image viewer). */
     --backdrop: rgb(10 6 3 / 0.6);
