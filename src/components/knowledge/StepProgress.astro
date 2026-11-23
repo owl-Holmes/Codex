@@ -1,8 +1,8 @@
 ---
 /**
- * Progress of a thematic path: one dot per step joined by a line, plus "n / total".
- * Dots of pages already read in this browser fill in (client script, localStorage via visited.ts).
- * Used by the paths list and each path page.
+ * Reading progress of a thematic path: a segmented bar (one segment per step) and "n / total".
+ * Segments of pages already read in this browser fill in (client script, localStorage via visited.ts).
+ * Used by PathCard and each path page.
  */
 import type { Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
@@ -16,66 +16,55 @@ const { pages, locale } = Astro.props;
 const t = useT(locale);
 ---
 
-<div class="step-dots" data-total={pages.length}>
-  <span class="visually-hidden">{t('paths.progress')}</span>
-  <ol class="dots" aria-hidden="true">
+<div class="step-progress">
+  <ol class="segments" aria-hidden="true">
     {pages.map((page) => (
       <li data-page={page} />
     ))}
   </ol>
   <span class="ui-label count">
-    <span class="done">0</span> / {pages.length} {t('paths.steps')}
+    <span class="visually-hidden">{t('paths.progress')} :</span>
+    <span class="done">0</span>/{pages.length} {t('paths.read')}
   </span>
 </div>
 
 <script>
   import { getVisited } from './visited';
   const visited = getVisited();
-  document.querySelectorAll<HTMLElement>('.step-dots').forEach((box) => {
-    const dots = [...box.querySelectorAll<HTMLElement>('li[data-page]')];
-    dots.forEach((dot) => dot.classList.toggle('is-done', visited.has(dot.dataset.page ?? '')));
+  document.querySelectorAll<HTMLElement>('.step-progress').forEach((box) => {
+    const segments = [...box.querySelectorAll<HTMLElement>('li[data-page]')];
+    segments.forEach((s) => s.classList.toggle('is-done', visited.has(s.dataset.page ?? '')));
     const done = box.querySelector('.done');
-    if (done) done.textContent = String(dots.filter((d) => d.classList.contains('is-done')).length);
+    if (done) done.textContent = String(segments.filter((s) => s.classList.contains('is-done')).length);
   });
 </script>
 
 <style>
-  .step-dots {
+  .step-progress {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem 0.8rem;
+    gap: 0.8rem;
   }
-  .dots {
+  .segments {
     display: flex;
-    align-items: center;
+    flex: 1;
+    gap: 4px;
+    min-width: 6rem;
     margin: 0;
     padding: 0;
     list-style: none;
   }
   li {
-    width: 0.85rem;
-    height: 0.85rem;
-    border: 2px solid var(--color-accent);
-    border-radius: 50%;
-    background: var(--color-surface);
-  }
-  li + li {
-    margin-left: 1.4rem;
-    position: relative;
-  }
-  /* Connector line between two dots. */
-  li + li::before {
-    content: '';
-    position: absolute;
-    right: calc(100% + 2px);
-    top: 50%;
-    width: 1.4rem;
-    height: 2px;
-    translate: 0 -50%;
-    background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-accent) 18%, transparent);
+    transition: background var(--duration) var(--ease);
   }
   li:global(.is-done) {
     background: var(--color-accent);
+  }
+  .count {
+    white-space: nowrap;
   }
 </style>

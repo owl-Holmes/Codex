@@ -4,7 +4,8 @@
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Locale } from '../config/site';
-import { getPageMap } from './pages';
+import { getPageMap, resolvePage } from './pages';
+import { getTrail, getTree } from './tree';
 
 export type PathEntry = CollectionEntry<'paths'>;
 export interface ThematicPath {
@@ -32,4 +33,25 @@ export async function getPathsForPage(locale: Locale, slug: string) {
     const index = path.data.steps.findIndex((s) => s.page === slug);
     return index < 0 ? [] : [{ path, index }];
   });
+}
+
+/** A path step ready to display: page slug, page title, top-level section and optional note. */
+export interface ResolvedStep {
+  page: string;
+  title: string;
+  section?: string;
+  note?: string;
+}
+
+/** Steps of a path with their page titles and top-level section names, in the locale (FR fallback). */
+export async function resolveSteps(locale: Locale, path: ThematicPath): Promise<ResolvedStep[]> {
+  const tree = await getTree(locale);
+  return Promise.all(
+    path.data.steps.map(async (s) => ({
+      page: s.page,
+      note: s.note,
+      title: (await resolvePage(locale, s.page))?.page.entry.data.title ?? s.page,
+      section: getTrail(tree, s.page)[0]?.title,
+    })),
+  );
 }

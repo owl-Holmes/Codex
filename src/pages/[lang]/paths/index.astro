@@ -1,11 +1,10 @@
 ---
-/** List of thematic paths as cards: title, description, step count and reading progress (dots). */
+/** List of thematic paths as rich cards (see PathCard). */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import StepDots from '../../../components/knowledge/StepDots.astro';
+import PathCard from '../../../components/knowledge/PathCard.astro';
 import { LOCALES, type Locale } from '../../../config/site';
 import { useT } from '../../../i18n/ui';
 import { getPaths } from '../../../lib/paths';
-import { pageUrl } from '../../../lib/urls';
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -18,18 +17,10 @@ const paths = await getPaths(locale);
 <BaseLayout locale={locale} slug="paths" title={t('paths.title')} description={t('paths.intro')}>
   <h1>{t('paths.title')}</h1>
   <p class="intro">{t('paths.intro')}</p>
-  <ul class="entry-grid paths">
+  <ul class="paths">
     {paths.map((p) => (
       <li>
-        <a class="entry-card path-card" href={pageUrl(locale, `paths/${p.id}`)}>
-          <span class="badge badge--accent">
-            {p.data.steps.length} {t('paths.steps')}
-          </span>
-          <span class="entry-card-title">{p.data.title}</span>
-          <span class="entry-card-text">{p.data.description}</span>
-          <StepDots pages={p.data.steps.map((s) => s.page)} locale={locale} />
-          <span class="start">{t('paths.start')} →</span>
-        </a>
+        <PathCard path={p} locale={locale} />
       </li>
     ))}
   </ul>
@@ -40,20 +31,11 @@ const paths = await getPaths(locale);
     color: var(--color-muted);
   }
   .paths {
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  }
-  .path-card {
-    gap: 0.6rem;
-    padding: 1.2rem 1.3rem;
-  }
-  .path-card .entry-card-title {
-    font-size: var(--text-lg);
-  }
-  .start {
-    margin-top: auto;
-    color: var(--color-accent);
-    font-family: var(--font-ui);
-    font-size: var(--text-sm);
-    font-weight: 600;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
   }
 </style>
