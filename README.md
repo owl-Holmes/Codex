@@ -32,7 +32,7 @@ npm run dev        # http://localhost:4321/Codex/
 - **Images / SVG :** `src/assets/images/<section>/…`, insérées avec `<Figure … />`.
 - **Glossaire :** `src/content/glossary/fr/…`.
 - **Depuis le navigateur :** [Pages CMS](https://app.pagescms.org) → se connecter avec GitHub → choisir ce dépôt.
-- Les règles détaillées (et pour les agents IA) sont dans [AGENTS.md](AGENTS.md), les composants dans [docs/COMPONENTS.md](docs/COMPONENTS.md).
+- Les règles détaillées (et pour les agents IA) sont dans [AGENTS.md](AGENTS.md), les composants dans [docs/COMPONENTS.md](docs/COMPONENTS.md), les conventions graphiques dans [docs/STYLE.md](docs/STYLE.md).
 
 ## Réglages GitHub à faire une fois
 
