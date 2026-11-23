@@ -41,20 +41,21 @@ const ariaCurrent = isCurrent ? 'page' : undefined;
   li {
     margin: 0.15rem 0;
   }
+  /* Each nested level is a little smaller (em compounds) so deep titles fit the narrow sidebar. */
   ul {
     list-style: none;
-    padding-left: 0.6rem;
+    padding-left: 0.45rem;
     margin: 0 0 0 0.3rem;
+    font-size: 0.94em;
     border-left: 1px solid var(--color-border);
   }
   a {
     display: inline-block;
-    max-width: calc(100% - 1.1rem); /* stays beside the summary arrow in the narrow sidebar */
     min-height: 24px; /* WCAG 2.5.8 target size */
     padding: 0.2rem 0.4rem;
     vertical-align: top;
-    overflow-wrap: anywhere;
-    hyphens: auto;
+    line-height: 1.35;
+    overflow-wrap: break-word; /* breaks between words; inside a word only if it cannot fit at all */
     border-radius: var(--radius);
     color: var(--color-text);
     text-decoration: none;
@@ -75,6 +76,10 @@ const ariaCurrent = isCurrent ? 'page' : undefined;
   }
   summary {
     cursor: pointer;
+  }
+  /* Folder link stays beside the disclosure arrow. */
+  summary a {
+    max-width: calc(100% - 1.1rem);
   }
   summary::marker {
     color: var(--color-ornament);
