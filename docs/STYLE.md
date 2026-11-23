@@ -1,99 +1,108 @@
-# Guide de style graphique
+# Visual style guide
 
-Conventions visuelles du Codex. À lire (humains et agents IA) avant toute modification d'interface.
-Le propriétaire édite ce fichier pour préciser ses goûts ; en cas de conflit, ce fichier prime sur
-l'intuition de l'agent. Mécanique technique des thèmes : [THEMES.md](THEMES.md).
+Visual conventions of the Codex. Read it (humans and AI agents) before any interface change.
+The owner edits this file to record their taste; when it conflicts with an agent's own intuition,
+this file wins. Theme mechanics (tokens, files, contrast check): [THEMES.md](THEMES.md).
 
-## 1. Principes
+## 1. Principles
 
-1. **Lisible d'abord.** Le texte est toujours posé sur une surface opaque ou un fond très voilé,
-   jamais directement sur une illustration chargée.
-2. **Épuré mais travaillé.** Pas de liste brute : chaque élément a une hiérarchie (pastille,
-   titre, description, méta). « Basique » est un défaut, « chargé » aussi.
-3. **Toute la largeur utile.** Pas de cartes étroites perdues dans du vide ; une grille qui s'adapte
-   au nombre d'éléments (panneaux, fiches pleine largeur).
-4. **Le titre de la page domine.** Les intitulés automatiques (« Dans cette section », « Sources »…)
-   sont petits, en majuscules discrètes (`.block-heading`).
-5. **Pas de doublon.** Une information affichée une fois (ex. aperçu au survol sur une carte qui
-   montre déjà la description → désactivé).
-6. **Clair ET sombre** vérifiés à chaque changement, ainsi que le mobile (375 px, pas de défilement
-   horizontal).
+1. **Readable first.** Text always sits on an opaque surface or a heavily veiled background, never
+   directly on a busy illustration.
+2. **Clean but designed.** No raw lists: every item has a hierarchy (badge, title, description,
+   meta). "Basic" is a defect, and so is "cluttered".
+3. **Use the available width.** No narrow cards lost in empty space; layouts adapt to the number of
+   items (letter panels, full-width sheets).
+4. **The page title dominates.** Automatic block headings ("In this section", "Sources"…) are small,
+   discreet uppercase labels (`.block-heading`).
+5. **No duplication on screen.** Show a piece of information once (e.g. no hover preview on a card
+   that already shows the description: `data-no-preview`).
+6. **Light AND dark** are checked on every change, and mobile too (375 px wide, no horizontal scroll).
 
-**Page de référence :** une page de cours du thème `lab` (ex. `sciences/chimie/chimie-analytique/chromatographie`)
-— jugée « épurée, complète, esthétique, élégante et lisible ».
+**Reference page:** a course page of the `lab` theme (e.g. `sciences/chimie/chimie-analytique/chromatographie`),
+judged by the owner "clean, complete, aesthetic, elegant and readable".
 
-## 2. Mise en page
+## 2. Layout
 
-| Élément | Règle |
+| Element | Rule |
 |---|---|
-| Grille | Symétrique : sidebar `--sidebar-width` · contenu `--content-max` · sommaire `--toc-width` (colonnes latérales égales → texte centré) |
-| Feuille de lecture | Pages de cours uniquement (`.content:has(> article)`), fond `--sheet-bg` |
-| Accueil, index (A–Z, glossaire, parcours, tags) | Ouverts sur le fond, sans grande boîte englobante |
-| ≤ 1200 px | Sommaire au-dessus du contenu ; ≤ 960 px : une colonne |
-| Fond de page | `--page-art` flouté (`--page-art-blur`) et désaturé (`--page-art-saturation`) sous `--page-veil` |
+| Grid | Symmetric: sidebar `--sidebar-width` · content `--content-max` · TOC `--toc-width`; equal side columns keep the text centred (`src/styles/layout.css`) |
+| Reading sheet | Course pages only (`.content:has(> article)`), background `--sheet-bg` |
+| Home and index pages (A–Z, glossary, paths, tags) | Open on the page background, no big wrapping box |
+| ≤ 1200 px | TOC moves above the content; ≤ 960 px: single column |
+| Page background | `--page-art`, blurred (`--page-art-blur`) and desaturated (`--page-art-saturation`) under `--page-veil` |
 
-## 3. Typographie
+## 3. Typography
 
-| Usage | Police (jeton) |
+| Use | Font (token) |
 |---|---|
-| Texte courant, interface | IBM Plex Sans (`--font-body`, `--font-ui`) |
-| Titres, thème de base | Fraunces (`--font-display`) — identité bibliothèque |
-| Titres, thème `lab` | IBM Plex Sans |
-| Code, étiquettes du thème `lab` | IBM Plex Mono (`--font-mono`, `--font-label`) |
-| Marque « CODEX », eyebrows | Cinzel (`--font-brand`) |
+| Body text, interface | IBM Plex Sans (`--font-body`, `--font-ui`) |
+| Headings, base theme | Fraunces (`--font-display`): the library identity |
+| Headings, `lab` theme | IBM Plex Sans |
+| Code, `lab` labels | IBM Plex Mono (`--font-mono`, `--font-label`) |
+| "CODEX" wordmark, eyebrows | Cinzel (`--font-brand`) |
 
-Étiquettes (compteurs, dates, catégories) : classe `.ui-label` (petites majuscules espacées).
+Labels (counts, dates, categories): `.ui-label` (small spaced uppercase).
 
-## 4. Couleurs et formes
+## 4. Colour and shape
 
-- Uniquement des jetons (`var(--color-…)`), jamais de couleur en dur dans un composant.
-- Contraste WCAG AA (≥ 4,5:1) : `npm run contrast`.
-- Accent (`--color-accent`) : liens, numéros d'étape, éléments actifs. Ornement (`--color-ornament`) :
-  filets décoratifs.
-- Coins : `--radius` (petits éléments), `--radius-lg` (cartes) ; pastilles et bulles : `999px` / `50%`.
-- Élévation : `--shadow-sm` au repos, `--shadow-lg` ou `--glow` au survol, léger déplacement (2–3 px).
+- Tokens only (`var(--color-…)`), never a hard-coded colour in a component.
+- WCAG AA contrast (≥ 4.5:1), checked by `npm run contrast`.
+- Accent (`--color-accent`): links, step numbers, active items. Ornament (`--color-ornament`):
+  decorative rules.
+- Corners: `--radius` (small items), `--radius-lg` (cards); pills and bubbles: `999px` / `50%`.
+- Elevation: `--shadow-sm` at rest, `--shadow-lg` or `--glow` on hover, with a small 2–3 px move.
 
-## 5. Motifs d'interface (classes partagées, `src/styles/components.css`)
+## 5. Interface patterns
 
-| Motif | Usage |
+Shared classes (`src/styles/components.css`):
+
+| Pattern | Use |
 |---|---|
-| `.badge` / `.badge--accent` | Petite pastille : section, nombre d'étapes, « Glossaire » |
-| `.entry-card` | Carte arrondie, **entièrement cliquable** quand c'est un lien |
-| `.link-card` | Ligne cliquable avec liseré (pages récentes) |
-| `.letter-heading` | Bulle de lettre suivie d'un filet (glossaire) |
-| `.block-heading` | Intitulé de bloc automatique |
-| `LetterNav` | Barre de lettres en bulles, collante sous l'en-tête |
-| `PathCard`, `StepProgress` | Carte de parcours (sections, trajet numéroté, barre segmentée, bouton) |
+| `.page-intro` | Muted lead paragraph under an index page h1 |
+| `.badge` / `.badge--accent` | Small pill: section, step count, "Glossary" |
+| `.entry-card` | Rounded card, **entirely clickable** when it is a link |
+| `.link-card` | Clickable row with a coloured edge (recent pages) |
+| `.letter-heading` | Letter bubble followed by a hairline (glossary) |
+| `.block-heading` | Heading of an automatic page block |
 
-## 6. Thèmes de section
+Components (`src/components/knowledge/`):
 
-| Thème | Section | Esprit |
+| Component | Use |
+|---|---|
+| `LetterNav` | Letter bubbles, sticky under the header |
+| `LetterPanel` | One letter of the A–Z index: clickable rows |
+| `GlossarySheet` | One glossary term: term and variants left, definition right |
+| `PathCard`, `StepProgress` | Path card (sections, numbered route, segmented progress, start button) |
+
+## 6. Section themes
+
+| Theme | Section | Mood |
 |---|---|---|
-| `base` | Tout le site | Bibliothèque ancienne : bois, laiton, crème |
-| `lab` | Sciences | Laboratoire blanc : papier millimétré, bleu instrument, Plex |
-| `noir` | Enquête | Dossier d'enquête : gris, titres machine à écrire |
-| `archive` | Histoire | Encre bordeaux et dorure |
-| `alchemy` | (inutilisé) | Vert-de-gris et cuivre |
+| `base` | Whole site | Old library: wood, brass, cream |
+| `lab` | Sciences | White laboratory: graph paper, instrument blue, Plex |
+| `noir` | Investigation | Case file: greys, typewriter headings |
+| `archive` | History | Oxblood ink and gilt |
+| `alchemy` | (unused) | Verdigris and copper |
 
-## 7. Comment demander un style précis
+## 7. How to ask for a precise style
 
-Une bonne demande donne des valeurs, pas des impressions :
+A good request gives values, not impressions:
 
-1. **Référence** : capture ou URL, et ce qui plaît dedans.
-2. **Périmètre** : tout le site, une section, une page ou un composant.
-3. **Couleurs** : codes hex (`#0b5cad`) ou contraintes (« fond blanc pur, pas de dégradé »).
-4. **Typo** : nom de la police, graisse des titres, taille du texte.
-5. **Formes** : coins (px), ombres oui/non, densité (compact / aéré).
-6. **Règles** : « définitions toujours en encadré bleu », « h2 numérotés »…
-7. **À ne pas toucher** : « garde l'en-tête bois », « ne change pas le mode sombre ».
+1. **Reference**: a screenshot or URL, and what you like in it.
+2. **Scope**: whole site, one section, one page or one component.
+3. **Colours**: hex codes (`#0b5cad`) or constraints ("pure white background, no gradient").
+4. **Type**: font name, heading weight, text size.
+5. **Shapes**: corner radius (px), shadows yes/no, density (compact / airy).
+6. **Rules**: "definitions always in a blue callout", "numbered h2"…
+7. **Do not touch**: "keep the wood header", "leave dark mode as it is".
 
-> Exemple : « Section chimie : fond #ffffff, accent #0b5cad, titres Plex Sans 700, coins 4 px,
-> sans ombre, h2 numérotés, formules dans un encadré gris clair. Référence : capture jointe. »
+> Example: "Chemistry section: background #ffffff, accent #0b5cad, Plex Sans 700 headings, 4 px
+> corners, no shadow, numbered h2, formulas in a light grey box. Reference: attached screenshot."
 
-## 8. Décisions du propriétaire (à compléter)
+## 8. Owner decisions (to be extended)
 
-- **La version Sciences (thème `lab`) est validée : très bien telle quelle.** Ne pas la modifier sans
-  demande explicite ; s'en inspirer pour les autres sections (lisibilité, sobriété, finition).
-- Pas de bloc « Précédent / Suivant » en bas des pages.
-- Pas de grande boîte autour de l'accueil.
-- La sidebar reste étroite ; les titres longs passent à la ligne entre les mots, jamais au milieu.
+- **The Sciences version (`lab` theme) is approved: very good as it is.** Do not change it without an
+  explicit request; use it as the model for other sections (readability, sobriety, finish).
+- No "Previous / Next" block at the bottom of pages.
+- No big box around the home page.
+- The sidebar stays narrow; long titles wrap between words, never inside a word.

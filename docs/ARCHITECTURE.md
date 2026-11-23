@@ -22,8 +22,10 @@ GitHub Actions (validate, build, links) ──► GitHub Pages
 1. **Collections** (`src/content.config.ts`): `docs` (pages), `sections` (folder metadata), `glossary`, `paths`.
 2. **`lib/pages.ts`** turns entries into `{ locale, slug, entry }` and resolves FR fallbacks.
 3. **`lib/tree.ts`** builds the navigation tree from FR folders + `section.yml`, and resolves inherited themes.
-4. **`lib/knowledge.ts`, `tags.ts`, `graph.ts`, `paths.ts`** compute relations (refs, backlinks, related
-   pages, tags, graph, thematic paths). Broken references throw at build time.
+4. **`lib/knowledge.ts`, `tags.ts`, `graph.ts`, `paths.ts`, `glossary.ts`** compute relations (refs, backlinks,
+   related pages, tags, graph, thematic paths, glossary). Broken references throw at build time.
+   `lib/localized.ts` merges per-locale collections with the FR fallback; `lib/alphabet.ts` groups
+   index pages by letter.
 5. **Routes** in `src/pages/` render layouts with that data; MDX bodies get components from
    `components/content/index.ts`.
 
@@ -36,6 +38,7 @@ GitHub Actions (validate, build, links) ──► GitHub Pages
 | Search UI | `pages/[lang]/search.astro` | search page |
 | Graph hover tooltip | `components/knowledge/graph-hover.ts` (layout is computed at build: `lib/graph-layout.ts`) | pages with a graph |
 | Tabs, quiz, gallery, video facade, TOC scroll-spy | their components | only pages using them |
+| Path reading progress (`localStorage`, never sent) | `components/knowledge/visited.ts`, `StepProgress.astro`, `PathBanner.astro` | path pages, home, pages in a path |
 | Mermaid, Lottie | lazy `import()` | only pages using them |
 | Service worker | `pages/sw.js.ts` | production only |
 
