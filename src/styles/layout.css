@@ -1,0 +1,62 @@
+/*
+ * Page layout (cascade layer `layout`, order declared in global.css): the centred symmetric grid
+ * (sidebar | content | TOC column), the reading sheet behind course pages and the fixed, blurred
+ * page artwork with its veil. Sizes come from tokens (--sidebar-width, --content-max, --toc-width…).
+ * Imported once by BaseLayout, right after global.css.
+ */
+@layer layout {
+  /* Centred, symmetric page: sidebar | content | table of contents (fixed, see TableOfContents).
+     Both side columns have the same width, so the content column sits in the middle of the screen. */
+  .shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, var(--content-max)) var(--toc-width);
+    justify-content: center;
+    gap: var(--shell-gap);
+    padding: 2rem var(--shell-padding) 5rem;
+  }
+  .content {
+    min-width: 0;
+  }
+  /* Reading sheet, on content pages only (PageLayout renders an <article>): an almost opaque panel
+     behind the text, above the page artwork. Home and index pages stay open on the background. */
+  .content:has(> article) {
+    padding: 2rem 2.5rem 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--sheet-bg);
+    box-shadow: var(--shadow-sm);
+  }
+  /* Theme artwork behind the page, fixed, blurred and desaturated (::before), then softened by a
+     veil in the page colour (::after), so the veil keeps its exact tint (see tokens). */
+  .shell::before,
+  .shell::after {
+    content: '';
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .shell::before {
+    inset: calc(-2 * var(--page-art-blur));
+    background: var(--page-art);
+    filter: blur(var(--page-art-blur)) saturate(var(--page-art-saturation));
+  }
+  .shell::after {
+    inset: 0;
+    background: var(--page-veil);
+  }
+  /* Medium screens: the TOC goes back above the content, two columns. */
+  @media (max-width: 1200px) {
+    .shell {
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 960px) {
+    .shell {
+      grid-template-columns: minmax(0, 1fr);
+      padding-inline: 1rem;
+    }
+    .content:has(> article) {
+      padding: 1.2rem 1rem 1.5rem;
+    }
+  }
+}
