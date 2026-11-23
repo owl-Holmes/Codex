@@ -1,7 +1,7 @@
 /*
  * Shared UI patterns used across components (cascade layer `components`; a component's scoped
  * styles may refine them): .ui-label, .pill, .card-grid, .card-list, .link-card,
- * .entry-grid / .entry-card (A–Z, glossary, paths), .badge, .letter-heading.
+ * .entry-card (path steps), .badge, .letter-heading.
  * Imported once by BaseLayout.
  */
 @layer components {
@@ -79,15 +79,6 @@
     font-size: var(--text-md);
     font-weight: 600;
   }
-  /* Responsive grid of entry cards. */
-  .entry-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: 0.75rem;
-    margin: 0 0 1.5rem;
-    padding: 0;
-    list-style: none;
-  }
   /* Rounded "bubble" card; when it is a link, the WHOLE card is clickable. */
   .entry-card {
     display: flex;
@@ -137,15 +128,27 @@
     border-color: var(--color-accent);
     color: var(--color-accent);
   }
-  /* Big letter heading above a group of entries (A–Z, glossary). */
+  /* Letter heading of a group (glossary): round bubble followed by a hairline.
+     Markup: <h2 class="letter-heading"><span>A</span></h2>. */
   .letter-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 2rem 0 1rem;
+    padding: 0;
+    border: 0;
+  }
+  .letter-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+  .letter-heading > span {
     display: grid;
     place-items: center;
     width: 2.6rem;
     height: 2.6rem;
-    margin: 1.5rem 0 0.8rem;
-    padding: 0;
-    border: 0;
     border-radius: 50%;
     background: var(--color-accent);
     color: var(--color-accent-contrast);

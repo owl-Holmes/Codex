@@ -1,7 +1,8 @@
 ---
 /**
  * A–Z index: every page and glossary term, grouped by first letter (accents ignored),
- * shown as fully clickable cards with their section (or "Glossary") and a short description.
+ * one panel per letter; each entry is a fully clickable row with its section (or "Glossary")
+ * and a one-line description.
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -67,31 +68,118 @@ const letters = [...groups.keys()].sort();
   <h1>{t('az.title')}</h1>
   <p class="intro">{t('az.intro')}</p>
   <LetterNav letters={letters} label={t('az.letters')} />
-  {letters.map((l) => (
-    <section id={`letter-${l}`} aria-labelledby={`h-${l}`}>
-      <h2 id={`h-${l}`} class="letter-heading">
-        {l}
-      </h2>
-      <ul class="entry-grid">
-        {groups.get(l)!.map((item) => (
-          <li>
-            <a class="entry-card" href={item.url}>
-              <span class:list={['badge', { 'badge--accent': item.isTerm }]}>{item.kind}</span>
-              <span class="entry-card-title">{item.label}</span>
-              <span class="entry-card-text">{item.text}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-  ))}
+  <div class="panels">
+    {letters.map((l) => (
+      <section id={`letter-${l}`} class="panel" aria-labelledby={`h-${l}`}>
+        <header class="panel-head">
+          <h2 id={`h-${l}`} class="letter">
+            {l}
+          </h2>
+          <span class="ui-label">
+            {groups.get(l)!.length} {t(groups.get(l)!.length > 1 ? 'az.entries' : 'az.entry')}
+          </span>
+        </header>
+        <ul class="rows">
+          {groups.get(l)!.map((item) => (
+            <li>
+              <a class="row" href={item.url} data-no-preview>
+                <span class="row-main">
+                  <span class="row-title">{item.label}</span>
+                  <span class="row-text">{item.text}</span>
+                </span>
+                <span class:list={['badge', { 'badge--accent': item.isTerm }]}>{item.kind}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
 </BaseLayout>
 
 <style>
   .intro {
     color: var(--color-muted);
   }
-  section {
+  .panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    align-items: start;
+    gap: 1rem;
+  }
+  .panel {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
     scroll-margin-top: calc(var(--header-height) + 5rem);
+  }
+  .panel:target {
+    box-shadow: var(--glow);
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-accent) 6%, var(--color-surface));
+  }
+  .letter {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    font-family: var(--font-label);
+    font-size: var(--text-md);
+  }
+  .rows {
+    margin: 0;
+    padding: 0.3rem;
+    list-style: none;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: var(--radius);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background var(--duration) var(--ease);
+  }
+  .row:hover,
+  .row:focus-visible {
+    background: color-mix(in srgb, var(--color-accent) 9%, transparent);
+  }
+  .row-main {
+    display: grid;
+    flex: 1;
+    min-width: 0;
+  }
+  .row-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .row:hover .row-title {
+    color: var(--color-accent);
+  }
+  .row-text {
+    overflow: hidden;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .badge {
+    flex: none;
   }
 </style>
