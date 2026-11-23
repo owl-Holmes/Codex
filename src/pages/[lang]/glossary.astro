@@ -1,10 +1,12 @@
 ---
 /**
- * Glossary: every term of the locale (FR fallback), alphabetical, each with a stable anchor (#id).
- * Each term is a heading with that id, so Pagefind returns it as its own search sub-result.
+ * Glossary: every term of the locale (FR fallback), alphabetical, grouped by letter, as cards.
+ * Each term is a heading with a stable id (#id), so Pagefind returns it as its own search sub-result
+ * and other pages (Term component, A–Z index) can link straight to it.
  */
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import LetterNav from '../../components/knowledge/LetterNav.astro';
 import { LOCALES, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
 
@@ -22,33 +24,77 @@ const terms = await Promise.all(
     .sort(([, a], [, b]) => a.data.term.localeCompare(b.data.term, locale))
     .map(async ([id, entry]) => ({ id, entry, Body: (await render(entry)).Content })),
 );
+/** First letter without accents. */
+const letterOf = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')[0]?.toUpperCase() ?? '#';
+const groups = new Map<string, typeof terms>();
+terms.forEach((term) => {
+  const key = letterOf(term.entry.data.term);
+  groups.set(key, [...(groups.get(key) ?? []), term]);
+});
+const letters = [...groups.keys()].sort();
 ---
 
 <BaseLayout locale={locale} slug="glossary" title={t('glossary.title')} description={t('glossary.title')}>
   <h1>{t('glossary.title')}</h1>
-  <div class="glossary">
-    {terms.map(({ id, entry, Body }) => (
-      <section class="glossary-entry" lang={entry.id.startsWith(`${locale}/`) ? locale : 'fr'}>
-        <h2 id={id} class="term">
-          {entry.data.term}
-        </h2>
-        <p>{entry.data.definition}</p>
-        <Body />
-      </section>
-    ))}
-  </div>
+  <p class="intro">{t('glossary.intro')}</p>
+  <LetterNav letters={letters} label={t('az.letters')} />
+  {letters.map((l) => (
+    <section id={`letter-${l}`} aria-labelledby={`h-${l}`}>
+      <p id={`h-${l}`} class="letter-heading" aria-hidden="true">
+        {l}
+      </p>
+      <div class="entry-grid">
+        {groups.get(l)!.map(({ id, entry, Body }) => (
+          <article class="entry-card glossary-entry" lang={entry.id.startsWith(`${locale}/`) ? locale : 'fr'}>
+            <h2 id={id} class="entry-card-title term">
+              <a href={`#${id}`} title={t('glossary.permalink')}>
+                {entry.data.term}
+              </a>
+            </h2>
+            {entry.data.aliases.length > 0 && (
+              <span class="badge">
+                {t('glossary.aliases')} : {entry.data.aliases.join(', ')}
+              </span>
+            )}
+            <p class="definition">{entry.data.definition}</p>
+            <div class="entry-card-text">
+              <Body />
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
 </BaseLayout>
 
 <style>
-  .glossary-entry {
-    padding-block: 0.8rem;
-    border-bottom: 1px solid var(--color-border);
+  .intro {
+    color: var(--color-muted);
   }
-  .glossary-entry:has(:target) {
-    background: var(--color-surface);
+  section {
+    scroll-margin-top: calc(var(--header-height) + 5rem);
+  }
+  .entry-grid {
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
   }
   .term {
-    margin: 0 0 0.2rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
     font-size: var(--text-lg);
+  }
+  .term a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .term a:hover {
+    color: var(--color-accent);
+  }
+  .definition {
+    margin: 0;
+  }
+  .glossary-entry:has(:target) {
+    border-color: var(--color-accent);
+    box-shadow: var(--glow);
   }
 </style>

@@ -1,0 +1,61 @@
+---
+/**
+ * Alphabet jump bar: one round bubble per letter that has entries, sticky under the header.
+ * Used by the A–Z index and the glossary. Targets are `#letter-<L>` anchors on the page.
+ */
+interface Props {
+  /** Letters that have entries, already sorted. */
+  letters: string[];
+  /** Accessible name of the navigation. */
+  label: string;
+}
+const { letters, label } = Astro.props;
+---
+
+<nav class="letter-nav" aria-label={label}>
+  {letters.map((l) => (
+    <a href={`#letter-${l}`}>{l}</a>
+  ))}
+</nav>
+
+<style>
+  .letter-nav {
+    position: sticky;
+    top: calc(var(--header-height) + 0.5rem);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-block: 1rem 1.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+  }
+  a {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    font-family: var(--font-label);
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      background var(--duration) var(--ease),
+      color var(--duration) var(--ease);
+  }
+  a:hover,
+  a:focus-visible {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+  @media (max-width: 960px) {
+    .letter-nav {
+      position: static;
+      border-radius: var(--radius-lg);
+    }
+  }
+</style>

@@ -1,10 +1,15 @@
 ---
-/** A–Z index: every page and glossary term, grouped by first letter (accents ignored). */
+/**
+ * A–Z index: every page and glossary term, grouped by first letter (accents ignored),
+ * shown as fully clickable cards with their section (or "Glossary") and a short description.
+ */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LOCALES, type Locale } from '../../config/site';
 import { useT } from '../../i18n/ui';
+import LetterNav from '../../components/knowledge/LetterNav.astro';
 import { getPageMap, resolvePage } from '../../lib/pages';
+import { getTree, getTrail } from '../../lib/tree';
 import { pageUrl } from '../../lib/urls';
 
 export function getStaticPaths() {
@@ -13,12 +18,18 @@ export function getStaticPaths() {
 const locale = Astro.params.lang as Locale;
 const t = useT(locale);
 
+const tree = await getTree(locale);
 const pages = await Promise.all(
-  [...(await getPageMap('fr')).keys()].filter(Boolean).map(async (slug) => ({
-    label: (await resolvePage(locale, slug))!.page.entry.data.title,
-    url: pageUrl(locale, slug),
-    kind: '',
-  })),
+  [...(await getPageMap('fr')).keys()].filter(Boolean).map(async (slug) => {
+    const data = (await resolvePage(locale, slug))!.page.entry.data;
+    return {
+      label: data.title,
+      url: pageUrl(locale, slug),
+      kind: getTrail(tree, slug)[0]?.title ?? t('az.page'),
+      text: data.description,
+      isTerm: false,
+    };
+  }),
 );
 // FR terms first, then the locale's own terms override them (FR fallback).
 const allTerms = await getCollection('glossary');
@@ -31,6 +42,8 @@ const terms = [...glossary].map(([id, e]) => ({
   label: e.data.term,
   url: `${pageUrl(locale, 'glossary')}#${id}`,
   kind: t('nav.glossary'),
+  text: e.data.definition,
+  isTerm: true,
 }));
 
 /** First significant letter, without leading articles' apostrophes or accents. */
@@ -52,19 +65,21 @@ const letters = [...groups.keys()].sort();
 
 <BaseLayout locale={locale} slug="a-z" title={t('az.title')} description={t('az.title')} indexable={false}>
   <h1>{t('az.title')}</h1>
-  <nav aria-label={t('az.letters')} class="letters">
-    {letters.map((l) => (
-      <a href={`#letter-${l}`}>{l}</a>
-    ))}
-  </nav>
+  <p class="intro">{t('az.intro')}</p>
+  <LetterNav letters={letters} label={t('az.letters')} />
   {letters.map((l) => (
-    <section id={`letter-${l}`}>
-      <h2>{l}</h2>
-      <ul>
+    <section id={`letter-${l}`} aria-labelledby={`h-${l}`}>
+      <h2 id={`h-${l}`} class="letter-heading">
+        {l}
+      </h2>
+      <ul class="entry-grid">
         {groups.get(l)!.map((item) => (
           <li>
-            <a href={item.url}>{item.label}</a>
-            {item.kind && <small> · {item.kind}</small>}
+            <a class="entry-card" href={item.url}>
+              <span class:list={['badge', { 'badge--accent': item.isTerm }]}>{item.kind}</span>
+              <span class="entry-card-title">{item.label}</span>
+              <span class="entry-card-text">{item.text}</span>
+            </a>
           </li>
         ))}
       </ul>
@@ -73,17 +88,10 @@ const letters = [...groups.keys()].sort();
 </BaseLayout>
 
 <style>
-  .letters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    font-family: var(--font-display);
-    font-size: 1.3rem;
+  .intro {
+    color: var(--color-muted);
   }
   section {
-    scroll-margin-top: 1rem;
-  }
-  small {
-    color: var(--color-muted);
+    scroll-margin-top: calc(var(--header-height) + 5rem);
   }
 </style>
