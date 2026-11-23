@@ -4,10 +4,13 @@
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Locale } from '../config/site';
+import { localizedById } from './localized';
 import { getPageMap, resolvePage } from './pages';
 import { getTrail, getTree } from './tree';
 
+/** Raw entry of the `paths` collection (`paths/<lang>/<id>.yml`). */
 export type PathEntry = CollectionEntry<'paths'>;
+/** A thematic path in a locale: its id (file name) and YAML data (title, description, steps). */
 export interface ThematicPath {
   id: string;
   data: PathEntry['data'];
@@ -15,10 +18,7 @@ export interface ThematicPath {
 
 /** All paths for a locale; a missing translation falls back to the FR path. Throws on unknown step pages. */
 export async function getPaths(locale: Locale): Promise<ThematicPath[]> {
-  const all = await getCollection('paths');
-  const idOf = (e: PathEntry) => e.id.split('/').slice(1).join('/');
-  const byId = new Map(all.filter((e) => e.id.startsWith('fr/')).map((e) => [idOf(e), e]));
-  all.filter((e) => e.id.startsWith(`${locale}/`)).forEach((e) => byId.set(idOf(e), e));
+  const byId = localizedById(await getCollection('paths'), locale);
   const fr = await getPageMap('fr');
   for (const [id, e] of byId) {
     const unknown = e.data.steps.filter((s) => !fr.has(s.page)).map((s) => s.page);
