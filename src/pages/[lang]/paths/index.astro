@@ -1,6 +1,7 @@
 ---
-/** List of thematic paths. */
+/** List of thematic paths as cards: title, description, step count and reading progress (dots). */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import StepDots from '../../../components/knowledge/StepDots.astro';
 import { LOCALES, type Locale } from '../../../config/site';
 import { useT } from '../../../i18n/ui';
 import { getPaths } from '../../../lib/paths';
@@ -16,15 +17,43 @@ const paths = await getPaths(locale);
 
 <BaseLayout locale={locale} slug="paths" title={t('paths.title')} description={t('paths.intro')}>
   <h1>{t('paths.title')}</h1>
-  <p>{t('paths.intro')}</p>
-  <ul>
+  <p class="intro">{t('paths.intro')}</p>
+  <ul class="entry-grid paths">
     {paths.map((p) => (
       <li>
-        <a href={pageUrl(locale, `paths/${p.id}`)}>{p.data.title}</a> — {p.data.description}{' '}
-        <small>
-          ({p.data.steps.length} {t('paths.steps')})
-        </small>
+        <a class="entry-card path-card" href={pageUrl(locale, `paths/${p.id}`)}>
+          <span class="badge badge--accent">
+            {p.data.steps.length} {t('paths.steps')}
+          </span>
+          <span class="entry-card-title">{p.data.title}</span>
+          <span class="entry-card-text">{p.data.description}</span>
+          <StepDots pages={p.data.steps.map((s) => s.page)} locale={locale} />
+          <span class="start">{t('paths.start')} →</span>
+        </a>
       </li>
     ))}
   </ul>
 </BaseLayout>
+
+<style>
+  .intro {
+    color: var(--color-muted);
+  }
+  .paths {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  }
+  .path-card {
+    gap: 0.6rem;
+    padding: 1.2rem 1.3rem;
+  }
+  .path-card .entry-card-title {
+    font-size: var(--text-lg);
+  }
+  .start {
+    margin-top: auto;
+    color: var(--color-accent);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+</style>
